@@ -1,0 +1,57 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+.env.*
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local development artefacts
+scripts/
+docs/
+notebooks/
+src/
+app/test_streamlit_folium.py
+*.backup_*
+*.bak
+
+# Do not commit raw or intermediate data
+data/raw/
+data/processed/
+
+# Do not commit outputs except deployment boundary GeoJSON
+outputs/*
+!outputs/powerbi_map/
+outputs/powerbi_map/*
+!outputs/powerbi_map/ndis_service_area_boundaries_simplified.geojson
+
+# Exclude published backups/intermediates
+data/published/.gitkeep
+data/published/*backup*
+data/published/*BEFORE*
+data/published/*.xlsx
+data/published/*.parquet
+data/published/master_ndis_service_area_latest.csv
+data/published/master_ndis_service_area_quarter_2024_present.csv
+data/published/national_benchmark_quarter_2024_present.csv
+data/published/master_ndis_service_area_quarter_service_type.csv
+data/published/master_ndis_service_area_wide_2024_present.csv
+data/published/master_ndis_service_area_wide_all_available.csv
+data/published/national_benchmark_wide_2024_present.csv
+data/published/ndis_service_area_total_row_build_audit.csv
+
+# Archives
+*.zip
+*.7z
+*.rar
