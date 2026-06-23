@@ -55,3 +55,5 @@ data/published/ndis_service_area_total_row_build_audit.csv
 *.zip
 *.7z
 *.rar
+
+README.md
