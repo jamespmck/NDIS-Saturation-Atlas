@@ -65,3 +65,10 @@ README.md
 *.backup_*.py
 *backup*.py
 # Local OS/editor files
+# Python artefacts
+# Local Streamlit config backups
+.streamlit/*.backup_*
+# Local patch/debug backups
+*.broken_*.py
+*.broken_*
+*backup_*

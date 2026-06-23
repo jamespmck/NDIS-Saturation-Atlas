@@ -31,9 +31,9 @@ METRIC_LABELS = {
 }
 
 METRIC_SHORT_LABELS = {
-    "funded_plans_per_1000_gap_from_national": "Plans per 1,000 gap",
+    "funded_plans_per_1000_gap_from_national": "Plan coverage gap",
     "mean_plan_utilisation_gap_from_national": "Utilisation gap",
-    "plans_per_1000_change_from_baseline": "Plans per 1,000 change",
+    "plans_per_1000_change_from_baseline": "Plan coverage change",
     "mean_plan_utilisation_change_from_baseline": "Utilisation change",
 }
 
@@ -68,8 +68,8 @@ GM_REMOTENESS_SCALE = alt.Scale(
 )
 
 METRIC_HELP = {
-    "funded_plans_per_1000_gap_from_national": "National benchmark minus service-area funded plans per 1,000 population.",
-    "mean_plan_utilisation_gap_from_national": "National benchmark minus service-area mean plan utilisation.",
+    "funded_plans_per_1000_gap_from_national": "National benchmark minus service-area plan coverage. Positive values mean the area is below the national benchmark.",
+    "mean_plan_utilisation_gap_from_national": "National benchmark minus service-area mean utilisation. Positive values mean the area is below the national benchmark.",
     "plans_per_1000_change_from_baseline": "Selected quarter minus baseline quarter for funded plans per 1,000 population.",
     "mean_plan_utilisation_change_from_baseline": "Selected quarter minus baseline quarter for mean plan utilisation.",
 }
@@ -124,10 +124,10 @@ TOOLTIP_ALIASES = [
     "Population 2025 ERP",
     "Proxy funded plans",
     "Plans per 1,000",
-    "Plans per 1,000 gap",
+    "Plan coverage gap",
     "Mean utilisation",
     "Utilisation gap",
-    "Plans per 1,000 change",
+    "Plan coverage change",
     "Utilisation change",
     "Benchmark position",
 ]
@@ -1358,9 +1358,9 @@ def make_ranked_bar_chart(
 
     data[metric] = pd.to_numeric(data[metric], errors="coerce")
 
-    if rank_direction == "Largest positive values":
+    if rank_direction == "Furthest below benchmark":
         data = data.sort_values(metric, ascending=False)
-    elif rank_direction == "Largest negative values":
+    elif rank_direction == "Furthest above benchmark":
         data = data.sort_values(metric, ascending=True)
     else:
         data["_abs_metric"] = data[metric].abs()
@@ -2288,7 +2288,7 @@ def render_service_area_dashboard(
         [
             "Benchmark summary",
             "Trends",
-            "Service-type mix",
+            "Service mix",
             "Data",
         ]
     )
@@ -2986,7 +2986,7 @@ def render_service_area_dashboard(
     )
 
     overview_tab, trend_tab, service_type_tab, data_tab = st.tabs(
-        ["Trends", "Benchmarks", "Service-type mix", "Data"]
+        ["Trends", "Benchmarks", "Service mix", "Data"]
     )
 
     with overview_tab:
@@ -4697,9 +4697,9 @@ def _gm_original_main() -> None:
     rank_direction = sidebar.radio(
         "Rank chart by",
         options=[
-            "Largest positive values",
-            "Largest negative values",
-            "Largest absolute values",
+            "Furthest below benchmark",
+            "Furthest above benchmark",
+            "Largest absolute benchmark gap",
         ],
         index=0,
     )
@@ -4751,10 +4751,10 @@ def _gm_original_main() -> None:
         st.metric("Baseline", baseline_quarter)
 
     with top_row[2]:
-        st.metric("Positive values", int((pd.to_numeric(filtered[metric], errors="coerce") > 0).sum()))
+        st.metric("Areas below national benchmark", int((pd.to_numeric(filtered[metric], errors="coerce") > 0).sum()))
 
     with top_row[3]:
-        st.metric("Negative values", int((pd.to_numeric(filtered[metric], errors="coerce") < 0).sum()))
+        st.metric("Areas above national benchmark", int((pd.to_numeric(filtered[metric], errors="coerce") < 0).sum()))
 
     with top_row[4]:
         mean_share = pd.to_numeric(filtered["included_service_type_share"], errors="coerce").mean()
@@ -4777,21 +4777,21 @@ def _gm_original_main() -> None:
         st.markdown(
             """
             **Interpretation:** gap is calculated as **national benchmark minus service-area value**.
-            Positive values indicate the service area is below the national benchmark.
-            Negative values indicate the service area is above the national benchmark.
+            Areas below national benchmark indicate the service area is below the national benchmark.
+            Areas above national benchmark indicate the service area is above the national benchmark.
             """
         )
     else:
         st.markdown(
             """
             **Interpretation:** change is calculated as **selected quarter minus baseline quarter**.
-            Positive values indicate an increase since baseline. Negative values indicate a decrease since baseline.
+            Areas below national benchmark indicate an increase since baseline. Areas above national benchmark indicate a decrease since baseline.
             """
         )
 
     st.caption(METRIC_HELP[metric])
 
-    map_tab, dashboard_tab, data_tab = st.tabs(["Map", "Dashboard", "Data"])
+    map_tab, dashboard_tab, data_tab = st.tabs(["Atlas map", "Evidence dashboard", "Data table"])
 
     with map_tab:
         st.subheader("Static service-area map")
@@ -4801,44 +4801,60 @@ def _gm_original_main() -> None:
         render_map_atlas(merged=merged, metric=metric)
 
     with dashboard_tab:
-        left, right = st.columns([1, 1], gap="large")
+        # === GOOD MEASURE INTERPRETATION LAYER START ===
+        try:
+            from pathlib import Path as _GM_Path
+            from good_measure_dashboard_enhancements import render_good_measure_evidence_workspace as _gm_render_evidence_workspace
+            _gm_project_root = globals().get('PROJECT_ROOT', _GM_Path(__file__).resolve().parents[1])
+            _gm_render_evidence_workspace(_gm_project_root)
+        except Exception as _gm_exc:
+            try:
+                st.warning(f'Good Measure evidence dashboard did not load: {_gm_exc}')
+            except Exception:
+                pass
+        # === GOOD MEASURE INTERPRETATION LAYER END ===
 
-        with left:
-            st.subheader("Ranked service areas")
-            ranked_chart = make_ranked_bar_chart(
-                filtered=filtered,
-                metric=metric,
-                rank_direction=rank_direction,
-            )
-            st.altair_chart(ranked_chart, use_container_width=True)
+        # === GOOD MEASURE LEGACY DASHBOARD COLLAPSE START ===
+        with st.expander('Original dashboard visualisations', expanded=False):
+                left, right = st.columns([1, 1], gap="large")
 
-        with right:
-            st.subheader("Mean by remoteness")
-            remoteness_chart = make_remoteness_bar_chart(filtered, metric)
-            st.altair_chart(remoteness_chart, use_container_width=True)
+                with left:
+                    st.subheader("Service areas by benchmark position")
+                    ranked_chart = make_ranked_bar_chart(
+                        filtered=filtered,
+                        metric=metric,
+                        rank_direction=rank_direction,
+                    )
+                    st.altair_chart(ranked_chart, use_container_width=True)
 
-            st.subheader("Trend by remoteness")
-            trend_chart = make_change_over_time_chart(
-                data=data,
-                metric=metric,
-                selected_remoteness=selected_remoteness,
-            )
-            st.altair_chart(trend_chart, use_container_width=True)
+                with right:
+                    st.subheader("Average benchmark position by remoteness")
+                    remoteness_chart = make_remoteness_bar_chart(filtered, metric)
+                    st.altair_chart(remoteness_chart, use_container_width=True)
 
-            st.subheader("Plans per 1,000 and utilisation")
-            distribution_chart = make_distribution_chart(filtered)
-            st.altair_chart(distribution_chart, use_container_width=True)
+                    st.subheader("Benchmark trend by remoteness")
+                    trend_chart = make_change_over_time_chart(
+                        data=data,
+                        metric=metric,
+                        selected_remoteness=selected_remoteness,
+                    )
+                    st.altair_chart(trend_chart, use_container_width=True)
 
-            st.subheader("Service-type payment mix per 1,000 population")
-            stacked_chart = make_service_type_stacked_bar_chart(
-                service_type_data=service_type_data,
-                quarter=quarter,
-                selected_remoteness=selected_remoteness,
-                selected_service_types=selected_service_types,
-                exclude_selected=exclude_selected,
-            )
-            st.altair_chart(stacked_chart, use_container_width=True)
+                    st.subheader("Plans per 1,000 and utilisation")
+                    distribution_chart = make_distribution_chart(filtered)
+                    st.altair_chart(distribution_chart, use_container_width=True)
 
+                    st.subheader("Service-type payment mix per 1,000 population")
+                    stacked_chart = make_service_type_stacked_bar_chart(
+                        service_type_data=service_type_data,
+                        quarter=quarter,
+                        selected_remoteness=selected_remoteness,
+                        selected_service_types=selected_service_types,
+                        exclude_selected=exclude_selected,
+                    )
+                    st.altair_chart(stacked_chart, use_container_width=True)
+
+        # === GOOD MEASURE LEGACY DASHBOARD COLLAPSE END ===
     with data_tab:
         st.subheader("Data behind selected view")
 
@@ -4927,9 +4943,11 @@ def _gm_original_main() -> None:
 
 def main() -> None:
     _gm_original_main()
+
     render_good_measure_footer()
 
 if __name__ == "__main__":
     main()
+
 
 
