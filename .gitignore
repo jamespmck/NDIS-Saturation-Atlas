@@ -57,3 +57,11 @@ data/published/ndis_service_area_total_row_build_audit.csv
 *.rar
 
 README.md
+# Local Python artefacts
+*.pyc
+# Local virtual environments
+# Local secrets and environment files
+# Local dashboard backups
+*.backup_*.py
+*backup*.py
+# Local OS/editor files

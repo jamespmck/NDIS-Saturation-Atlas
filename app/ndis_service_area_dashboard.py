@@ -24,10 +24,10 @@ GEO_PATH = PROJECT_ROOT / "outputs" / "powerbi_map" / "ndis_service_area_boundar
 BASELINE_QUARTER_DEFAULT = "2024Q2"
 
 METRIC_LABELS = {
-    "funded_plans_per_1000_gap_from_national": "Funded plans per 1,000 population: gap from national",
-    "mean_plan_utilisation_gap_from_national": "Mean plan utilisation: gap from national",
-    "plans_per_1000_change_from_baseline": "Change in funded plans per 1,000 population",
-    "mean_plan_utilisation_change_from_baseline": "Change in mean plan utilisation",
+    "funded_plans_per_1000_gap_from_national": "Is plan coverage above or below the national benchmark?",
+    "mean_plan_utilisation_gap_from_national": "Is utilisation above or below the national benchmark?",
+    "plans_per_1000_change_from_baseline": "Has plan coverage increased or decreased since baseline?",
+    "mean_plan_utilisation_change_from_baseline": "Has utilisation increased or decreased since baseline?",
 }
 
 METRIC_SHORT_LABELS = {
@@ -4356,11 +4356,257 @@ def gm_label_for_row(
     return ""
 
 
-def main() -> None:
+
+# === GOOD MEASURE PUBLIC FRAMING START ===
+
+GM_PUBLIC_METRIC_LABELS = {
+    "funded_plans_per_1000_gap_from_national": "Is plan coverage above or below the national benchmark?",
+    "mean_plan_utilisation_gap_from_national": "Is utilisation above or below the national benchmark?",
+    "plans_per_1000_change_from_baseline": "Has plan coverage increased or decreased since baseline?",
+    "mean_plan_utilisation_change_from_baseline": "Has utilisation increased or decreased since baseline?",
+}
+
+GM_PUBLIC_METRIC_SHORT_LABELS = {
+    "funded_plans_per_1000_gap_from_national": "Plan coverage gap",
+    "mean_plan_utilisation_gap_from_national": "Utilisation gap",
+    "plans_per_1000_change_from_baseline": "Plan coverage change",
+    "mean_plan_utilisation_change_from_baseline": "Utilisation change",
+}
+
+GM_PUBLIC_METHOD_NOTE = """
+This atlas uses public NDIS data to compare service-area patterns in plan coverage, utilisation and change over time.
+
+In this atlas, saturation refers to observable public-data patterns: funded plans per 1,000 population, mean plan utilisation, national benchmark gaps and change since baseline. These indicators do not prove unmet need, oversupply, service quality, participant outcomes or causal impact. They show where further local interpretation is warranted.
+
+Service-type filtering is based on payment-share information. When a service type is selected, funded-plan counts and plans per 1,000 are payment-share-weighted proxies. Mean utilisation is retained as a whole-area context measure because multiplying a mean by payment share would not produce a valid utilisation rate.
+
+Public NDIS data should be read alongside service user voice, workforce insight, local service knowledge, catchment demographics and commissioning context.
+"""
+
+GM_PUBLIC_USE_CASES = """
+- Providers can compare service areas before reviewing, expanding or redesigning a service.
+- Peak bodies can identify areas where public data supports a market stewardship question.
+- Community organisations can combine the atlas with local service data and workforce insight.
+- Funders can use it as an initial scan before commissioning deeper catchment analysis.
+- Boards can use it to frame strategic risk, growth, equity and advocacy questions.
+"""
+
+GM_PUBLIC_LIMITATIONS = """
+- This is a public-data market-sensing tool.
+- It is not a measure of individual need.
+- It is not a measure of provider quality.
+- It is not an estimate of unmet demand.
+- It does not measure participant outcomes.
+- It does not establish causality.
+- Service-type filtered counts are proxy estimates.
+- Suppression, de-identification and boundary effects may affect interpretation.
+"""
+
+def gm_public_metric_label(metric: str) -> str:
+    return GM_PUBLIC_METRIC_LABELS.get(metric, str(metric).replace("_", " ").title())
+
+
+def gm_public_metric_short_label(metric: str) -> str:
+    return GM_PUBLIC_METRIC_SHORT_LABELS.get(metric, gm_public_metric_label(metric))
+
+
+def render_good_measure_landing() -> None:
+    st.markdown(
+        """
+        <style>
+        .gm-hero {
+            border: 1px solid rgba(24, 38, 54, 0.18);
+            border-radius: 18px;
+            padding: 1.25rem 1.4rem;
+            margin-bottom: 1.1rem;
+            background: linear-gradient(135deg, rgba(248,246,239,0.96), rgba(255,255,255,0.98));
+        }
+        .gm-kicker {
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6B5A45;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+        .gm-title {
+            font-size: 2rem;
+            line-height: 1.12;
+            font-weight: 800;
+            color: #182636;
+            margin-bottom: 0.55rem;
+        }
+        .gm-subtitle {
+            font-size: 1.02rem;
+            line-height: 1.5;
+            color: #26384A;
+            max-width: 980px;
+            margin-bottom: 0.75rem;
+        }
+        .gm-brandline {
+            font-size: 0.95rem;
+            color: #182636;
+            font-weight: 700;
+        }
+        .gm-note {
+            border-left: 4px solid #D9822B;
+            padding: 0.7rem 0.9rem;
+            background: rgba(217,130,43,0.08);
+            margin: 0.7rem 0 1rem 0;
+        }
+        .gm-footer {
+            border-top: 1px solid rgba(24, 38, 54, 0.18);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            color: #4D5A66;
+            font-size: 0.92rem;
+        }
+        </style>
+        <div class="gm-hero">
+            <div class="gm-kicker">Good Measure public-data prototype</div>
+            <div class="gm-title">NDIS Market Saturation Atlas</div>
+            <div class="gm-subtitle">
+                A public-data tool for exploring where NDIS plan coverage and utilisation differ from national benchmarks
+                across service areas, remoteness categories and support types.
+            </div>
+            <div class="gm-brandline">For community. Data beyond compliance. Evidence with purpose.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+        <div class="gm-note">
+        Use this atlas to identify service areas that warrant deeper analysis. A low funded-plans-per-1,000 rate may reflect
+        access barriers, population differences, eligibility patterns, local service history or data artefacts. Low utilisation may
+        reflect thin markets, workforce constraints, participant choice, plan design, support coordination availability or other
+        local factors.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    with st.expander("How to read this atlas", expanded=False):
+        st.markdown(GM_PUBLIC_METHOD_NOTE)
+
+    with st.expander("Practical use cases", expanded=False):
+        st.markdown(GM_PUBLIC_USE_CASES)
+
+    with st.expander("Method and limitations", expanded=False):
+        st.markdown(GM_PUBLIC_LIMITATIONS)
+
+
+def gm_prepare_public_export(df, metric: str):
+    export = df.copy()
+
+    export["selected_metric"] = metric
+    export["selected_metric_label"] = gm_public_metric_label(metric)
+
+    if metric in export.columns:
+        export["selected_metric_value"] = export[metric]
+
+    preferred_columns = [
+        "ndis_service_area",
+        "service_area_state_label",
+        "state_acronym",
+        "quarter",
+        "remoteness_category",
+        "service_type_filter_label",
+        "included_service_type_share",
+        "population_2025_erp",
+        "funded_plans_count",
+        "service_area_funded_plans_per_1000_population_2025_erp",
+        "service_area_mean_plan_utilisation",
+        "funded_plans_per_1000_gap_from_national",
+        "mean_plan_utilisation_gap_from_national",
+        "plans_per_1000_change_from_baseline",
+        "mean_plan_utilisation_change_from_baseline",
+        "benchmark_position",
+        "selected_metric",
+        "selected_metric_label",
+        "selected_metric_value",
+    ]
+
+    existing = [column for column in preferred_columns if column in export.columns]
+    remaining = [column for column in export.columns if column not in existing and column != "geometry"]
+
+    return export[existing + remaining]
+
+
+def render_good_measure_downloads(filtered, metric: str, quarter_value: str | None = None) -> None:
+    if filtered is None or getattr(filtered, "empty", True):
+        return
+
+    export = gm_prepare_public_export(filtered, metric)
+    metric_stub = re.sub(r"[^a-zA-Z0-9]+", "_", str(metric)).strip("_").lower()
+    quarter_stub = re.sub(r"[^a-zA-Z0-9]+", "_", str(quarter_value or "selected_quarter")).strip("_").lower()
+
+    with st.expander("Download filtered data and method note", expanded=False):
+        st.download_button(
+            label="Download filtered service-area data as CSV",
+            data=export.to_csv(index=False).encode("utf-8"),
+            file_name=f"good_measure_ndis_saturation_atlas_{quarter_stub}_{metric_stub}.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
+
+        method_note = f"""# Good Measure NDIS Market Saturation Atlas method note
+
+Selected metric: {gm_public_metric_label(metric)}
+Quarter: {quarter_value or "Selected quarter"}
+
+## Purpose
+
+This atlas turns public NDIS service-area data into evidence for funding, advocacy, strategy, service design and market stewardship.
+
+## Definition of saturation
+
+In this atlas, saturation refers to observable public-data patterns: funded plans per 1,000 population, mean plan utilisation, national benchmark gaps and change since baseline.
+
+## Interpretation
+
+The atlas identifies areas that warrant deeper local interpretation. It does not prove unmet need, oversupply, service quality, individual need, participant outcomes or causal impact.
+
+## Method limits
+
+{GM_PUBLIC_LIMITATIONS}
+
+## Good Measure
+
+For community. Data beyond compliance. Evidence with purpose.
+"""
+
+        st.download_button(
+            label="Download method note as Markdown",
+            data=method_note.encode("utf-8"),
+            file_name=f"good_measure_ndis_saturation_atlas_method_note_{quarter_stub}.md",
+            mime="text/markdown",
+            use_container_width=True,
+        )
+
+
+def render_good_measure_footer() -> None:
+    st.markdown(
+        """
+        <div class="gm-footer">
+            <strong>Good Measure</strong><br>
+            Good Measure turns public data, service data, workforce insight and lived experience into evidence for funding,
+            advocacy, strategy, service design and impact reporting.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# === GOOD MEASURE PUBLIC FRAMING END ===
+
+
+def _gm_original_main() -> None:
     st.set_page_config(
         page_title="Good Measure | NDIS service-area evidence map",
         layout="wide",
     )
+    render_good_measure_landing()
 
     apply_good_measure_theme()
 
@@ -4677,6 +4923,11 @@ def main() -> None:
         "equity and plan utilisation across NDIS service areas."
     )
 
+
+
+def main() -> None:
+    _gm_original_main()
+    render_good_measure_footer()
 
 if __name__ == "__main__":
     main()
