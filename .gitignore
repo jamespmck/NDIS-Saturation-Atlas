@@ -1,42 +1,46 @@
-﻿# Python
+# Python runtime artefacts
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+.pytest_cache/
+
+# Virtual environments and local configuration
 .venv/
 venv/
 .env
 .env.*
-
-# Streamlit secrets
 .streamlit/secrets.toml
+.streamlit/*.backup_*
 
-# OS / editor
+# OS and editor files
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# Local development artefacts
-scripts/
-docs/
-notebooks/
-src/
+# Local dashboard/debug snapshots
 app/test_streamlit_folium.py
 *.backup_*
 *.bak
+*.backup_*.py
+*backup*.py
+*.broken_*.py
+*.broken_*
+*.before_*.py
+*.pre_*.py
+*.recover_*.py
+for_deletion/
+
+# Local build and repair scripts
+scripts/
+tools/
 
 # Do not commit raw or intermediate data
 data/raw/
 data/processed/
 
-# Do not commit outputs except deployment boundary GeoJSON
-outputs/*
-!outputs/powerbi_map/
-outputs/powerbi_map/*
-!outputs/powerbi_map/ndis_service_area_boundaries_simplified.geojson
-
-# Exclude published backups/intermediates
+# Keep curated published CSV outputs, but ignore bulky/generated variants
 data/published/.gitkeep
 data/published/*backup*
 data/published/*BEFORE*
@@ -51,24 +55,15 @@ data/published/master_ndis_service_area_wide_all_available.csv
 data/published/national_benchmark_wide_2024_present.csv
 data/published/ndis_service_area_total_row_build_audit.csv
 
+# Do not commit rendered outputs except the deployment boundary GeoJSON
+outputs/*
+!outputs/powerbi_map/
+outputs/powerbi_map/*
+!outputs/powerbi_map/ndis_service_area_boundaries_simplified.geojson
+outputs/codex_pycache/
+outputs/streamlit*.log
+
 # Archives
 *.zip
 *.7z
 *.rar
-
-README.md
-# Local Python artefacts
-*.pyc
-# Local virtual environments
-# Local secrets and environment files
-# Local dashboard backups
-*.backup_*.py
-*backup*.py
-# Local OS/editor files
-# Python artefacts
-# Local Streamlit config backups
-.streamlit/*.backup_*
-# Local patch/debug backups
-*.broken_*.py
-*.broken_*
-*backup_*

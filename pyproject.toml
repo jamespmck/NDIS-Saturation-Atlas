@@ -1,0 +1,11 @@
+[project]
+name = "ndis-saturation-atlas"
+version = "0.3.0"
+description = "Applied data science and geospatial evidence prototype for NDIS service-area market saturation analysis."
+requires-python = ">=3.11"
+readme = "README.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["app"]
+addopts = "-q"
