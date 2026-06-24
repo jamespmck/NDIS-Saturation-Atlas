@@ -303,7 +303,6 @@ def _query_for_service_area(service_area: str | None) -> str:
         }
     )
 
-
 def _legend_svg(metric_label: str, domain: float, x: int, y: int) -> str:
     steps = [
         (-1.00, "Lower relative position"),
@@ -403,7 +402,7 @@ def _path_elements_for_plot(
             href_escaped = html.escape(href, quote=True)
 
             elements.append(
-                f'<a href="{href_escaped}" target="_top">'
+                f'<a href="{href_escaped}" target="_top" rel="noopener noreferrer">' 
                 f"<path d='{path}' fill='{fill}' stroke='{GM_NAVY}' stroke-width='{stroke_width}' "
                 f"vector-effect='non-scaling-stroke' pointer-events='all'>"
                 f"<title>{tooltip}</title>"
@@ -522,13 +521,13 @@ def render_australia_svg_map(
     bottom_gap = 20
     perth_x = 24
     perth_w = 290
-    perth_h = 230
+    perth_h = right_h
     perth_y = inset_bottom - perth_h
 
     adelaide_x = perth_x + perth_w + bottom_gap
     adelaide_y = perth_y
     adelaide_w = 430
-    adelaide_h = perth_h
+    adelaide_h = right_h
 
     national_excluded = set()
     for areas in RIGHT_INSETS.values():

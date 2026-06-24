@@ -1,13 +1,5 @@
 from __future__ import annotations
 
-"""Streamlit dashboard for the NDIS Market Saturation Atlas.
-
-The app presents a transparent analytical case study rather than a black-box
-scorecard. It loads curated service-area-quarter data, applies selected
-benchmark definitions, preserves service-category payment mix as a proxy
-measure, and renders the results as an interactive atlas and review workspace.
-"""
-
 from pathlib import Path
 import html
 import re
@@ -550,7 +542,7 @@ def render_css() -> None:
 
         div[data-testid="stSegmentedControl"] div[role="radiogroup"] {
             display: grid;
-            grid-template-columns: repeat(8, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 0.35rem;
             width: 100%;
         }
@@ -671,10 +663,10 @@ def render_header() -> None:
 
 
 def render_navigation(active: str) -> str:
-    nav_options = ["Overview", "Atlas", "Funded Plans", "Service area", "Data quality", "Method", "Data"]
+    nav_options = ["Atlas", "Funded Plans", "Service area", "Data"]
 
-    if "gm_active_view" not in st.session_state:
-        st.session_state["gm_active_view"] = active if active in nav_options else "Overview"
+    if "gm_active_view" not in st.session_state or st.session_state.get("gm_active_view") not in nav_options:
+        st.session_state["gm_active_view"] = active if active in nav_options else "Atlas"
 
     if active in nav_options and active != st.session_state.get("gm_active_view"):
         st.session_state["gm_active_view"] = active
@@ -1400,7 +1392,7 @@ def main() -> None:
         st.exception(exc)
         return
 
-    nav_options = ["Overview", "Atlas", "Funded Plans", "Service area", "Data quality", "Method", "Data"]
+    nav_options = ["Atlas", "Funded Plans", "Service area", "Data"]
     requested_view = get_query_param("view")
     requested_area = get_query_param("service_area")
 
@@ -1409,7 +1401,9 @@ def main() -> None:
     elif requested_view in nav_options:
         active_view = requested_view
     else:
-        active_view = st.session_state.get("gm_active_view", "Overview")
+        active_view = st.session_state.get("gm_active_view", "Atlas")
+        if active_view not in nav_options:
+            active_view = "Atlas"
 
     active_view = render_navigation(active_view)
     controls = build_controls(master, service_type_data, requested_area=requested_area)
