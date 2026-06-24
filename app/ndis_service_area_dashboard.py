@@ -81,7 +81,7 @@ METRICS = {
     UTIL_GAP_COL: {
         "label": "Utilisation gap",
         "short": "Utilisation gap",
-        "definition": "Benchmark mean plan utilisation minus observed mean plan utilisation.",
+        "definition": "Observed mean plan utilisation minus benchmark mean plan utilisation.",
     },
     "plans_per_1000_change_from_baseline": {
         "label": "Plan coverage change",
@@ -410,10 +410,10 @@ def apply_benchmark(data: pd.DataFrame, basis: str, historical_quarter: str) -> 
         out["benchmark_reference_quarter"] = out["quarter"]
 
     out[PLAN_GAP_COL] = num(out[PLAN_COL]) - num(out[PLAN_BENCHMARK_COL])
-    out[UTIL_GAP_COL] = num(out[UTIL_BENCHMARK_COL]) - num(out[UTIL_COL])
+    out[UTIL_GAP_COL] = num(out[UTIL_COL]) - num(out[UTIL_BENCHMARK_COL])
 
     plan_lower = out[PLAN_GAP_COL] < 0
-    util_lower = out[UTIL_GAP_COL] > 0
+    util_lower = out[UTIL_GAP_COL] < 0
 
     out["market_position_typology"] = np.select(
         [
@@ -712,11 +712,11 @@ def key_finding(filtered: pd.DataFrame, metric: str, quarter: str, selected_cate
         scope_label = "Australian service areas in the current filter set"
 
     metric_value = num(filtered[metric]).median()
-
     values = num(filtered[metric])
-    below = int((values > 0).sum())
-    above = int((values < 0).sum())
     valid = int(values.notna().sum())
+
+    below = int((values < 0).sum())
+    above = int((values > 0).sum())
 
     strongest = filtered.copy()
     strongest[metric] = num(strongest[metric])
@@ -732,16 +732,12 @@ def key_finding(filtered: pd.DataFrame, metric: str, quarter: str, selected_cate
         f"of {fmt(metric_value)} against the {html.escape(str(benchmark_label))}. "
     )
 
-    if metric == PLAN_GAP_COL:
-        below = int((values < 0).sum())
-        above = int((values > 0).sum())
-        body += f"{below:,} of {valid:,} service areas are below benchmark and {above:,} are above benchmark. "
-    elif metric == UTIL_GAP_COL:
-        below = int((values > 0).sum())
-        above = int((values < 0).sum())
+    if metric in {PLAN_GAP_COL, UTIL_GAP_COL}:
         body += f"{below:,} of {valid:,} service areas are below benchmark and {above:,} are above benchmark. "
     else:
-        body += f"{above:,} of {valid:,} service areas increased since the reference quarter and {below:,} decreased. "
+        increases = int((values > 0).sum())
+        decreases = int((values < 0).sum())
+        body += f"{increases:,} of {valid:,} service areas increased since the reference quarter and {decreases:,} decreased. "
 
     if lead:
         body += html.escape(lead)
@@ -755,7 +751,6 @@ def key_finding(filtered: pd.DataFrame, metric: str, quarter: str, selected_cate
         """,
         unsafe_allow_html=True,
     )
-
 
 def chart_ranked(filtered: pd.DataFrame, metric: str, limit: int = 25, title: str | None = None) -> alt.Chart:
     data = filtered.copy()
