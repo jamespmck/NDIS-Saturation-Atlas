@@ -182,8 +182,8 @@ def render_case_study_header() -> None:
     st.markdown(
         """
         <div class="gm-hero">
-            <div class="gm-kicker">Good Measure technical case study</div>
-            <div class="gm-title">NDIS Market Saturation Atlas</div>
+            <div class="gm-kicker">Good Measure</div>
+            <div class="gm-title">NDIS Saturation Atlas</div>
             <div class="gm-subtitle">
                 Applied public-data, geospatial and benchmark analysis prototype.
             </div>
