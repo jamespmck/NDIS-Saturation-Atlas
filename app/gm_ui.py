@@ -185,8 +185,7 @@ def render_case_study_header() -> None:
             <div class="gm-kicker">Good Measure technical case study</div>
             <div class="gm-title">NDIS Market Saturation Atlas</div>
             <div class="gm-subtitle">
-                Applied public-data, geospatial and benchmark analysis prototype showing schema harmonisation,
-                benchmark construction, service-type proxy modelling, geospatial evidence design, data QA and method transparency.
+                Applied public-data, geospatial and benchmark analysis prototype.
             </div>
         </div>
         """,
