@@ -76,7 +76,7 @@ METRICS = {
     PLAN_GAP_COL: {
         "label": "Plan coverage gap",
         "short": "Plan coverage gap",
-        "definition": "Benchmark funded plans per 1,000 population minus observed funded plans per 1,000 population.",
+        "definition": "Observed funded plans per 1,000 population minus benchmark funded plans per 1,000 population.",
     },
     UTIL_GAP_COL: {
         "label": "Utilisation gap",
@@ -409,10 +409,10 @@ def apply_benchmark(data: pd.DataFrame, basis: str, historical_quarter: str) -> 
         out["benchmark_basis_label"] = "service-area disability estimate 0.214"
         out["benchmark_reference_quarter"] = out["quarter"]
 
-    out[PLAN_GAP_COL] = num(out[PLAN_BENCHMARK_COL]) - num(out[PLAN_COL])
+    out[PLAN_GAP_COL] = num(out[PLAN_COL]) - num(out[PLAN_BENCHMARK_COL])
     out[UTIL_GAP_COL] = num(out[UTIL_BENCHMARK_COL]) - num(out[UTIL_COL])
 
-    plan_lower = out[PLAN_GAP_COL] > 0
+    plan_lower = out[PLAN_GAP_COL] < 0
     util_lower = out[UTIL_GAP_COL] > 0
 
     out["market_position_typology"] = np.select(
@@ -432,7 +432,7 @@ def apply_benchmark(data: pd.DataFrame, basis: str, historical_quarter: str) -> 
     )
 
     out["benchmark_position"] = np.select(
-        [out[PLAN_GAP_COL] > 0, out[PLAN_GAP_COL] < 0],
+        [out[PLAN_GAP_COL] < 0, out[PLAN_GAP_COL] > 0],
         ["Below benchmark", "Above benchmark"],
         default="At benchmark",
     )
@@ -732,7 +732,13 @@ def key_finding(filtered: pd.DataFrame, metric: str, quarter: str, selected_cate
         f"of {fmt(metric_value)} against the {html.escape(str(benchmark_label))}. "
     )
 
-    if metric in {PLAN_GAP_COL, UTIL_GAP_COL}:
+    if metric == PLAN_GAP_COL:
+        below = int((values < 0).sum())
+        above = int((values > 0).sum())
+        body += f"{below:,} of {valid:,} service areas are below benchmark and {above:,} are above benchmark. "
+    elif metric == UTIL_GAP_COL:
+        below = int((values > 0).sum())
+        above = int((values < 0).sum())
         body += f"{below:,} of {valid:,} service areas are below benchmark and {above:,} are above benchmark. "
     else:
         body += f"{above:,} of {valid:,} service areas increased since the reference quarter and {below:,} decreased. "

@@ -64,10 +64,11 @@ def selected_metric_interpretation(metric: str, value: Any, plan_gap_col: str, u
         return "Insufficient data"
     if abs(value) < 0.005:
         return "Near benchmark" if "gap" in metric else "No material change"
-    if metric in {plan_gap_col, util_gap_col}:
+    if metric == plan_gap_col:
+        return "Above selected benchmark" if value > 0 else "Below selected benchmark"
+    if metric == util_gap_col:
         return "Below selected benchmark" if value > 0 else "Above selected benchmark"
     return "Increase since reference" if value > 0 else "Decrease since reference"
-
 
 def benchmark_context_label(basis: str, benchmark_quarter: str) -> str:
     if basis == "Selected historical quarter":
