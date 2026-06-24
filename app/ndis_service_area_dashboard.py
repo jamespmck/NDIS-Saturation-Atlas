@@ -1121,12 +1121,23 @@ def service_mix_chart(
 
     if selected_area:
         title_area = "Australia" if selected_area == "Australia" else selected_area
-        chart_height = max(390, len(SERVICE_TYPE_ORDER) * 32)
+        chart_height = max(560, len(SERVICE_TYPE_ORDER) * 42)
         chart = (
             alt.Chart(grouped)
             .mark_bar(stroke="#061A2E", strokeWidth=0.3, cornerRadiusEnd=3)
             .encode(
-                y=alt.Y("service_type_group:N", sort=SERVICE_TYPE_ORDER, title="Service category", axis=alt.Axis(labelLimit=380)),
+                y=alt.Y(
+                    "service_type_group:N",
+                    sort=SERVICE_TYPE_ORDER,
+                    title="Service category",
+                    scale=alt.Scale(domain=SERVICE_TYPE_ORDER),
+                    axis=alt.Axis(
+                        labelLimit=720,
+                        labelOverlap=False,
+                        labelFontSize=12,
+                        titleFontSize=12,
+                    ),
+                ),
                 x=alt.X(
                     "payment_share_gap_pp:Q",
                     title=f"Observed share minus {benchmark_label} (percentage points)",
@@ -1381,9 +1392,116 @@ def render_atlas(current: pd.DataFrame, metric: str) -> None:
         st.warning(f"Polygon atlas could not render. Showing analytical atlas fallback. Error: {exc}")
         st.altair_chart(chart_scatter(current), width="stretch")
 
+
+def render_embedded_service_area_canvas(master: pd.DataFrame, service_type_data: pd.DataFrame, requested_area: str) -> None:
+    st.markdown(
+        """
+        <style>
+        [data-testid="stAppViewContainer"] {
+            background: #FFFFFF !important;
+        }
+
+        .block-container {
+            max-width: 1720px !important;
+            padding-top: 0.45rem !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+
+        header, footer {
+            visibility: hidden;
+            height: 0;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    quarters = sorted(master["quarter"].dropna().astype(str).unique().tolist(), key=quarter_key)
+    requested_quarter = get_query_param("quarter")
+    quarter = requested_quarter if requested_quarter in quarters else quarters[-1]
+
+    data = apply_service_category_proxy(master, service_type_data, [], False)
+    data = apply_benchmark(data, "National mean", quarter)
+    data = add_reference_change_measures(data, quarter)
+
+    current = filtered_current(
+        data=data,
+        quarter=quarter,
+        remoteness=REMOTENESS_ORDER,
+        metric=PLAN_GAP_COL,
+    )
+
+    area_current = current.loc[current["ndis_service_area"].astype(str).eq(str(requested_area))].copy()
+    area_all = data.loc[data["ndis_service_area"].astype(str).eq(str(requested_area))].copy()
+
+    if area_current.empty:
+        st.warning(f"No service-area data found for {requested_area}.")
+        return
+
+    label = (
+        area_current["service_area_state_label"].iloc[0]
+        if "service_area_state_label" in area_current.columns
+        else requested_area
+    )
+
+    st.markdown(f"### {html.escape(str(label))}")
+
+    metric_cards(area_current, PLAN_GAP_COL, quarter)
+
+    key_finding(
+        area_current,
+        PLAN_GAP_COL,
+        quarter,
+        selected_categories=[],
+        exclude_selected=False,
+        remoteness=REMOTENESS_ORDER,
+        service_area_label=str(label),
+    )
+
+    left, right = st.columns(2, gap="large")
+
+    with left:
+        st.altair_chart(
+            trend_chart(
+                area_all,
+                PLAN_COL,
+                PLAN_BENCHMARK_COL,
+                f"{label}: funded plans per 1,000 population",
+                "Plans per 1,000",
+            ),
+            width="stretch",
+        )
+
+    with right:
+        st.altair_chart(
+            trend_chart(
+                area_all,
+                UTIL_COL,
+                UTIL_BENCHMARK_COL,
+                f"{label}: mean plan utilisation",
+                "Mean utilisation (%)",
+            ),
+            width="stretch",
+        )
+
+    st.markdown("#### Service-category payment benchmark")
+    service_mix_chart(
+        service_type_data,
+        current,
+        quarter,
+        selected_area=requested_area,
+        benchmark_basis="National mean",
+        benchmark_quarter=quarter,
+    )
+
+
 def main() -> None:
     render_css()
-    render_header()
+
+    embed_mode = get_query_param("embed")
+    embedded_area = get_query_param("service_area")
 
     try:
         master = load_master()
@@ -1392,6 +1510,12 @@ def main() -> None:
         st.error("The app could not load the published data.")
         st.exception(exc)
         return
+
+    if embed_mode == "1" and embedded_area:
+        render_embedded_service_area_canvas(master, service_type_data, embedded_area)
+        return
+
+    render_header()
 
     nav_options = ["Atlas", "Funded Plans", "Service area", "Data"]
     requested_view = get_query_param("view")

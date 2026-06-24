@@ -293,13 +293,18 @@ def _project_geometry_to_path(geometry, bounds, map_x, map_y, map_w, map_h) -> s
 
 
 def _query_for_service_area(service_area: str | None) -> str:
-    if not service_area or str(service_area).lower() in {"nan", "none"}:
+    if service_area is None:
+        return ""
+
+    service_area_text = str(service_area).strip()
+
+    if not service_area_text or service_area_text.lower() in {"nan", "none", "missing", "all"}:
         return ""
 
     return urlencode(
         {
             "view": "Service area",
-            "service_area": str(service_area),
+            "service_area": service_area_text,
         }
     )
 
@@ -376,7 +381,13 @@ def _path_elements_for_plot(
         fill = _colour_for_score(row.get("_map_score"), domain)
 
         service_area = row.get("ndis_service_area", row.get("map_key", ""))
-        area_label = row.get("service_area_state_label", row.get("ndis_service_area", row.get("map_key", "")))
+        if service_area is None or str(service_area).strip().lower() in {"", "nan", "none"}:
+            service_area = row.get("map_key", "")
+
+        area_label = row.get("service_area_state_label", service_area)
+        if area_label is None or str(area_label).strip().lower() in {"", "nan", "none"}:
+            area_label = service_area
+
         remoteness = row.get("remoteness_category", "")
         position = row.get("benchmark_position", "")
         typology = row.get("market_position_typology", "")
@@ -397,28 +408,25 @@ def _path_elements_for_plot(
         tooltip = html.escape("\n".join(tooltip_lines))
         query = _query_for_service_area(str(service_area))
 
+        path_svg = (
+            f"<path d='{path}' fill='{fill}' stroke='{GM_NAVY}' stroke-width='{stroke_width}' "
+            f"vector-effect='non-scaling-stroke' pointer-events='all' style='cursor:pointer;'>"
+            f"<title>{tooltip}</title>"
+            f"</path>"
+        )
+
         if query:
             href = f"/?{query}"
             href_escaped = html.escape(href, quote=True)
-
             elements.append(
-                f'<a href="{href_escaped}" target="_top" rel="noopener noreferrer">' 
-                f"<path d='{path}' fill='{fill}' stroke='{GM_NAVY}' stroke-width='{stroke_width}' "
-                f"vector-effect='non-scaling-stroke' pointer-events='all'>"
-                f"<title>{tooltip}</title>"
-                f"</path>"
+                f'<a href="{href_escaped}" target="_blank" rel="noopener noreferrer" data-service-area-link="1">'
+                f"{path_svg}"
                 f"</a>"
             )
         else:
-            elements.append(
-                f"<path d='{path}' fill='{fill}' stroke='{GM_NAVY}' stroke-width='{stroke_width}' "
-                f"vector-effect='non-scaling-stroke' pointer-events='all'>"
-                f"<title>{tooltip}</title>"
-                f"</path>"
-            )
+            elements.append(path_svg)
 
     return "\n".join(elements)
-
 
 def _inset_svg(name, plot, service_areas, x, y, w, h, domain, metric, metric_label, pad_ratio=0.0):
     subset = plot.loc[plot["ndis_service_area"].astype(str).isin(service_areas)].copy()
@@ -638,11 +646,14 @@ def render_australia_svg_map(
     </svg>
     """
 
+    
+    
     html_doc = f"""
     <!doctype html>
     <html>
     <head>
         <meta charset="utf-8">
+        <base target="_blank">
         <style>
             html, body {{
                 margin: 0;
@@ -744,3 +755,5 @@ def render_australia_svg_map(
     """
 
     components.html(html_doc, height=height + 80, width=1720, scrolling=False)
+
+
