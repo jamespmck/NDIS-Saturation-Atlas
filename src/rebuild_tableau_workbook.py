@@ -161,6 +161,7 @@ def _atlas_viewpoint() -> ET.Element:
     viewpoint = ET.Element("viewpoint", {"name": "Atlas Map"})
     highlight = ET.SubElement(viewpoint, "highlight")
     ET.SubElement(highlight, "color-one-way")
+    _lock_atlas_map_navigation(viewpoint)
     return viewpoint
 
 
@@ -272,6 +273,8 @@ def _viewpoint(name: str) -> ET.Element:
     viewpoint = ET.Element("viewpoint", {"name": name})
     highlight = ET.SubElement(viewpoint, "highlight")
     ET.SubElement(highlight, "color-one-way")
+    if name == "Atlas Map":
+        _lock_atlas_map_navigation(viewpoint)
     return viewpoint
 
 
@@ -326,6 +329,28 @@ def _configure_atlas_worksheet(root: ET.Element) -> None:
         if not any(node.attrib.get("column") == column for node in encodings.findall("tooltip")):
             ET.SubElement(encodings, "tooltip", {"column": column})
     _set_atlas_fixed_extent(worksheet)
+    _lock_atlas_window_viewpoints(root)
+
+
+def _lock_atlas_window_viewpoints(root: ET.Element) -> None:
+    for viewpoint in root.findall(".//window/viewpoint") + root.findall(".//window/viewpoints/viewpoint"):
+        window = _find_parent(root, viewpoint)
+        if viewpoint.attrib.get("name") == "Atlas Map" or (window is not None and window.attrib.get("name") == "Atlas Map"):
+            _lock_atlas_map_navigation(viewpoint)
+
+
+def _lock_atlas_map_navigation(viewpoint: ET.Element) -> None:
+    for node in list(viewpoint):
+        if node.tag == "map-navigation":
+            viewpoint.remove(node)
+    ET.SubElement(viewpoint, "map-navigation", {"value": "false"})
+
+
+def _find_parent(root: ET.Element, target: ET.Element) -> ET.Element | None:
+    for parent in root.iter():
+        if target in list(parent):
+            return parent
+    return None
 
 
 def _ensure_column(dependencies: ET.Element, caption: str, datatype: str, name: str, role: str, col_type: str) -> None:

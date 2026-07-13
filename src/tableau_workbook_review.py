@@ -329,6 +329,11 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
         findings.append(ReviewFinding("pass", "info", "atlas_dashboard_presence", f"Atlas Map appears in {len(atlas_dashboards)} dashboard(s)."))
     else:
         findings.append(ReviewFinding("fail", "critical", "atlas_dashboard_presence", "Atlas Map is not embedded in any dashboard."))
+
+    if _atlas_map_navigation_locked(root):
+        findings.append(ReviewFinding("pass", "info", "atlas_map_navigation_lock", "Atlas Map viewpoints disable Tableau map navigation."))
+    else:
+        findings.append(ReviewFinding("fail", "high", "atlas_map_navigation_lock", "Atlas Map viewpoints do not disable Tableau map navigation."))
     return findings
 
 
@@ -344,6 +349,23 @@ def _atlas_extent_covers_insets(space_encodings: list[ET.Element]) -> bool:
     if any(node.attrib.get("projection") == "EPSG:3857" for node in space_encodings):
         return False
     return cols_min <= 110 and cols_max >= 170 and rows_min <= -45 and rows_max >= -8
+
+
+def _atlas_map_navigation_locked(root: ET.Element) -> bool:
+    viewpoints = [
+        node
+        for node in root.findall(".//window/viewpoints/viewpoint")
+        if node.attrib.get("name") == "Atlas Map"
+    ]
+    atlas_window = root.find(".//window[@class='worksheet'][@name='Atlas Map']")
+    if atlas_window is not None:
+        viewpoints.extend(atlas_window.findall("viewpoint"))
+    if not viewpoints:
+        return False
+    return all(
+        any(nav.attrib.get("value") == "false" for nav in viewpoint.findall("map-navigation"))
+        for viewpoint in viewpoints
+    )
 
 
 def _markdown_report(path: Path, findings: list[ReviewFinding]) -> str:

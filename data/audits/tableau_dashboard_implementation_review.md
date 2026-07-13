@@ -4,7 +4,7 @@ Workbook: `D:\Good Measure\NDIS-Saturation-Atlas\outputs\tableau\NDIS-Saturation
 
 Verdict: **WEBSITE READY**
 
-- Pass: 21
+- Pass: 22
 - Warn: 0
 - Fail: 0
 
@@ -33,6 +33,7 @@ Verdict: **WEBSITE READY**
 | pass | info | `atlas_render_safe_field_contract` | Atlas Map avoids CSV-only fields and support-type grain fields that can prevent Tableau from rendering the geometry. |
 | pass | info | `atlas_quarter_filter_contract` | Atlas Map includes quarter label context for quarter filtering. |
 | pass | info | `atlas_dashboard_presence` | Atlas Map appears in 3 dashboard(s). |
+| pass | info | `atlas_map_navigation_lock` | Atlas Map viewpoints disable Tableau map navigation. |
 
 ## Review Standard
 

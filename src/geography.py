@@ -286,6 +286,7 @@ def _atlas_feature(feature: dict) -> dict | None:
     if name.lower() in EXCLUDED_ATLAS_GEOGRAPHIES:
         return None
     props["atlas_panel"] = "Main map"
+    props["atlas_zoom_locked"] = True
     out = dict(feature)
     out["properties"] = props
     return out
