@@ -22,8 +22,8 @@ ATLAS_ONLY_DASHBOARDS = {
 }
 
 ATLAS_FIXED_EXTENT_DEGREES = {
-    "cols": {"min": "0.0", "max": "100.0"},
-    "rows": {"min": "-60.0", "max": "20.0"},
+    "cols": {"min": "0.0", "max": "98.0"},
+    "rows": {"min": "-44.0", "max": "16.0"},
 }
 
 STREAMLIT_STYLE_DASHBOARDS = [
@@ -58,6 +58,7 @@ def rebuild_website_ready_candidate(
     _rebuild_streamlit_style_dashboards(stable_root)
     _configure_atlas_worksheet(stable_root)
     _remove_map_navigation_elements(stable_root)
+    _remove_stale_extracts(stable_root)
     ET.indent(stable_tree, space="  ")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     stable_tree.write(output_path, encoding="utf-8", xml_declaration=True)
@@ -334,6 +335,17 @@ def _remove_map_navigation_elements(root: ET.Element) -> None:
     for parent in root.iter():
         for child in list(parent):
             if child.tag == "map-navigation":
+                parent.remove(child)
+
+
+def _remove_stale_extracts(root: ET.Element) -> None:
+    """Force Tableau to read the regenerated CSV/GeoJSON files instead of stale temp Hyper extracts."""
+
+    for parent in root.iter():
+        for child in list(parent):
+            if child.tag == "extract":
+                parent.remove(child)
+            elif child.tag == "properties" and child.attrib.get("context") == "extract":
                 parent.remove(child)
 
 

@@ -21,17 +21,17 @@ FISCAL_QUARTER_END_MONTH_DAY = {
 
 EXCLUDED_ATLAS_GEOGRAPHIES = {"lord howe island", "norfolk island"}
 
-ATLAS_CANVAS_BOUNDS = (0.0, -60.0, 100.0, 20.0)
-ATLAS_MAIN_BOUNDS = (24.0, -38.0, 72.0, 16.0)
+ATLAS_CANVAS_BOUNDS = (0.0, -44.0, 98.0, 16.0)
+ATLAS_MAIN_BOUNDS = (16.0, -25.0, 76.0, 13.0)
 
 METRO_INSET_GROUPS = {
     "Perth inset": {
         "areas": {"Central North Metro", "Central South Metro", "North Metro", "South East Metro", "South Metro"},
-        "target_bounds": (3.0, -34.0, 21.0, -16.0),
+        "target_bounds": (2.0, -40.0, 18.0, -20.0),
     },
     "Adelaide inset": {
         "areas": {"Adelaide Hills", "Barossa, Light and Lower North", "Eastern Adelaide", "Northern Adelaide", "Southern Adelaide", "Western Adelaide"},
-        "target_bounds": (25.0, -58.0, 64.0, -43.0),
+        "target_bounds": (20.0, -44.0, 50.0, -28.0),
     },
     "Melbourne inset": {
         "areas": {
@@ -44,15 +44,15 @@ METRO_INSET_GROUPS = {
             "Southern Melbourne",
             "Western Melbourne",
         },
-        "target_bounds": (77.0, -38.0, 97.0, -22.0),
+        "target_bounds": (76.0, -35.0, 96.0, -23.0),
     },
     "Sydney inset": {
         "areas": {"Central Coast", "North Sydney", "South Eastern Sydney", "South Western Sydney", "Sydney", "Western Sydney"},
-        "target_bounds": (77.0, -19.0, 97.0, -3.0),
+        "target_bounds": (76.0, -18.0, 96.0, -6.0),
     },
     "Brisbane inset": {
         "areas": {"Beenleigh", "Brisbane", "Caboolture/Strathpine", "Robina"},
-        "target_bounds": (77.0, 0.0, 97.0, 16.0),
+        "target_bounds": (76.0, -1.0, 96.0, 11.0),
     },
 }
 

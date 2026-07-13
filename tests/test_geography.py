@@ -62,12 +62,12 @@ def test_atlas_geojson_excludes_external_islands_and_tags_metro_insets():
         feature["properties"]["ndis_service_area"]: _bounds(feature["geometry"])
         for feature in out["features"]
     }
-    assert bounds["Barkly"][0] >= 24
-    assert bounds["Barkly"][2] <= 72
-    assert bounds["Sydney"][0] >= 77
-    assert bounds["Sydney"][2] <= 97
-    assert bounds["Barossa, Light and Lower North"][1] >= -58
-    assert bounds["Barossa, Light and Lower North"][3] <= -42.999
+    assert bounds["Barkly"][0] >= 16
+    assert bounds["Barkly"][2] <= 76
+    assert bounds["Sydney"][0] >= 76
+    assert bounds["Sydney"][2] <= 96
+    assert bounds["Barossa, Light and Lower North"][1] >= -44
+    assert bounds["Barossa, Light and Lower North"][3] <= -27.999
 
 
 def _feature(name: str, x: float, y: float) -> dict:
