@@ -2532,16 +2532,16 @@
             <column-instance column="[funded_plans_per_1000_gap_from_national]" derivation="Avg" name="[avg:funded_plans_per_1000_gap_from_national:qk]" pivot="key" type="quantitative" />
             <column-instance column="[mean_plan_utilisation_gap_from_national]" derivation="Avg" name="[avg:mean_plan_utilisation_gap_from_national:qk]" pivot="key" type="quantitative" />
             <column-instance column="[active_providers_per_1000_funded_plans]" derivation="Avg" name="[avg:active_providers_per_1000_funded_plans:qk]" pivot="key" type="quantitative" />
+            <column caption="Atlas Utilisation Median Band" datatype="string" name="[atlas_utilisation_median_band]" role="dimension" type="nominal" />
+            <column-instance column="[atlas_utilisation_median_band]" derivation="None" name="[none:atlas_utilisation_median_band:nk]" pivot="key" type="nominal" />
             <column caption="Funded Plans Per 1000 Delta From National Median" datatype="real" name="[funded_plans_per_1000_delta_from_national_median]" role="measure" type="quantitative" />
             <column caption="Mean Plan Utilisation Delta From National Median" datatype="real" name="[mean_plan_utilisation_delta_from_national_median]" role="measure" type="quantitative" />
             <column caption="Provider Saturation Delta From National Median" datatype="real" name="[provider_saturation_delta_from_national_median]" role="measure" type="quantitative" />
             <column caption="Active Provider Rate Delta From National Median" datatype="real" name="[active_provider_rate_delta_from_national_median]" role="measure" type="quantitative" />
-            <column caption="Atlas Utilisation Median Band" datatype="string" name="[atlas_utilisation_median_band]" role="dimension" type="nominal" />
             <column-instance column="[funded_plans_per_1000_delta_from_national_median]" derivation="Avg" name="[avg:funded_plans_per_1000_delta_from_national_median:qk]" pivot="key" type="quantitative" />
             <column-instance column="[mean_plan_utilisation_delta_from_national_median]" derivation="Avg" name="[avg:mean_plan_utilisation_delta_from_national_median:qk]" pivot="key" type="quantitative" />
             <column-instance column="[provider_saturation_delta_from_national_median]" derivation="Avg" name="[avg:provider_saturation_delta_from_national_median:qk]" pivot="key" type="quantitative" />
             <column-instance column="[active_provider_rate_delta_from_national_median]" derivation="Avg" name="[avg:active_provider_rate_delta_from_national_median:qk]" pivot="key" type="quantitative" />
-            <column-instance column="[atlas_utilisation_median_band]" derivation="None" name="[none:atlas_utilisation_median_band:nk]" pivot="key" type="nominal" />
           </datasource-dependencies>
           <filter class="categorical" column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:quarter_label (tableau_market_classification.csv):nk]">
             <groupfilter function="member" level="[none:quarter_label (tableau_market_classification.csv):nk]" member="&quot;2026 Q1&quot;" ns0:ui-domain="database" ns0:ui-enumeration="inclusive" ns0:ui-marker="enumerate" />
@@ -2587,11 +2587,11 @@
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_gap_from_national:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_gap_from_national:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_providers_per_1000_funded_plans:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:atlas_utilisation_median_band:nk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_median:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_median:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_provider_rate_delta_from_national_median:qk]" />
-              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:atlas_utilisation_median_band:nk]" />
             </encodings>
             <customized-tooltip>
               <formatted-text>

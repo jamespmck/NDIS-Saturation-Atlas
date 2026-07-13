@@ -182,6 +182,8 @@ def _rebuild_streamlit_style_dashboards(root: ET.Element) -> None:
         raise ValueError("Workbook has no dashboard template.")
     datasource_block = source_dashboard.find("datasources")
     devicelayouts = source_dashboard.find("devicelayouts")
+    if devicelayouts is not None and not list(devicelayouts):
+        devicelayouts = None
 
     dashboards.clear()
     for name, size, sheets in STREAMLIT_STYLE_DASHBOARDS:
