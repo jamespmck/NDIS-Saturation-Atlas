@@ -21,9 +21,9 @@ ATLAS_ONLY_DASHBOARDS = {
     "NDIS Saturation Atlas Phone": {"maxwidth": "390", "minwidth": "390", "maxheight": "520", "minheight": "520"},
 }
 
-ATLAS_FIXED_EXTENT_EPSG3857 = {
-    "cols": {"min": "12245143.987260092", "max": "18924313.434856508"},  # lon 110 to 170
-    "rows": {"min": "-5621521.486192066", "max": "-893463.751012646"},  # lat -45 to -8
+ATLAS_FIXED_EXTENT_DEGREES = {
+    "cols": {"min": "110.0", "max": "170.0"},
+    "rows": {"min": "-45.0", "max": "-8.0"},
 }
 
 STREAMLIT_STYLE_DASHBOARDS = [
@@ -358,12 +358,12 @@ def _set_atlas_fixed_extent(worksheet: ET.Element) -> None:
         if encoding.attrib.get("type") != "space":
             continue
         scope = encoding.attrib.get("scope")
-        if scope not in ATLAS_FIXED_EXTENT_EPSG3857:
+        if scope not in ATLAS_FIXED_EXTENT_DEGREES:
             continue
         encoding.attrib["range-type"] = "fixed"
-        encoding.attrib["projection"] = "EPSG:3857"
-        encoding.attrib["min"] = ATLAS_FIXED_EXTENT_EPSG3857[scope]["min"]
-        encoding.attrib["max"] = ATLAS_FIXED_EXTENT_EPSG3857[scope]["max"]
+        encoding.attrib.pop("projection", None)
+        encoding.attrib["min"] = ATLAS_FIXED_EXTENT_DEGREES[scope]["min"]
+        encoding.attrib["max"] = ATLAS_FIXED_EXTENT_DEGREES[scope]["max"]
 
 
 def _stable_uuid(value: str) -> str:

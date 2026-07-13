@@ -341,7 +341,9 @@ def _atlas_extent_covers_insets(space_encodings: list[ET.Element]) -> bool:
         rows_max = float(by_scope["rows"].attrib["max"])
     except (KeyError, TypeError, ValueError):
         return False
-    return cols_min <= 12245144 and cols_max >= 18924313 and rows_min <= -5621521 and rows_max >= -893464
+    if any(node.attrib.get("projection") == "EPSG:3857" for node in space_encodings):
+        return False
+    return cols_min <= 110 and cols_max >= 170 and rows_min <= -45 and rows_max >= -8
 
 
 def _markdown_report(path: Path, findings: list[ReviewFinding]) -> str:
