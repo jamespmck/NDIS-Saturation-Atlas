@@ -33,8 +33,8 @@ Parquet equivalents were written beside the Tableau CSV outputs.
 
 ```csv
 dataset,stage,row_count,column_count,notes
-tableau_market_quarter,tableau,640,86,Tableau CSV and Parquet output
-tableau_support_type_quarter,tableau,7680,57,Tableau CSV and Parquet output
+tableau_market_quarter,tableau,640,93,Tableau CSV and Parquet output
+tableau_support_type_quarter,tableau,7680,61,Tableau CSV and Parquet output
 tableau_participant_profile,tableau,0,13,Tableau CSV and Parquet output
 tableau_community_context,tableau,93,9,Tableau CSV and Parquet output
 tableau_market_classification,tableau,640,21,Tableau CSV and Parquet output

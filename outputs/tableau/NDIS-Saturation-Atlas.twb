@@ -2209,27 +2209,18 @@
       <layout dim-ordering="alphabetic" measure-ordering="alphabetic" show-aliased-fields="true" show-structure="true" />
       <style>
         <style-rule element="mark">
-          <encoding attr="color" field="[none:persistent_utilisation_classification:nk]" type="palette">
-            <map to="#4e79a7">
-              <bucket>%null%</bucket>
+          <encoding attr="color" field="[none:atlas_utilisation_median_band:nk]" type="palette">
+            <map to="#D9D9D9">
+              <bucket>"No data"</bucket>
             </map>
-            <map to="#59a14f">
-              <bucket>"persistently low"</bucket>
+            <map to="#B3261E">
+              <bucket>"Below national median"</bucket>
             </map>
-            <map to="#76b7b2">
-              <bucket>"insufficient history"</bucket>
+            <map to="#FFF7E6">
+              <bucket>"Near national median"</bucket>
             </map>
-            <map to="#b07aa1">
-              <bucket>"stable"</bucket>
-            </map>
-            <map to="#e15759">
-              <bucket>"deteriorating"</bucket>
-            </map>
-            <map to="#edc948">
-              <bucket>"recovering"</bucket>
-            </map>
-            <map to="#f28e2b">
-              <bucket>"consistently high"</bucket>
+            <map to="#2E7D32">
+              <bucket>"Above national median"</bucket>
             </map>
           </encoding>
         </style-rule>
@@ -2541,6 +2532,16 @@
             <column-instance column="[funded_plans_per_1000_gap_from_national]" derivation="Avg" name="[avg:funded_plans_per_1000_gap_from_national:qk]" pivot="key" type="quantitative" />
             <column-instance column="[mean_plan_utilisation_gap_from_national]" derivation="Avg" name="[avg:mean_plan_utilisation_gap_from_national:qk]" pivot="key" type="quantitative" />
             <column-instance column="[active_providers_per_1000_funded_plans]" derivation="Avg" name="[avg:active_providers_per_1000_funded_plans:qk]" pivot="key" type="quantitative" />
+            <column caption="Funded Plans Per 1000 Delta From National Median" datatype="real" name="[funded_plans_per_1000_delta_from_national_median]" role="measure" type="quantitative" />
+            <column caption="Mean Plan Utilisation Delta From National Median" datatype="real" name="[mean_plan_utilisation_delta_from_national_median]" role="measure" type="quantitative" />
+            <column caption="Provider Saturation Delta From National Median" datatype="real" name="[provider_saturation_delta_from_national_median]" role="measure" type="quantitative" />
+            <column caption="Active Provider Rate Delta From National Median" datatype="real" name="[active_provider_rate_delta_from_national_median]" role="measure" type="quantitative" />
+            <column caption="Atlas Utilisation Median Band" datatype="string" name="[atlas_utilisation_median_band]" role="dimension" type="nominal" />
+            <column-instance column="[funded_plans_per_1000_delta_from_national_median]" derivation="Avg" name="[avg:funded_plans_per_1000_delta_from_national_median:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[mean_plan_utilisation_delta_from_national_median]" derivation="Avg" name="[avg:mean_plan_utilisation_delta_from_national_median:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[provider_saturation_delta_from_national_median]" derivation="Avg" name="[avg:provider_saturation_delta_from_national_median:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[active_provider_rate_delta_from_national_median]" derivation="Avg" name="[avg:active_provider_rate_delta_from_national_median:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[atlas_utilisation_median_band]" derivation="None" name="[none:atlas_utilisation_median_band:nk]" pivot="key" type="nominal" />
           </datasource-dependencies>
           <filter class="categorical" column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:quarter_label (tableau_market_classification.csv):nk]">
             <groupfilter function="member" level="[none:quarter_label (tableau_market_classification.csv):nk]" member="&quot;2026 Q1&quot;" ns0:ui-domain="database" ns0:ui-enumeration="inclusive" ns0:ui-marker="enumerate" />
@@ -2572,7 +2573,7 @@
             </view>
             <mark class="Automatic" />
             <encodings>
-              <color column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:persistent_utilisation_classification:nk]" />
+              <color column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:atlas_utilisation_median_band:nk]" />
               <lod column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:remoteness_category:nk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[sum:funded_plan_count:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000:qk]" />
@@ -2586,45 +2587,53 @@
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_gap_from_national:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_gap_from_national:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_providers_per_1000_funded_plans:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_median:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_median:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_provider_rate_delta_from_national_median:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:atlas_utilisation_median_band:nk]" />
             </encodings>
             <customized-tooltip>
               <formatted-text>
                 <run fontcolor="#757575">Ndis Service Area:	</run>
                 <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:ndis_service_area:nk]&gt;</run>
-                <run>Æ
+                <run>
 </run>
                 <run fontcolor="#757575">Remoteness Category:	</run>
                 <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:remoteness_category:nk]&gt;</run>
-                <run>Æ
+                <run>
 </run>
-                <run fontcolor="#757575">Quarter:</run>
-                <run fontcolor="#555555">Æ	</run>
+                <run fontcolor="#757575">Quarter:	</run>
                 <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[attr:quarter_label:nk]&gt;</run>
-                <run>Æ
+                <run>
+</run>
+                <run fontcolor="#757575">Utilisation vs national median:	</run>
+                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]&gt;</run>
+                <run>
+</run>
+                <run fontcolor="#757575">Utilisation band:	</run>
+                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:atlas_utilisation_median_band:nk]&gt;</run>
+                <run>
+</run>
+                <run fontcolor="#757575">Funded plans per 1,000 vs national median:	</run>
+                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_median:qk]&gt;</run>
+                <run>
+</run>
+                <run fontcolor="#757575">Provider saturation vs national median:	</run>
+                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_median:qk]&gt;</run>
+                <run>
+</run>
+                <run fontcolor="#757575">Active providers per 1,000 plans vs national median:	</run>
+                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_provider_rate_delta_from_national_median:qk]&gt;</run>
+                <run>
 </run>
                 <run fontcolor="#757575">Funded Plan Count:	</run>
                 <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[sum:funded_plan_count:qk]&gt;</run>
-                <run>Æ
-</run>
-                <run fontcolor="#757575">Funded Plans Per 1000:	</run>
-                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000:qk]&gt;</run>
-                <run>Æ
+                <run>
 </run>
                 <run fontcolor="#757575">Mean Plan Utilisation:	</run>
                 <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation:qk]&gt;</run>
-                <run>Æ
-</run>
-                <run fontcolor="#757575">Payment Amount:	</run>
-                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[sum:payment_amount:qk]&gt;</run>
-                <run>Æ
-</run>
-                <run fontcolor="#757575">Payments Per Funded Plan:	</run>
-                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:payments_per_funded_plan:qk]&gt;</run>
-                <run>Æ
-</run>
-                <run fontcolor="#757575">Persistent Utilisation Classification:	</run>
-                <run bold="true">&lt;[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:persistent_utilisation_classification:nk]&gt;</run>
-                <run>Æ
+                <run>
 </run>
               </formatted-text>
             </customized-tooltip>
@@ -4667,7 +4676,7 @@ Weighted mean utilisation KPI: &lt;</run>
         </edge>
         <edge name="right">
           <strip size="160">
-            <card pane-specification-id="0" param="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:persistent_utilisation_classification:nk]" type="color" />
+            <card pane-specification-id="0" param="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:atlas_utilisation_median_band:nk]" type="color" />
           </strip>
         </edge>
       </cards>

@@ -310,21 +310,21 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
         findings.append(ReviewFinding("pass", "info", "atlas_fixed_extent", "Atlas Map has fixed x/y ranges covering the custom atlas canvas and metro inset panels."))
 
     for field in [
-        "none:persistent_utilisation_classification:nk",
-        "avg:funded_plans_per_1000_gap_from_national:qk",
-        "avg:mean_plan_utilisation_gap_from_national:qk",
-        "avg:active_providers_per_1000_funded_plans:qk",
+        "none:atlas_utilisation_median_band:nk",
+        "avg:funded_plans_per_1000_delta_from_national_median:qk",
+        "avg:mean_plan_utilisation_delta_from_national_median:qk",
+        "avg:provider_saturation_delta_from_national_median:qk",
+        "avg:active_provider_rate_delta_from_national_median:qk",
     ]:
         if field not in atlas_xml:
             findings.append(ReviewFinding("fail", "high", "atlas_metric_contract", f"Atlas Map is missing field `{field}`."))
             break
     else:
-        findings.append(ReviewFinding("pass", "info", "atlas_metric_contract", "Atlas Map uses render-safe workbook fields for utilisation classification, funded-plan gap, utilisation gap and provider rate."))
+        findings.append(ReviewFinding("pass", "info", "atlas_metric_contract", "Atlas Map uses render-safe national-median fields for utilisation colour, funded-plan delta, provider saturation delta and active-provider-rate delta."))
 
     forbidden_atlas_tokens = [
         "atlas_default_metric_value",
         "funded_plans_per_1000_delta_from_national_mean",
-        "mean_plan_utilisation_delta_from_national_median",
         "provider_saturation_delta_from_national_mean",
         "none:support_type:nk",
         "avg:supply_response_gap:qk",

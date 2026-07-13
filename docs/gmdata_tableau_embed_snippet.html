@@ -8,7 +8,7 @@
       <p><strong>Publication setup required.</strong> Publish the workbook, then replace the placeholder URL above.</p>
     </div>
 
-    <p class="tableau-status" data-tableau-ready hidden>Select a service area on the atlas to filter the detail dashboard.</p>
+    <p class="tableau-status" data-tableau-ready hidden>Select a quarter, inspect utilisation against the national median, then select a service area on the atlas to filter the detail dashboard.</p>
 
     <form class="tableau-filter-box" data-tableau-filter-box hidden>
       <label>
@@ -47,6 +47,7 @@
 
     <article class="tableau-panel">
       <h3>Geospatial atlas</h3>
+      <p>Colour shows mean plan utilisation against the national median: lower utilisation is red, near-median is neutral and higher utilisation is green.</p>
       <div class="tableau-viz-frame">
         <tableau-viz class="tableau-monitor" data-tableau-role="atlas" data-device="monitor" data-view-name="NDISSaturationAtlasMonitor" toolbar="hidden" hide-tabs width="100%" height="940"></tableau-viz>
         <tableau-viz class="tableau-tablet" data-tableau-role="atlas" data-device="tablet" data-view-name="NDISSaturationAtlasTablet" toolbar="hidden" hide-tabs width="100%" height="760"></tableau-viz>

@@ -32,7 +32,7 @@ Verdict: **WEBSITE READY**
 | pass | info | `atlas_geometry_encoding` | Atlas Map contains a geometry encoding. |
 | pass | info | `atlas_color_encoding` | Atlas Map contains a color encoding. |
 | pass | info | `atlas_fixed_extent` | Atlas Map has fixed x/y ranges covering the custom atlas canvas and metro inset panels. |
-| pass | info | `atlas_metric_contract` | Atlas Map uses render-safe workbook fields for utilisation classification, funded-plan gap, utilisation gap and provider rate. |
+| pass | info | `atlas_metric_contract` | Atlas Map uses render-safe national-median fields for utilisation colour, funded-plan delta, provider saturation delta and active-provider-rate delta. |
 | pass | info | `atlas_render_safe_field_contract` | Atlas Map avoids CSV-only fields and support-type grain fields that can prevent Tableau from rendering the geometry. |
 | pass | info | `atlas_quarter_filter_contract` | Atlas Map includes quarter label context for quarter filtering. |
 | pass | info | `atlas_dashboard_presence` | Atlas Map appears in 3 dashboard(s). |

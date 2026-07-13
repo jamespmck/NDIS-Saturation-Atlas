@@ -104,10 +104,13 @@ def _market_columns(market: pd.DataFrame) -> pd.DataFrame:
         "unspent_funding_per_funded_plan",
         "mean_plan_utilisation",
         "benchmark_national_funded_plans_per_1000",
+        "benchmark_national_median_funded_plans_per_1000",
         "benchmark_national_mean_plan_utilisation",
         "benchmark_national_median_plan_utilisation",
         "benchmark_national_provider_saturation",
+        "benchmark_national_median_provider_saturation",
         "benchmark_national_active_providers_per_1000_funded_plans",
+        "benchmark_national_median_active_providers_per_1000_funded_plans",
         "benchmark_national_mean_plan_funding",
         "benchmark_national_payments_per_funded_plan",
         "benchmark_remoteness_funded_plans_per_1000",
@@ -116,6 +119,7 @@ def _market_columns(market: pd.DataFrame) -> pd.DataFrame:
         "benchmark_remoteness_payments_per_funded_plan",
         "funded_plans_per_1000_gap_from_national",
         "funded_plans_per_1000_delta_from_national_mean",
+        "funded_plans_per_1000_delta_from_national_median",
         "mean_plan_utilisation_gap_from_national",
         "mean_plan_utilisation_delta_from_national_median",
         "mean_plan_funding_gap_from_national",
@@ -130,10 +134,13 @@ def _market_columns(market: pd.DataFrame) -> pd.DataFrame:
         "participants_per_active_provider",
         "active_providers_per_1000_funded_plans",
         "provider_saturation_delta_from_national_mean",
+        "provider_saturation_delta_from_national_median",
         "active_provider_rate_delta_from_national_mean",
+        "active_provider_rate_delta_from_national_median",
         "atlas_default_metric_value",
         "atlas_default_metric_label",
         "atlas_metric_interpretation",
+        "atlas_utilisation_median_band",
         "provider_growth_rate",
         "payment_growth_rate",
         "plan_value_growth_rate",
@@ -213,12 +220,16 @@ def _support_columns(support: pd.DataFrame, market: pd.DataFrame) -> pd.DataFram
         "underfunded_advocacy_score",
         "underserviced_provider_score",
         "funded_plans_per_1000_delta_from_national_mean",
+        "funded_plans_per_1000_delta_from_national_median",
         "mean_plan_utilisation_delta_from_national_median",
         "provider_saturation_delta_from_national_mean",
+        "provider_saturation_delta_from_national_median",
         "active_provider_rate_delta_from_national_mean",
+        "active_provider_rate_delta_from_national_median",
         "atlas_default_metric_value",
         "atlas_default_metric_label",
         "atlas_metric_interpretation",
+        "atlas_utilisation_median_band",
         "payment_item_participant_count_sum_not_unique",
         "suppressed_payment_item_rows",
         "suppressed_participant_item_rows",
@@ -242,18 +253,25 @@ def _add_market_opportunity_fields(market: pd.DataFrame) -> pd.DataFrame:
     out["benchmark_remoteness_mean_plan_funding"] = _weighted_average_by_group(out, ["quarter", "remoteness"], "mean_plan_funding", "funded_plan_count")
     out["benchmark_national_payments_per_funded_plan"] = _weighted_average_by_group(out, ["quarter"], "payments_per_funded_plan", "funded_plan_count")
     out["benchmark_remoteness_payments_per_funded_plan"] = _weighted_average_by_group(out, ["quarter", "remoteness"], "payments_per_funded_plan", "funded_plan_count")
+    out["benchmark_national_median_funded_plans_per_1000"] = numeric(out.get("funded_plans_per_1000")).groupby(out["quarter"], dropna=False).transform("median")
     out["benchmark_national_median_plan_utilisation"] = numeric(out.get("mean_plan_utilisation")).groupby(out["quarter"], dropna=False).transform("median")
     out["benchmark_national_provider_saturation"] = _weighted_average_by_group(out, ["quarter"], "funded_plans_per_active_provider", "funded_plan_count")
+    out["benchmark_national_median_provider_saturation"] = numeric(out.get("funded_plans_per_active_provider")).groupby(out["quarter"], dropna=False).transform("median")
     out["benchmark_national_active_providers_per_1000_funded_plans"] = _weighted_average_by_group(out, ["quarter"], "active_providers_per_1000_funded_plans", "funded_plan_count")
+    out["benchmark_national_median_active_providers_per_1000_funded_plans"] = numeric(out.get("active_providers_per_1000_funded_plans")).groupby(out["quarter"], dropna=False).transform("median")
 
     out["mean_plan_funding_gap_from_national"] = numeric(out["benchmark_national_mean_plan_funding"]) - numeric(out.get("mean_plan_funding"))
     out["mean_plan_funding_gap_from_remoteness"] = numeric(out["benchmark_remoteness_mean_plan_funding"]) - numeric(out.get("mean_plan_funding"))
     out["payments_per_funded_plan_gap_from_national"] = numeric(out["benchmark_national_payments_per_funded_plan"]) - numeric(out.get("payments_per_funded_plan"))
     out["payments_per_funded_plan_gap_from_remoteness"] = numeric(out["benchmark_remoteness_payments_per_funded_plan"]) - numeric(out.get("payments_per_funded_plan"))
     out["funded_plans_per_1000_delta_from_national_mean"] = numeric(out.get("funded_plans_per_1000")) - numeric(out.get("benchmark_national_funded_plans_per_1000"))
+    out["funded_plans_per_1000_delta_from_national_median"] = numeric(out.get("funded_plans_per_1000")) - numeric(out["benchmark_national_median_funded_plans_per_1000"])
     out["mean_plan_utilisation_delta_from_national_median"] = numeric(out.get("mean_plan_utilisation")) - numeric(out["benchmark_national_median_plan_utilisation"])
     out["provider_saturation_delta_from_national_mean"] = numeric(out.get("funded_plans_per_active_provider")) - numeric(out["benchmark_national_provider_saturation"])
+    out["provider_saturation_delta_from_national_median"] = numeric(out.get("funded_plans_per_active_provider")) - numeric(out["benchmark_national_median_provider_saturation"])
     out["active_provider_rate_delta_from_national_mean"] = numeric(out.get("active_providers_per_1000_funded_plans")) - numeric(out["benchmark_national_active_providers_per_1000_funded_plans"])
+    out["active_provider_rate_delta_from_national_median"] = numeric(out.get("active_providers_per_1000_funded_plans")) - numeric(out["benchmark_national_median_active_providers_per_1000_funded_plans"])
+    out["atlas_utilisation_median_band"] = _utilisation_median_band(out["mean_plan_utilisation_delta_from_national_median"])
     out["unspent_funding_per_funded_plan"] = safe_divide(out.get("unspent_committed_funding"), out.get("funded_plan_count"))
     out["funding_conversion_gap"] = (1 - numeric(out.get("funding_conversion_rate"))).clip(lower=0)
 
@@ -324,8 +342,8 @@ def _add_market_opportunity_fields(market: pd.DataFrame) -> pd.DataFrame:
     )
     out["atlas_default_metric_label"] = "Benchmark opportunity index"
     out["atlas_metric_interpretation"] = (
-        "Default atlas colour combines funded-plan density below national mean, utilisation below national median "
-        "and provider saturation above national mean. Use tooltips and filters to inspect each delta separately."
+        "Atlas benchmark fields compare each service area with the national service-area median for the same quarter. "
+        "The map colour uses utilisation delta from the national median, where higher utilisation is greener and lower utilisation is redder."
     )
     out["opportunity_reading_note"] = (
         "Proxy score from public NDIA service-area data. It combines benchmark gaps, utilisation friction, "
@@ -350,12 +368,16 @@ def _add_support_opportunity_fields(support: pd.DataFrame, market: pd.DataFrame)
         "underfunded_advocacy_score",
         "underserviced_provider_score",
         "funded_plans_per_1000_delta_from_national_mean",
+        "funded_plans_per_1000_delta_from_national_median",
         "mean_plan_utilisation_delta_from_national_median",
         "provider_saturation_delta_from_national_mean",
+        "provider_saturation_delta_from_national_median",
         "active_provider_rate_delta_from_national_mean",
+        "active_provider_rate_delta_from_national_median",
         "atlas_default_metric_value",
         "atlas_default_metric_label",
         "atlas_metric_interpretation",
+        "atlas_utilisation_median_band",
     ]
     available_context = [col for col in context_cols if col in market.columns]
     if len(available_context) == len(context_cols):
@@ -413,6 +435,18 @@ def _add_support_opportunity_fields(support: pd.DataFrame, market: pd.DataFrame)
     out["service_type_opportunity_rank"] = numeric(out["service_type_opportunity_score"]).groupby(rank_groups).rank(ascending=False, method="dense")
     out["service_type_opportunity_segment"] = _support_opportunity_segment(out)
     return out
+
+
+def _utilisation_median_band(delta: pd.Series) -> pd.Series:
+    values = numeric(delta)
+    return pd.Series(
+        np.select(
+            [values.isna(), values < -0.02, values > 0.02],
+            ["No data", "Below national median", "Above national median"],
+            default="Near national median",
+        ),
+        index=values.index,
+    )
 
 
 def _weighted_average_by_group(frame: pd.DataFrame, group_cols: list[str], value_col: str, weight_col: str) -> pd.Series:

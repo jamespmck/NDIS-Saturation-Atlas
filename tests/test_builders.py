@@ -48,8 +48,11 @@ def test_tableau_outputs_include_opportunity_scores():
         "underfunded_advocacy_score",
         "underserviced_provider_score",
         "funded_plans_per_1000_delta_from_national_mean",
+        "funded_plans_per_1000_delta_from_national_median",
         "mean_plan_utilisation_delta_from_national_median",
         "provider_saturation_delta_from_national_mean",
+        "provider_saturation_delta_from_national_median",
+        "atlas_utilisation_median_band",
         "atlas_default_metric_value",
         "opportunity_segment",
     }.issubset(market_out.columns)
@@ -60,8 +63,11 @@ def test_tableau_outputs_include_opportunity_scores():
         "service_type_opportunity_segment",
         "atlas_service_type_filter",
         "funded_plans_per_1000_delta_from_national_mean",
+        "funded_plans_per_1000_delta_from_national_median",
         "mean_plan_utilisation_delta_from_national_median",
         "provider_saturation_delta_from_national_mean",
+        "provider_saturation_delta_from_national_median",
+        "atlas_utilisation_median_band",
     }.issubset(support_out.columns)
 
     for field in [

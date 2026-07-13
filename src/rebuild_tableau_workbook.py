@@ -26,6 +26,10 @@ ATLAS_FIXED_EXTENT_DEGREES = {
     "rows": {"min": "-44.0", "max": "16.0"},
 }
 
+ATLAS_DATASOURCE_PREFIX = "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij]"
+ATLAS_COLOUR_BAND_INSTANCE = "[none:atlas_utilisation_median_band:nk]"
+ATLAS_COLOUR_BAND_COLUMN = f"{ATLAS_DATASOURCE_PREFIX}.{ATLAS_COLOUR_BAND_INSTANCE}"
+
 STREAMLIT_STYLE_DASHBOARDS = [
     ("NDIS Saturation Atlas Monitor", (1600, 940), ["Atlas Map"]),
     ("NDIS Saturation Atlas Tablet", (900, 760), ["Atlas Map"]),
@@ -57,6 +61,8 @@ def rebuild_website_ready_candidate(
     _replace_dashboard_windows(stable_root.find("windows"), layout_root.find("windows"))
     _rebuild_streamlit_style_dashboards(stable_root)
     _configure_atlas_worksheet(stable_root)
+    _configure_atlas_colour_palette(stable_root)
+    _configure_atlas_window_cards(stable_root)
     _remove_map_navigation_elements(stable_root)
     _remove_stale_extracts(stable_root)
     ET.indent(stable_tree, space="  ")
@@ -293,40 +299,56 @@ def _configure_atlas_worksheet(root: ET.Element) -> None:
             "[funded_plans_per_1000_delta_from_national_mean]",
             "[mean_plan_utilisation_delta_from_national_median]",
             "[provider_saturation_delta_from_national_mean]",
+            "[provider_saturation_delta_from_national_median]",
+            "[funded_plans_per_1000_delta_from_national_median]",
+            "[active_provider_rate_delta_from_national_median]",
             "[support_type]",
             "[supply_response_gap]",
         ],
     )
 
-    _ensure_column(dependencies, "Funded Plans Per 1000 Gap From National", "real", "[funded_plans_per_1000_gap_from_national]", "measure", "quantitative")
-    _ensure_column(dependencies, "Mean Plan Utilisation Gap From National", "real", "[mean_plan_utilisation_gap_from_national]", "measure", "quantitative")
+    _ensure_column(dependencies, "Funded Plans Per 1000 Delta From National Median", "real", "[funded_plans_per_1000_delta_from_national_median]", "measure", "quantitative")
+    _ensure_column(dependencies, "Mean Plan Utilisation Delta From National Median", "real", "[mean_plan_utilisation_delta_from_national_median]", "measure", "quantitative")
+    _ensure_column(dependencies, "Provider Saturation Delta From National Median", "real", "[provider_saturation_delta_from_national_median]", "measure", "quantitative")
+    _ensure_column(dependencies, "Active Provider Rate Delta From National Median", "real", "[active_provider_rate_delta_from_national_median]", "measure", "quantitative")
     _ensure_column(dependencies, "Active Providers Per 1000 Funded Plans", "real", "[active_providers_per_1000_funded_plans]", "measure", "quantitative")
-    _ensure_column_instance(dependencies, "[funded_plans_per_1000_gap_from_national]", "Avg", "[avg:funded_plans_per_1000_gap_from_national:qk]", "quantitative")
-    _ensure_column_instance(dependencies, "[mean_plan_utilisation_gap_from_national]", "Avg", "[avg:mean_plan_utilisation_gap_from_national:qk]", "quantitative")
+    _ensure_column(dependencies, "Atlas Utilisation Median Band", "string", "[atlas_utilisation_median_band]", "dimension", "nominal")
+    _ensure_column_instance(dependencies, "[funded_plans_per_1000_delta_from_national_median]", "Avg", "[avg:funded_plans_per_1000_delta_from_national_median:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[mean_plan_utilisation_delta_from_national_median]", "Avg", "[avg:mean_plan_utilisation_delta_from_national_median:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[provider_saturation_delta_from_national_median]", "Avg", "[avg:provider_saturation_delta_from_national_median:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[active_provider_rate_delta_from_national_median]", "Avg", "[avg:active_provider_rate_delta_from_national_median:qk]", "quantitative")
     _ensure_column_instance(dependencies, "[active_providers_per_1000_funded_plans]", "Avg", "[avg:active_providers_per_1000_funded_plans:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[atlas_utilisation_median_band]", "None", ATLAS_COLOUR_BAND_INSTANCE, "nominal")
 
     for color in encodings.findall("color"):
         encodings.remove(color)
-    color = ET.Element("color", {"column": "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:persistent_utilisation_classification:nk]"})
+    color = ET.Element("color", {"column": ATLAS_COLOUR_BAND_COLUMN})
     encodings.insert(0, color)
     _remove_encoding_references(
         encodings,
         [
             "atlas_default_metric_value",
             "funded_plans_per_1000_delta_from_national_mean",
+            "funded_plans_per_1000_delta_from_national_median",
             "mean_plan_utilisation_delta_from_national_median",
             "provider_saturation_delta_from_national_mean",
+            "provider_saturation_delta_from_national_median",
+            "active_provider_rate_delta_from_national_median",
             "support_type",
             "supply_response_gap",
         ],
     )
     for column in [
-        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_gap_from_national:qk]",
-        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_gap_from_national:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_median:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_median:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_provider_rate_delta_from_national_median:qk]",
         "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_providers_per_1000_funded_plans:qk]",
+        ATLAS_COLOUR_BAND_COLUMN,
     ]:
         if not any(node.attrib.get("column") == column for node in encodings.findall("tooltip")):
             ET.SubElement(encodings, "tooltip", {"column": column})
+    _set_atlas_tooltip(worksheet)
     _set_atlas_fixed_extent(worksheet)
     _set_atlas_map_washout(worksheet)
 
@@ -347,6 +369,63 @@ def _remove_stale_extracts(root: ET.Element) -> None:
                 parent.remove(child)
             elif child.tag == "properties" and child.attrib.get("context") == "extract":
                 parent.remove(child)
+
+
+def _configure_atlas_colour_palette(root: ET.Element) -> None:
+    style = next((node for node in root.findall(".//datasource/style") if node.find("./style-rule[@element='mark']") is not None), None)
+    if style is None:
+        return
+    mark_rule = style.find("./style-rule[@element='mark']")
+    if mark_rule is None:
+        mark_rule = ET.SubElement(style, "style-rule", {"element": "mark"})
+    for encoding in list(mark_rule.findall("encoding")):
+        if encoding.attrib.get("attr") == "color":
+            mark_rule.remove(encoding)
+    encoding = ET.SubElement(mark_rule, "encoding", {"attr": "color", "field": ATLAS_COLOUR_BAND_INSTANCE, "type": "palette"})
+    for label, colour in [
+        ("No data", "#D9D9D9"),
+        ("Below national median", "#B3261E"),
+        ("Near national median", "#FFF7E6"),
+        ("Above national median", "#2E7D32"),
+    ]:
+        colour_map = ET.SubElement(encoding, "map", {"to": colour})
+        bucket = ET.SubElement(colour_map, "bucket")
+        bucket.text = f'"{label}"'
+
+
+def _configure_atlas_window_cards(root: ET.Element) -> None:
+    window = next((node for node in root.findall(".//windows/window") if node.attrib.get("class") == "worksheet" and node.attrib.get("name") == "Atlas Map"), None)
+    if window is None:
+        return
+    for card in window.findall(".//card"):
+        if card.attrib.get("type") == "color":
+            card.attrib["param"] = ATLAS_COLOUR_BAND_COLUMN
+
+
+def _set_atlas_tooltip(worksheet: ET.Element) -> None:
+    tooltip = worksheet.find(".//pane[@id='0']/customized-tooltip/formatted-text")
+    if tooltip is None:
+        return
+    tooltip.clear()
+    rows = [
+        ("Ndis Service Area", f"{ATLAS_DATASOURCE_PREFIX}.[none:ndis_service_area:nk]"),
+        ("Remoteness Category", f"{ATLAS_DATASOURCE_PREFIX}.[none:remoteness_category:nk]"),
+        ("Quarter", f"{ATLAS_DATASOURCE_PREFIX}.[attr:quarter_label:nk]"),
+        ("Utilisation vs national median", f"{ATLAS_DATASOURCE_PREFIX}.[avg:mean_plan_utilisation_delta_from_national_median:qk]"),
+        ("Utilisation band", f"{ATLAS_DATASOURCE_PREFIX}.{ATLAS_COLOUR_BAND_INSTANCE}"),
+        ("Funded plans per 1,000 vs national median", f"{ATLAS_DATASOURCE_PREFIX}.[avg:funded_plans_per_1000_delta_from_national_median:qk]"),
+        ("Provider saturation vs national median", f"{ATLAS_DATASOURCE_PREFIX}.[avg:provider_saturation_delta_from_national_median:qk]"),
+        ("Active providers per 1,000 plans vs national median", f"{ATLAS_DATASOURCE_PREFIX}.[avg:active_provider_rate_delta_from_national_median:qk]"),
+        ("Funded Plan Count", f"{ATLAS_DATASOURCE_PREFIX}.[sum:funded_plan_count:qk]"),
+        ("Mean Plan Utilisation", f"{ATLAS_DATASOURCE_PREFIX}.[avg:mean_plan_utilisation:qk]"),
+    ]
+    for label, field in rows:
+        label_run = ET.SubElement(tooltip, "run", {"fontcolor": "#757575"})
+        label_run.text = f"{label}:\t"
+        value_run = ET.SubElement(tooltip, "run", {"bold": "true"})
+        value_run.text = f"<{field}>"
+        newline = ET.SubElement(tooltip, "run")
+        newline.text = "\n"
 
 
 def _ensure_column(dependencies: ET.Element, caption: str, datatype: str, name: str, role: str, col_type: str) -> None:
