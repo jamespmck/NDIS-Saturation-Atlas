@@ -17,7 +17,7 @@ Treat this workbook as publication-ready only when it demonstrates the full proj
 - a quarterly trend tool that lets readers inspect how these signals change over time;
 - a cautious projection tool that labels future metrics as simple momentum proxies, not statistical forecasts.
 
-The website version should make the standalone atlas the first view. The standalone atlas dashboards should be map-only: no KPI strip, rankings, opportunity tables or surrounding blank cells. The atlas geometry should include metro inset panels and should exclude Lord Howe Island and Norfolk Island if they appear in a future source. Selecting a service area should load or reveal the service-area dashboard filtered to that area. Opportunities dashboards should support review by utilisation, saturation, provider activity, business opportunity, advocacy opportunity, under-funding and service type.
+The website version should make the standalone atlas the first view. The standalone atlas dashboards should be map-only: no KPI strip, rankings, opportunity tables or surrounding blank cells. The atlas geometry should include metro inset panels and should exclude Lord Howe Island and Norfolk Island if they appear in a future source. Keep the atlas at service-area/quarter grain; do not add `support_type` to the map layer because it comes from the support-type table and can stop Tableau rendering the geometry. Selecting a service area should load or reveal the service-area dashboard filtered to that area. Opportunities dashboards should support review by utilisation, saturation, provider activity, business opportunity, advocacy opportunity, under-funding and service type.
 
 ## Current Generated Dashboards
 

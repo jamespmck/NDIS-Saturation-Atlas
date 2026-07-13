@@ -4478,16 +4478,14 @@
             <column-instance column="[mean_plan_utilisation]" derivation="Avg" name="[avg:mean_plan_utilisation:qk]" pivot="key" type="quantitative" />
             <column-instance column="[payment_amount]" derivation="Sum" name="[sum:payment_amount:qk]" pivot="key" type="quantitative" />
             <column-instance column="[payments_per_funded_plan]" derivation="Avg" name="[avg:payments_per_funded_plan:qk]" pivot="key" type="quantitative" />
-            <column caption="Atlas Default Metric Value" datatype="real" name="[atlas_default_metric_value]" role="measure" type="quantitative" />
-            <column caption="Funded Plans Per 1000 Delta From National Mean" datatype="real" name="[funded_plans_per_1000_delta_from_national_mean]" role="measure" type="quantitative" />
-            <column caption="Mean Plan Utilisation Delta From National Median" datatype="real" name="[mean_plan_utilisation_delta_from_national_median]" role="measure" type="quantitative" />
-            <column caption="Provider Saturation Delta From National Mean" datatype="real" name="[provider_saturation_delta_from_national_mean]" role="measure" type="quantitative" />
-            <column caption="Support Type" datatype="string" name="[support_type]" role="dimension" type="nominal" />
-            <column-instance column="[atlas_default_metric_value]" derivation="Avg" name="[avg:atlas_default_metric_value:qk]" pivot="key" type="quantitative" />
-            <column-instance column="[funded_plans_per_1000_delta_from_national_mean]" derivation="Avg" name="[avg:funded_plans_per_1000_delta_from_national_mean:qk]" pivot="key" type="quantitative" />
-            <column-instance column="[mean_plan_utilisation_delta_from_national_median]" derivation="Avg" name="[avg:mean_plan_utilisation_delta_from_national_median:qk]" pivot="key" type="quantitative" />
-            <column-instance column="[provider_saturation_delta_from_national_mean]" derivation="Avg" name="[avg:provider_saturation_delta_from_national_mean:qk]" pivot="key" type="quantitative" />
-            <column-instance column="[support_type]" derivation="None" name="[none:support_type:nk]" pivot="key" type="nominal" />
+            <column caption="Funded Plans Per 1000 Gap From National" datatype="real" name="[funded_plans_per_1000_gap_from_national]" role="measure" type="quantitative" />
+            <column caption="Mean Plan Utilisation Gap From National" datatype="real" name="[mean_plan_utilisation_gap_from_national]" role="measure" type="quantitative" />
+            <column caption="Supply Response Gap" datatype="real" name="[supply_response_gap]" role="measure" type="quantitative" />
+            <column caption="Active Providers Per 1000 Funded Plans" datatype="real" name="[active_providers_per_1000_funded_plans]" role="measure" type="quantitative" />
+            <column-instance column="[funded_plans_per_1000_gap_from_national]" derivation="Avg" name="[avg:funded_plans_per_1000_gap_from_national:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[mean_plan_utilisation_gap_from_national]" derivation="Avg" name="[avg:mean_plan_utilisation_gap_from_national:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[supply_response_gap]" derivation="Avg" name="[avg:supply_response_gap:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[active_providers_per_1000_funded_plans]" derivation="Avg" name="[avg:active_providers_per_1000_funded_plans:qk]" pivot="key" type="quantitative" />
           </datasource-dependencies>
           <filter class="categorical" column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:quarter_label (tableau_market_classification.csv):nk]">
             <groupfilter function="member" level="[none:quarter_label (tableau_market_classification.csv):nk]" member="&quot;2026 Q1&quot;" ns0:ui-domain="database" ns0:ui-enumeration="inclusive" ns0:ui-marker="enumerate" />
@@ -4519,7 +4517,7 @@
             </view>
             <mark class="Automatic" />
             <encodings>
-              <color column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:atlas_default_metric_value:qk]" />
+              <color column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:persistent_utilisation_classification:nk]" />
               <lod column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:remoteness_category:nk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[sum:funded_plan_count:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000:qk]" />
@@ -4530,10 +4528,10 @@
               <lod column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[clct:Geometry:nk]" />
               <lod column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:ndis_service_area:nk]" />
               <geometry column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[clct:Geometry:nk]" />
-              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_mean:qk]" />
-              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]" />
-              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_mean:qk]" />
-              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:support_type:nk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_gap_from_national:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_gap_from_national:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:supply_response_gap:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_providers_per_1000_funded_plans:qk]" />
             </encodings>
             <customized-tooltip>
               <formatted-text>

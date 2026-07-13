@@ -279,26 +279,45 @@ def _configure_atlas_worksheet(root: ET.Element) -> None:
     if dependencies is None or encodings is None:
         return
 
-    _ensure_column(dependencies, "Atlas Default Metric Value", "real", "[atlas_default_metric_value]", "measure", "quantitative")
-    _ensure_column(dependencies, "Funded Plans Per 1000 Delta From National Mean", "real", "[funded_plans_per_1000_delta_from_national_mean]", "measure", "quantitative")
-    _ensure_column(dependencies, "Mean Plan Utilisation Delta From National Median", "real", "[mean_plan_utilisation_delta_from_national_median]", "measure", "quantitative")
-    _ensure_column(dependencies, "Provider Saturation Delta From National Mean", "real", "[provider_saturation_delta_from_national_mean]", "measure", "quantitative")
-    _ensure_column(dependencies, "Support Type", "string", "[support_type]", "dimension", "nominal")
-    _ensure_column_instance(dependencies, "[atlas_default_metric_value]", "Avg", "[avg:atlas_default_metric_value:qk]", "quantitative")
-    _ensure_column_instance(dependencies, "[funded_plans_per_1000_delta_from_national_mean]", "Avg", "[avg:funded_plans_per_1000_delta_from_national_mean:qk]", "quantitative")
-    _ensure_column_instance(dependencies, "[mean_plan_utilisation_delta_from_national_median]", "Avg", "[avg:mean_plan_utilisation_delta_from_national_median:qk]", "quantitative")
-    _ensure_column_instance(dependencies, "[provider_saturation_delta_from_national_mean]", "Avg", "[avg:provider_saturation_delta_from_national_mean:qk]", "quantitative")
-    _ensure_column_instance(dependencies, "[support_type]", "None", "[none:support_type:nk]", "nominal")
+    _remove_dependency_fields(
+        dependencies,
+        [
+            "[atlas_default_metric_value]",
+            "[funded_plans_per_1000_delta_from_national_mean]",
+            "[mean_plan_utilisation_delta_from_national_median]",
+            "[provider_saturation_delta_from_national_mean]",
+            "[support_type]",
+        ],
+    )
+
+    _ensure_column(dependencies, "Funded Plans Per 1000 Gap From National", "real", "[funded_plans_per_1000_gap_from_national]", "measure", "quantitative")
+    _ensure_column(dependencies, "Mean Plan Utilisation Gap From National", "real", "[mean_plan_utilisation_gap_from_national]", "measure", "quantitative")
+    _ensure_column(dependencies, "Supply Response Gap", "real", "[supply_response_gap]", "measure", "quantitative")
+    _ensure_column(dependencies, "Active Providers Per 1000 Funded Plans", "real", "[active_providers_per_1000_funded_plans]", "measure", "quantitative")
+    _ensure_column_instance(dependencies, "[funded_plans_per_1000_gap_from_national]", "Avg", "[avg:funded_plans_per_1000_gap_from_national:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[mean_plan_utilisation_gap_from_national]", "Avg", "[avg:mean_plan_utilisation_gap_from_national:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[supply_response_gap]", "Avg", "[avg:supply_response_gap:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[active_providers_per_1000_funded_plans]", "Avg", "[avg:active_providers_per_1000_funded_plans:qk]", "quantitative")
 
     for color in encodings.findall("color"):
         encodings.remove(color)
-    color = ET.Element("color", {"column": "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:atlas_default_metric_value:qk]"})
+    color = ET.Element("color", {"column": "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:persistent_utilisation_classification:nk]"})
     encodings.insert(0, color)
+    _remove_encoding_references(
+        encodings,
+        [
+            "atlas_default_metric_value",
+            "funded_plans_per_1000_delta_from_national_mean",
+            "mean_plan_utilisation_delta_from_national_median",
+            "provider_saturation_delta_from_national_mean",
+            "support_type",
+        ],
+    )
     for column in [
-        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_mean:qk]",
-        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]",
-        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_mean:qk]",
-        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:support_type:nk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_gap_from_national:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_gap_from_national:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:supply_response_gap:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_providers_per_1000_funded_plans:qk]",
     ]:
         if not any(node.attrib.get("column") == column for node in encodings.findall("tooltip")):
             ET.SubElement(encodings, "tooltip", {"column": column})
@@ -312,6 +331,21 @@ def _ensure_column(dependencies: ET.Element, caption: str, datatype: str, name: 
 def _ensure_column_instance(dependencies: ET.Element, column: str, derivation: str, name: str, instance_type: str) -> None:
     if dependencies.find(f"./column-instance[@name='{name}']") is None:
         ET.SubElement(dependencies, "column-instance", {"column": column, "derivation": derivation, "name": name, "pivot": "key", "type": instance_type})
+
+
+def _remove_dependency_fields(dependencies: ET.Element, columns: list[str]) -> None:
+    for node in list(dependencies):
+        if node.tag == "column" and node.attrib.get("name") in columns:
+            dependencies.remove(node)
+        elif node.tag == "column-instance" and node.attrib.get("column") in columns:
+            dependencies.remove(node)
+
+
+def _remove_encoding_references(encodings: ET.Element, tokens: list[str]) -> None:
+    for node in list(encodings):
+        column = node.attrib.get("column", "")
+        if any(token in column for token in tokens):
+            encodings.remove(node)
 
 
 def _stable_uuid(value: str) -> str:

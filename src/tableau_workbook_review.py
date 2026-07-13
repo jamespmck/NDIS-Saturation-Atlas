@@ -292,21 +292,30 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
         findings.append(ReviewFinding("pass", "info", "atlas_fixed_extent", "Atlas Map has fixed longitude/latitude ranges for the Australia extent."))
 
     for field in [
-        "avg:atlas_default_metric_value:qk",
-        "avg:funded_plans_per_1000_delta_from_national_mean:qk",
-        "avg:mean_plan_utilisation_delta_from_national_median:qk",
-        "avg:provider_saturation_delta_from_national_mean:qk",
+        "none:persistent_utilisation_classification:nk",
+        "avg:funded_plans_per_1000_gap_from_national:qk",
+        "avg:mean_plan_utilisation_gap_from_national:qk",
+        "avg:supply_response_gap:qk",
+        "avg:active_providers_per_1000_funded_plans:qk",
     ]:
         if field not in atlas_xml:
             findings.append(ReviewFinding("fail", "high", "atlas_metric_contract", f"Atlas Map is missing field `{field}`."))
             break
     else:
-        findings.append(ReviewFinding("pass", "info", "atlas_metric_contract", "Atlas Map includes benchmark opportunity, funded-plan, utilisation and provider-saturation delta fields."))
+        findings.append(ReviewFinding("pass", "info", "atlas_metric_contract", "Atlas Map uses render-safe workbook fields for utilisation classification, funded-plan gap, utilisation gap, supply response and provider rate."))
 
-    if "none:support_type:nk" not in atlas_xml:
-        findings.append(ReviewFinding("fail", "high", "atlas_service_type_filter_contract", "Atlas Map is missing the support_type field needed for service-type filtering."))
+    forbidden_atlas_tokens = [
+        "atlas_default_metric_value",
+        "funded_plans_per_1000_delta_from_national_mean",
+        "mean_plan_utilisation_delta_from_national_median",
+        "provider_saturation_delta_from_national_mean",
+        "none:support_type:nk",
+    ]
+    leaked_tokens = [token for token in forbidden_atlas_tokens if token in atlas_xml]
+    if leaked_tokens:
+        findings.append(ReviewFinding("fail", "high", "atlas_render_safe_field_contract", "Atlas Map references fields that are unsafe for the current Tableau datasource/geometry grain: " + ", ".join(leaked_tokens) + "."))
     else:
-        findings.append(ReviewFinding("pass", "info", "atlas_service_type_filter_contract", "Atlas Map includes support_type for service-type filtering."))
+        findings.append(ReviewFinding("pass", "info", "atlas_render_safe_field_contract", "Atlas Map avoids CSV-only fields and support-type grain fields that can prevent Tableau from rendering the geometry."))
 
     if "quarter_label" not in atlas_xml:
         findings.append(ReviewFinding("fail", "high", "atlas_quarter_filter_contract", "Atlas Map is missing the quarter label field needed for quarter filtering."))
@@ -351,7 +360,7 @@ def _markdown_report(path: Path, findings: list[ReviewFinding]) -> str:
             "",
             "## Review Standard",
             "",
-            "A website-ready workbook must open reliably, show a standalone atlas with benchmark-delta metrics as the first geospatial view, move headline KPIs to national dashboards, support service-area detail review, and embed opportunity, advocacy, provider and service-type worksheets away from the atlas.",
+            "A website-ready workbook must open reliably, show a standalone atlas with render-safe benchmark gap context as the first geospatial view, move headline KPIs to national dashboards, support service-area detail review, and embed opportunity, advocacy, provider and service-type worksheets away from the atlas.",
             "",
         ]
     )

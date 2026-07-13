@@ -105,6 +105,8 @@ Recommended global filters:
 - `persistent_utilisation_classification`
 - `support_type`
 
+Use `support_type` on support-mix, service-type opportunity and opportunity dashboards. Do not place `support_type` directly on `Atlas Map`; it is a support-table grain field and can multiply service-area polygons enough to prevent Tableau from rendering the geometry.
+
 ## Atlas Click-Through
 
 The generated workbook keeps dashboard XML deliberately simple so Tableau Public opens the file reliably. The atlas-to-detail behavior is handled on `gmdata.au` through Tableau's Embedding API v3 rather than internal `.twb` dashboard-action XML.
@@ -137,7 +139,7 @@ Responsive dashboards:
 
 1. `NDIS Saturation Atlas Monitor`
    - Size: fixed, `1600 x 940`.
-   - Standalone map-only atlas with metro inset geometry and benchmark-delta tooltips.
+   - Standalone map-only atlas with metro inset geometry and render-safe benchmark-gap tooltips.
 
 2. `NDIS Saturation Atlas Tablet`
    - Size: fixed, `900 x 760`.

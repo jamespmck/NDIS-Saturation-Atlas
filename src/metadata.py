@@ -255,7 +255,7 @@ FIELD_DESCRIPTIONS = {
     "provider_saturation_delta_from_national_mean": "Funded plans per active provider minus the national mean for the same quarter. Higher values indicate higher provider load.",
     "active_provider_rate_delta_from_national_mean": "Active providers per 1,000 funded plans minus the national mean for the same quarter.",
     "atlas_default_metric_value": "Default atlas colour metric combining funded-plan coverage gaps, utilisation gaps and provider saturation signals.",
-    "atlas_service_type_filter": "Support type copied into the service-type table for Tableau atlas filtering.",
+    "atlas_service_type_filter": "Support type copied into the service-type table for Tableau support and opportunity filtering; keep it off the service-area geometry map.",
     "opportunity_rank": "Quarter-specific rank by combined opportunity score, where 1 is the highest-ranked service area.",
     "opportunity_segment": "Readable service-area opportunity segment derived from the proxy scores.",
     "support_payment_gap_from_remoteness_benchmark": "Estimated support-type payment dollars below or above the remoteness peer payment-share benchmark.",
