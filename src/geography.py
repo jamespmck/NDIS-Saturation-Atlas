@@ -21,14 +21,17 @@ FISCAL_QUARTER_END_MONTH_DAY = {
 
 EXCLUDED_ATLAS_GEOGRAPHIES = {"lord howe island", "norfolk island"}
 
+ATLAS_CANVAS_BOUNDS = (0.0, -60.0, 100.0, 20.0)
+ATLAS_MAIN_BOUNDS = (24.0, -38.0, 72.0, 16.0)
+
 METRO_INSET_GROUPS = {
     "Perth inset": {
         "areas": {"Central North Metro", "Central South Metro", "North Metro", "South East Metro", "South Metro"},
-        "target_bounds": (101.0, -39.5, 109.8, -31.0),
+        "target_bounds": (3.0, -34.0, 21.0, -16.0),
     },
     "Adelaide inset": {
         "areas": {"Adelaide Hills", "Barossa, Light and Lower North", "Eastern Adelaide", "Northern Adelaide", "Southern Adelaide", "Western Adelaide"},
-        "target_bounds": (124.0, -52.0, 140.0, -45.0),
+        "target_bounds": (25.0, -58.0, 64.0, -43.0),
     },
     "Melbourne inset": {
         "areas": {
@@ -41,15 +44,15 @@ METRO_INSET_GROUPS = {
             "Southern Melbourne",
             "Western Melbourne",
         },
-        "target_bounds": (171.0, -43.8, 179.0, -36.0),
+        "target_bounds": (77.0, -38.0, 97.0, -22.0),
     },
     "Sydney inset": {
         "areas": {"Central Coast", "North Sydney", "South Eastern Sydney", "South Western Sydney", "Sydney", "Western Sydney"},
-        "target_bounds": (171.0, -35.2, 179.0, -27.7),
+        "target_bounds": (77.0, -19.0, 97.0, -3.0),
     },
     "Brisbane inset": {
         "areas": {"Beenleigh", "Brisbane", "Caboolture/Strathpine", "Robina"},
-        "target_bounds": (171.0, -26.8, 179.0, -20.5),
+        "target_bounds": (77.0, 0.0, 97.0, 16.0),
     },
 }
 
@@ -253,8 +256,8 @@ def write_geometry_outputs() -> list[dict]:
                 "mapping_status": "atlas_geojson_with_metro_insets",
                 "reliability_flag": config.RELIABILITY_FLAGS["derived"],
                 "explanatory_note": (
-                    f"Built from {config.SERVICE_AREA_GEOJSON_SOURCE}. Metro service areas are repositioned into inset panels "
-                    "for Tableau atlas readability; Lord Howe Island and Norfolk Island are excluded if present."
+                    f"Built from {config.SERVICE_AREA_GEOJSON_SOURCE}. Service-area polygons are transformed into a custom "
+                    "Tableau atlas canvas with separate metro inset panels; Lord Howe Island and Norfolk Island are excluded if present."
                 ),
             }
         )
@@ -306,7 +309,21 @@ def _apply_metro_insets(features: list[dict]) -> list[dict]:
         str(feature.get("properties", {}).get("ndis_service_area") or feature.get("properties", {}).get("map_key") or feature.get("properties", {}).get("name")): feature
         for feature in features
     }
+    inset_names = {
+        name
+        for spec in METRO_INSET_GROUPS.values()
+        for name in spec["areas"]
+        if name in by_name
+    }
     transformed_names: set[str] = set()
+
+    main_features = [feature for name, feature in by_name.items() if name not in inset_names]
+    if main_features:
+        for feature in _transform_features_to_bounds(main_features, ATLAS_MAIN_BOUNDS, "Main map"):
+            name = str(feature["properties"].get("ndis_service_area") or feature["properties"].get("map_key") or feature["properties"].get("name"))
+            by_name[name] = feature
+            transformed_names.add(name)
+
     for panel_name, spec in METRO_INSET_GROUPS.items():
         names = set(spec["areas"])
         panel_features = [by_name[name] for name in names if name in by_name]
@@ -327,6 +344,8 @@ def _apply_metro_insets(features: list[dict]) -> list[dict]:
 
 def _transform_features_to_bounds(features: list[dict], target_bounds: tuple[float, float, float, float], panel_name: str) -> list[dict]:
     geometries = [shape(feature["geometry"]) for feature in features if feature.get("geometry")]
+    if not geometries:
+        return []
     minx = min(geom.bounds[0] for geom in geometries)
     miny = min(geom.bounds[1] for geom in geometries)
     maxx = max(geom.bounds[2] for geom in geometries)

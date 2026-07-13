@@ -288,11 +288,11 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
         if node.attrib.get("type") == "space" and node.attrib.get("range-type") == "fixed"
     ]
     if len(fixed_space_encodings) < 2:
-        findings.append(ReviewFinding("fail", "high", "atlas_fixed_extent", "Atlas Map does not have fixed longitude/latitude ranges for the Australia extent."))
+        findings.append(ReviewFinding("fail", "high", "atlas_fixed_extent", "Atlas Map does not have fixed x/y ranges for the custom atlas canvas."))
     elif not _atlas_extent_covers_insets(fixed_space_encodings):
-        findings.append(ReviewFinding("fail", "high", "atlas_fixed_extent", "Atlas Map fixed extent is too narrow to include the main Australia map and metro inset panels."))
+        findings.append(ReviewFinding("fail", "high", "atlas_fixed_extent", "Atlas Map fixed extent is too narrow to include the custom atlas canvas and metro inset panels."))
     else:
-        findings.append(ReviewFinding("pass", "info", "atlas_fixed_extent", "Atlas Map has fixed longitude/latitude ranges covering Australia and the metro inset panels."))
+        findings.append(ReviewFinding("pass", "info", "atlas_fixed_extent", "Atlas Map has fixed x/y ranges covering the custom atlas canvas and metro inset panels."))
 
     for field in [
         "none:persistent_utilisation_classification:nk",
@@ -345,7 +345,7 @@ def _atlas_extent_covers_insets(space_encodings: list[ET.Element]) -> bool:
         return False
     if any(node.attrib.get("projection") == "EPSG:3857" for node in space_encodings):
         return False
-    return cols_min <= 100 and cols_max >= 180 and rows_min <= -53 and rows_max >= -8
+    return cols_min <= 0 and cols_max >= 100 and rows_min <= -60 and rows_max >= 20
 
 
 def _markdown_report(path: Path, findings: list[ReviewFinding]) -> str:

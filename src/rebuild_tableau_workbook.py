@@ -22,8 +22,8 @@ ATLAS_ONLY_DASHBOARDS = {
 }
 
 ATLAS_FIXED_EXTENT_DEGREES = {
-    "cols": {"min": "100.0", "max": "180.0"},
-    "rows": {"min": "-53.0", "max": "-8.0"},
+    "cols": {"min": "0.0", "max": "100.0"},
+    "rows": {"min": "-60.0", "max": "20.0"},
 }
 
 STREAMLIT_STYLE_DASHBOARDS = [
@@ -327,6 +327,7 @@ def _configure_atlas_worksheet(root: ET.Element) -> None:
         if not any(node.attrib.get("column") == column for node in encodings.findall("tooltip")):
             ET.SubElement(encodings, "tooltip", {"column": column})
     _set_atlas_fixed_extent(worksheet)
+    _set_atlas_map_washout(worksheet)
 
 
 def _remove_map_navigation_elements(root: ET.Element) -> None:
@@ -372,6 +373,19 @@ def _set_atlas_fixed_extent(worksheet: ET.Element) -> None:
         encoding.attrib.pop("projection", None)
         encoding.attrib["min"] = ATLAS_FIXED_EXTENT_DEGREES[scope]["min"]
         encoding.attrib["max"] = ATLAS_FIXED_EXTENT_DEGREES[scope]["max"]
+
+
+def _set_atlas_map_washout(worksheet: ET.Element) -> None:
+    style = worksheet.find(".//style")
+    if style is None:
+        return
+    map_rule = style.find("./style-rule[@element='map']")
+    if map_rule is None:
+        map_rule = ET.SubElement(style, "style-rule", {"element": "map"})
+    washout = map_rule.find("./format[@attr='washout']")
+    if washout is None:
+        washout = ET.SubElement(map_rule, "format", {"attr": "washout"})
+    washout.attrib["value"] = "1.0"
 
 
 def _stable_uuid(value: str) -> str:

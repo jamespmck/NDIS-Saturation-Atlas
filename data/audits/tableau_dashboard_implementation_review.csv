@@ -16,7 +16,7 @@ pass,info,opportunity_dashboard_coverage,All opportunity worksheets are embedded
 pass,info,opportunity_ranking_dashboard,"Opportunity dashboards cover opportunity, advocacy, provider and service-type views."
 pass,info,atlas_geometry_encoding,Atlas Map contains a geometry encoding.
 pass,info,atlas_color_encoding,Atlas Map contains a color encoding.
-pass,info,atlas_fixed_extent,Atlas Map has fixed longitude/latitude ranges covering Australia and the metro inset panels.
+pass,info,atlas_fixed_extent,Atlas Map has fixed x/y ranges covering the custom atlas canvas and metro inset panels.
 pass,info,atlas_metric_contract,"Atlas Map uses render-safe workbook fields for utilisation classification, funded-plan gap, utilisation gap and provider rate."
 pass,info,atlas_render_safe_field_contract,Atlas Map avoids CSV-only fields and support-type grain fields that can prevent Tableau from rendering the geometry.
 pass,info,atlas_quarter_filter_contract,Atlas Map includes quarter label context for quarter filtering.

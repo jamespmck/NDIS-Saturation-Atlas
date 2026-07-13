@@ -58,6 +58,17 @@ def test_atlas_geojson_excludes_external_islands_and_tags_metro_insets():
     assert panels["Barossa, Light and Lower North"] == "Adelaide inset"
     assert panels["Barkly"] == "Main map"
 
+    bounds = {
+        feature["properties"]["ndis_service_area"]: _bounds(feature["geometry"])
+        for feature in out["features"]
+    }
+    assert bounds["Barkly"][0] >= 24
+    assert bounds["Barkly"][2] <= 72
+    assert bounds["Sydney"][0] >= 77
+    assert bounds["Sydney"][2] <= 97
+    assert bounds["Barossa, Light and Lower North"][1] >= -58
+    assert bounds["Barossa, Light and Lower North"][3] <= -42.999
+
 
 def _feature(name: str, x: float, y: float) -> dict:
     return {
@@ -74,3 +85,24 @@ def _feature(name: str, x: float, y: float) -> dict:
             ]],
         },
     }
+
+
+def _bounds(geometry: dict) -> tuple[float, float, float, float]:
+    coords = list(_coords(geometry))
+    xs = [x for x, _ in coords]
+    ys = [y for _, y in coords]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def _coords(geometry: dict):
+    geom_type = geometry["type"]
+    coordinates = geometry["coordinates"]
+    if geom_type == "Polygon":
+        for ring in coordinates:
+            for x, y, *_ in ring:
+                yield x, y
+    elif geom_type == "MultiPolygon":
+        for polygon in coordinates:
+            for ring in polygon:
+                for x, y, *_ in ring:
+                    yield x, y

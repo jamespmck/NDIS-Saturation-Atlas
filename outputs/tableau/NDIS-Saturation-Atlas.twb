@@ -4495,11 +4495,11 @@
         </view>
         <style>
           <style-rule element="axis">
-            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Longitude (generated)]" field-type="quantitative" max="180.0" min="100.0" range-type="fixed" scope="cols" type="space" />
-            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Latitude (generated)]" field-type="quantitative" max="-8.0" min="-53.0" range-type="fixed" scope="rows" type="space" />
+            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Longitude (generated)]" field-type="quantitative" max="100.0" min="0.0" range-type="fixed" scope="cols" type="space" />
+            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Latitude (generated)]" field-type="quantitative" max="20.0" min="-60.0" range-type="fixed" scope="rows" type="space" />
           </style-rule>
           <style-rule element="map">
-            <format attr="washout" value="0.45" />
+            <format attr="washout" value="1.0" />
           </style-rule>
         </style>
         <panes customization-axis="layer">

@@ -61,7 +61,7 @@ def _minimal_workbook(opportunity_dashboard: bool) -> str:
         "NDIS Saturation Opportunities Phone",
     ]
     worksheet_xml = "\n".join(
-        f'<worksheet name="{name}"><table><encodings>{"<geometry /><encoding type=\"space\" scope=\"cols\" range-type=\"fixed\" min=\"100\" max=\"180\" /><encoding type=\"space\" scope=\"rows\" range-type=\"fixed\" min=\"-53\" max=\"-8\" /><color column=\"[none:persistent_utilisation_classification:nk]\" /><tooltip column=\"[avg:funded_plans_per_1000_gap_from_national:qk]\" /><tooltip column=\"[avg:mean_plan_utilisation_gap_from_national:qk]\" /><tooltip column=\"[avg:active_providers_per_1000_funded_plans:qk]\" /><tooltip column=\"[none:quarter_label:nk]\" />" if name == "Atlas Map" else "<color />"}</encodings></table><simple-id uuid="ws-{index}" /></worksheet>'
+        f'<worksheet name="{name}"><table><encodings>{"<geometry /><encoding type=\"space\" scope=\"cols\" range-type=\"fixed\" min=\"0\" max=\"100\" /><encoding type=\"space\" scope=\"rows\" range-type=\"fixed\" min=\"-60\" max=\"20\" /><color column=\"[none:persistent_utilisation_classification:nk]\" /><tooltip column=\"[avg:funded_plans_per_1000_gap_from_national:qk]\" /><tooltip column=\"[avg:mean_plan_utilisation_gap_from_national:qk]\" /><tooltip column=\"[avg:active_providers_per_1000_funded_plans:qk]\" /><tooltip column=\"[none:quarter_label:nk]\" />" if name == "Atlas Map" else "<color />"}</encodings></table><simple-id uuid="ws-{index}" /></worksheet>'
         for index, name in enumerate(required_worksheets)
     )
     dashboard_xml = "\n".join(
