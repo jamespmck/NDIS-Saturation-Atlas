@@ -17,6 +17,7 @@ Verdict: **WEBSITE READY**
 | pass | info | `required_dashboards` | All 12 required dashboards are present. |
 | pass | info | `unique_simple_ids` | No duplicate simple-id UUIDs found. |
 | pass | info | `forbidden_grid` | No invalid <grid> elements found. |
+| pass | info | `forbidden_map_navigation` | No invalid <map_navigation> elements found. |
 | pass | info | `forbidden_nested_devicelayouts` | No invalid <nested_devicelayouts> elements found. |
 | pass | info | `devicelayout_auto_generated_attribute` | No unsupported devicelayout auto-generated attributes found. |
 | pass | info | `dashboard_sheet_zones` | Every dashboard contains worksheet zones. |
@@ -33,7 +34,6 @@ Verdict: **WEBSITE READY**
 | pass | info | `atlas_render_safe_field_contract` | Atlas Map avoids CSV-only fields and support-type grain fields that can prevent Tableau from rendering the geometry. |
 | pass | info | `atlas_quarter_filter_contract` | Atlas Map includes quarter label context for quarter filtering. |
 | pass | info | `atlas_dashboard_presence` | Atlas Map appears in 3 dashboard(s). |
-| pass | info | `atlas_map_navigation_lock` | Atlas Map viewpoints disable Tableau map navigation. |
 
 ## Review Standard
 

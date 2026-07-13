@@ -6632,7 +6632,6 @@ Weighted mean utilisation KPI: &lt;</run>
             <field>[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:remoteness_category:nk]</field>
           </color-one-way>
         </highlight>
-        <map-navigation value="false" />
       </viewpoint>
       <simple-id uuid="{71FDD439-054B-419E-B9D8-C419803696DB}" />
     </window>
@@ -7057,7 +7056,6 @@ Weighted mean utilisation KPI: &lt;</run>
           <highlight>
             <color-one-way />
           </highlight>
-          <map-navigation value="false" />
         </viewpoint>
       </viewpoints>
       <active id="2" />
@@ -7070,7 +7068,6 @@ Weighted mean utilisation KPI: &lt;</run>
           <highlight>
             <color-one-way />
           </highlight>
-          <map-navigation value="false" />
         </viewpoint>
       </viewpoints>
       <active id="2" />
@@ -7083,7 +7080,6 @@ Weighted mean utilisation KPI: &lt;</run>
           <highlight>
             <color-one-way />
           </highlight>
-          <map-navigation value="false" />
         </viewpoint>
       </viewpoints>
       <active id="2" />

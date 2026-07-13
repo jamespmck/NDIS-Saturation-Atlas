@@ -69,11 +69,10 @@ def _minimal_workbook(opportunity_dashboard: bool) -> str:
         for index, name in enumerate(dashboards)
     )
     window_xml = "\n".join(
-        f'<window class="dashboard" name="{name}"><viewpoints>{_window_viewpoints_for(name, opportunity_dashboard)}</viewpoints><simple-id uuid="window-{index}" /></window>'
+        f'<window class="dashboard" name="{name}"><simple-id uuid="window-{index}" /></window>'
         for index, name in enumerate(dashboards)
     )
-    worksheet_window = '<window class="worksheet" name="Atlas Map"><viewpoint><map-navigation value="false" /></viewpoint><simple-id uuid="atlas-window" /></window>'
-    return f"<workbook><worksheets>{worksheet_xml}</worksheets><dashboards>{dashboard_xml}</dashboards><windows>{worksheet_window}{window_xml}</windows></workbook>"
+    return f"<workbook><worksheets>{worksheet_xml}</worksheets><dashboards>{dashboard_xml}</dashboards><windows>{window_xml}</windows></workbook>"
 
 
 def _zones_for(dashboard_name: str, opportunity_dashboard: bool) -> str:
@@ -88,19 +87,3 @@ def _zones_for(dashboard_name: str, opportunity_dashboard: bool) -> str:
     if opportunity_dashboard and "Opportunities" in dashboard_name:
         sheets.extend(["Opportunity Priority", "Advocacy Gaps", "Provider Underservice", "Service Type Opportunities", "Opportunity Matrix"])
     return "".join(f'<zone name="{sheet}" />' for sheet in sheets)
-
-
-def _window_viewpoints_for(dashboard_name: str, opportunity_dashboard: bool) -> str:
-    sheets = []
-    if "Atlas" in dashboard_name:
-        sheets = ["Atlas Map"]
-    elif "National" in dashboard_name:
-        sheets = ["Headline KPIs", "Utilisation Trend", "Funded Plan Saturation Trend"]
-    elif "Service Area" in dashboard_name:
-        sheets = ["Utilisation Trend", "Funded Plan Saturation Trend", "Evidence Table"]
-    elif opportunity_dashboard and "Opportunities" in dashboard_name:
-        sheets = ["Opportunity Priority", "Advocacy Gaps", "Provider Underservice", "Service Type Opportunities", "Opportunity Matrix"]
-    return "".join(
-        f'<viewpoint name="{sheet}">{"<map-navigation value=\"false\" />" if sheet == "Atlas Map" else ""}</viewpoint>'
-        for sheet in sheets
-    )

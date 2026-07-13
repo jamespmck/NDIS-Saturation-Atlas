@@ -119,6 +119,7 @@ Website behavior:
    - `NDIS Saturation Atlas Phone`
 2. The standalone atlas dashboards are map-only. Keep `Headline KPIs`, opportunity tables and service-type charts out of these views so the atlas behaves like the original Streamlit atlas route.
 3. The atlas views are embedded with the Tableau toolbar hidden, and the workbook fixes the generated latitude/longitude ranges to the Australia-plus-insets extent.
+   Do not inject `<map-navigation>` into the `.twb`; Tableau rejects unsupported enum values and the workbook will not open. If the published atlas still allows mouse-wheel zoom after opening, use Tableau Desktop/Public: `Map` > `Map Options` > clear `Allow Pan and Zoom`, then save/publish.
 4. A website filter box applies `quarter_label` across embedded dashboards and `support_type` only to support-aware dashboards, not to `Atlas Map`.
 5. The page listens for a selected service-area mark on the atlas.
 6. The service-area detail panel is revealed.
