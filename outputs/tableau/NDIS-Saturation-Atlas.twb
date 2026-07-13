@@ -4495,8 +4495,8 @@
         </view>
         <style>
           <style-rule element="axis">
-            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Longitude (generated)]" field-type="quantitative" max="16516469.4556842" min="11925473.068147132" projection="EPSG:3857" range-type="fixed" scope="cols" type="space" />
-            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Latitude (generated)]" field-type="quantitative" max="-2432675.7085785605" min="-5009359.7120776903" projection="EPSG:3857" range-type="fixed" scope="rows" type="space" />
+            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Longitude (generated)]" field-type="quantitative" max="18924313.434856508" min="12245143.987260092" projection="EPSG:3857" range-type="fixed" scope="cols" type="space" />
+            <encoding attr="space" class="0" field="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[Latitude (generated)]" field-type="quantitative" max="-893463.751012646" min="-5621521.486192066" projection="EPSG:3857" range-type="fixed" scope="rows" type="space" />
           </style-rule>
           <style-rule element="map">
             <format attr="washout" value="0.45" />

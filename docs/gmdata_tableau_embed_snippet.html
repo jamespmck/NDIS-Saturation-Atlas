@@ -10,12 +10,47 @@
 
     <p class="tableau-status" data-tableau-ready hidden>Select a service area on the atlas to filter the detail dashboard.</p>
 
+    <form class="tableau-filter-box" data-tableau-filter-box hidden>
+      <label>
+        <span>Quarter</span>
+        <select data-tableau-filter="quarter">
+          <option value="2026 Q1">2026 Q1</option>
+          <option value="2025 Q4">2025 Q4</option>
+          <option value="2025 Q3">2025 Q3</option>
+          <option value="2025 Q2">2025 Q2</option>
+          <option value="2025 Q1">2025 Q1</option>
+          <option value="2024 Q4">2024 Q4</option>
+          <option value="2024 Q3">2024 Q3</option>
+          <option value="2024 Q2">2024 Q2</option>
+        </select>
+      </label>
+      <label>
+        <span>Support type</span>
+        <select data-tableau-filter="support-type">
+          <option value="">All supports</option>
+          <option value="Capital">Capital</option>
+          <option value="Community Participation Care">Community Participation Care</option>
+          <option value="Early Childhood Supports">Early Childhood Supports</option>
+          <option value="Group Centre Care">Group Centre Care</option>
+          <option value="High Needs Personal Care">High Needs Personal Care</option>
+          <option value="Other Capacity Building">Other Capacity Building</option>
+          <option value="Other Core">Other Core</option>
+          <option value="Personal Care">Personal Care</option>
+          <option value="Plan Management">Plan Management</option>
+          <option value="Shared Accommodation Supports">Shared Accommodation Supports</option>
+          <option value="Support Coordination">Support Coordination</option>
+          <option value="Therapy">Therapy</option>
+        </select>
+      </label>
+      <button class="button button-secondary" type="button" data-tableau-reset-filters>Reset</button>
+    </form>
+
     <article class="tableau-panel">
       <h3>Geospatial atlas</h3>
       <div class="tableau-viz-frame">
-        <tableau-viz class="tableau-monitor" data-tableau-role="atlas" data-device="monitor" data-view-name="NDISSaturationAtlasMonitor" toolbar="bottom" hide-tabs width="100%" height="940"></tableau-viz>
-        <tableau-viz class="tableau-tablet" data-tableau-role="atlas" data-device="tablet" data-view-name="NDISSaturationAtlasTablet" toolbar="bottom" hide-tabs width="100%" height="760"></tableau-viz>
-        <tableau-viz class="tableau-phone" data-tableau-role="atlas" data-device="phone" data-view-name="NDISSaturationAtlasPhone" toolbar="bottom" hide-tabs width="100%" height="520"></tableau-viz>
+        <tableau-viz class="tableau-monitor" data-tableau-role="atlas" data-device="monitor" data-view-name="NDISSaturationAtlasMonitor" toolbar="hidden" hide-tabs width="100%" height="940"></tableau-viz>
+        <tableau-viz class="tableau-tablet" data-tableau-role="atlas" data-device="tablet" data-view-name="NDISSaturationAtlasTablet" toolbar="hidden" hide-tabs width="100%" height="760"></tableau-viz>
+        <tableau-viz class="tableau-phone" data-tableau-role="atlas" data-device="phone" data-view-name="NDISSaturationAtlasPhone" toolbar="hidden" hide-tabs width="100%" height="520"></tableau-viz>
       </div>
     </article>
 

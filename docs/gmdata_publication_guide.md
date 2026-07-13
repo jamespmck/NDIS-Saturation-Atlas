@@ -137,4 +137,6 @@ The website embed presents:
 - a hidden service-area detail panel that appears after a map mark is selected;
 - an opportunities dashboard for utilisation, saturation, provider activity, opportunity signals, advocacy signals, service-type demand and evidence checks.
 
-The embed script listens for a mark selection in the desktop atlas view and applies the selected service-area value to the detail dashboard views where Tableau exposes a matching `Geography Name`, `Ndis Service Area`, `NDIS Service Area` or `Name` field.
+The embed script listens for a mark selection in the desktop atlas view and applies the selected service-area value to the detail dashboard views where Tableau exposes a matching `Geography Name`, `Ndis Service Area`, `NDIS Service Area` or `Name` field. It also provides a compact filter box above the atlas: `quarter_label` is applied across the embedded dashboards, while `support_type` is applied only to the support-aware national, service-area and opportunities dashboards so the atlas map remains at service-area geometry grain.
+
+The atlas Tableau views are embedded with the Tableau toolbar hidden. The workbook itself uses fixed longitude/latitude ranges that cover the Australia map and metro inset panels.

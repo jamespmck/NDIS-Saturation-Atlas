@@ -61,12 +61,13 @@ The website version should make the standalone atlas the first view. The standal
 - Open `outputs/tableau/NDIS-Saturation-Atlas.twb` in Tableau Public.
 - Confirm the atlas and original dashboard worksheets render.
 - Confirm the standalone atlas dashboards contain only the atlas map, with no blank cells around the map.
+- Confirm the fixed map extent includes the main Australia geometry and metro inset panels.
 - Confirm the opportunity worksheets render inside the dashboard shells.
 - Confirm the final dashboard set satisfies the website-ready acceptance criteria above.
 - Confirm each dashboard tab opens without `2805CF18`.
 - Confirm Presentation Mode opens on the atlas, national, detail and opportunities monitor dashboards.
 - Do not add Tableau device layouts; publish the separate monitor, tablet and phone dashboard tabs.
-- After publishing, test atlas click-through on `gmdata.au`.
+- After publishing, test atlas click-through and the quarter/support-type filter box on `gmdata.au`.
 
 ## Rebuild Notes
 

@@ -21,6 +21,11 @@ ATLAS_ONLY_DASHBOARDS = {
     "NDIS Saturation Atlas Phone": {"maxwidth": "390", "minwidth": "390", "maxheight": "520", "minheight": "520"},
 }
 
+ATLAS_FIXED_EXTENT_EPSG3857 = {
+    "cols": {"min": "12245143.987260092", "max": "18924313.434856508"},  # lon 110 to 170
+    "rows": {"min": "-5621521.486192066", "max": "-893463.751012646"},  # lat -45 to -8
+}
+
 STREAMLIT_STYLE_DASHBOARDS = [
     ("NDIS Saturation Atlas Monitor", (1600, 940), ["Atlas Map"]),
     ("NDIS Saturation Atlas Tablet", (900, 760), ["Atlas Map"]),
@@ -320,6 +325,7 @@ def _configure_atlas_worksheet(root: ET.Element) -> None:
     ]:
         if not any(node.attrib.get("column") == column for node in encodings.findall("tooltip")):
             ET.SubElement(encodings, "tooltip", {"column": column})
+    _set_atlas_fixed_extent(worksheet)
 
 
 def _ensure_column(dependencies: ET.Element, caption: str, datatype: str, name: str, role: str, col_type: str) -> None:
@@ -345,6 +351,19 @@ def _remove_encoding_references(encodings: ET.Element, tokens: list[str]) -> Non
         column = node.attrib.get("column", "")
         if any(token in column for token in tokens):
             encodings.remove(node)
+
+
+def _set_atlas_fixed_extent(worksheet: ET.Element) -> None:
+    for encoding in worksheet.findall(".//encoding"):
+        if encoding.attrib.get("type") != "space":
+            continue
+        scope = encoding.attrib.get("scope")
+        if scope not in ATLAS_FIXED_EXTENT_EPSG3857:
+            continue
+        encoding.attrib["range-type"] = "fixed"
+        encoding.attrib["projection"] = "EPSG:3857"
+        encoding.attrib["min"] = ATLAS_FIXED_EXTENT_EPSG3857[scope]["min"]
+        encoding.attrib["max"] = ATLAS_FIXED_EXTENT_EPSG3857[scope]["max"]
 
 
 def _stable_uuid(value: str) -> str:

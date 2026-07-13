@@ -288,8 +288,10 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
     ]
     if len(fixed_space_encodings) < 2:
         findings.append(ReviewFinding("fail", "high", "atlas_fixed_extent", "Atlas Map does not have fixed longitude/latitude ranges for the Australia extent."))
+    elif not _atlas_extent_covers_insets(fixed_space_encodings):
+        findings.append(ReviewFinding("fail", "high", "atlas_fixed_extent", "Atlas Map fixed extent is too narrow to include the main Australia map and metro inset panels."))
     else:
-        findings.append(ReviewFinding("pass", "info", "atlas_fixed_extent", "Atlas Map has fixed longitude/latitude ranges for the Australia extent."))
+        findings.append(ReviewFinding("pass", "info", "atlas_fixed_extent", "Atlas Map has fixed longitude/latitude ranges covering Australia and the metro inset panels."))
 
     for field in [
         "none:persistent_utilisation_classification:nk",
@@ -328,6 +330,18 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
     else:
         findings.append(ReviewFinding("fail", "critical", "atlas_dashboard_presence", "Atlas Map is not embedded in any dashboard."))
     return findings
+
+
+def _atlas_extent_covers_insets(space_encodings: list[ET.Element]) -> bool:
+    by_scope = {node.attrib.get("scope"): node for node in space_encodings}
+    try:
+        cols_min = float(by_scope["cols"].attrib["min"])
+        cols_max = float(by_scope["cols"].attrib["max"])
+        rows_min = float(by_scope["rows"].attrib["min"])
+        rows_max = float(by_scope["rows"].attrib["max"])
+    except (KeyError, TypeError, ValueError):
+        return False
+    return cols_min <= 12245144 and cols_max >= 18924313 and rows_min <= -5621521 and rows_max >= -893464
 
 
 def _markdown_report(path: Path, findings: list[ReviewFinding]) -> str:

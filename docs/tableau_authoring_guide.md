@@ -118,9 +118,11 @@ Website behavior:
    - `NDIS Saturation Atlas Tablet`
    - `NDIS Saturation Atlas Phone`
 2. The standalone atlas dashboards are map-only. Keep `Headline KPIs`, opportunity tables and service-type charts out of these views so the atlas behaves like the original Streamlit atlas route.
-3. The page listens for a selected service-area mark on the atlas.
-4. The service-area detail panel is revealed.
-5. The selected service area is applied to the detail dashboards where Tableau exposes a matching `Geography Name`, `Ndis Service Area`, `NDIS Service Area` or `Name` field.
+3. The atlas views are embedded with the Tableau toolbar hidden, and the workbook fixes the generated latitude/longitude ranges to the Australia-plus-insets extent.
+4. A website filter box applies `quarter_label` across embedded dashboards and `support_type` only to support-aware dashboards, not to `Atlas Map`.
+5. The page listens for a selected service-area mark on the atlas.
+6. The service-area detail panel is revealed.
+7. The selected service area is applied to the detail dashboards where Tableau exposes a matching `Geography Name`, `Ndis Service Area`, `NDIS Service Area` or `Name` field.
 
 After publishing to Tableau Public, replace the `data-tableau-base` placeholder in `gmdata.au/projects/ndis-saturation-atlas.html` with the published workbook URL base.
 
