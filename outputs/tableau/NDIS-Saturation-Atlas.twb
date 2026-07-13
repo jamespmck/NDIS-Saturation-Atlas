@@ -4480,11 +4480,9 @@
             <column-instance column="[payments_per_funded_plan]" derivation="Avg" name="[avg:payments_per_funded_plan:qk]" pivot="key" type="quantitative" />
             <column caption="Funded Plans Per 1000 Gap From National" datatype="real" name="[funded_plans_per_1000_gap_from_national]" role="measure" type="quantitative" />
             <column caption="Mean Plan Utilisation Gap From National" datatype="real" name="[mean_plan_utilisation_gap_from_national]" role="measure" type="quantitative" />
-            <column caption="Supply Response Gap" datatype="real" name="[supply_response_gap]" role="measure" type="quantitative" />
             <column caption="Active Providers Per 1000 Funded Plans" datatype="real" name="[active_providers_per_1000_funded_plans]" role="measure" type="quantitative" />
             <column-instance column="[funded_plans_per_1000_gap_from_national]" derivation="Avg" name="[avg:funded_plans_per_1000_gap_from_national:qk]" pivot="key" type="quantitative" />
             <column-instance column="[mean_plan_utilisation_gap_from_national]" derivation="Avg" name="[avg:mean_plan_utilisation_gap_from_national:qk]" pivot="key" type="quantitative" />
-            <column-instance column="[supply_response_gap]" derivation="Avg" name="[avg:supply_response_gap:qk]" pivot="key" type="quantitative" />
             <column-instance column="[active_providers_per_1000_funded_plans]" derivation="Avg" name="[avg:active_providers_per_1000_funded_plans:qk]" pivot="key" type="quantitative" />
           </datasource-dependencies>
           <filter class="categorical" column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:quarter_label (tableau_market_classification.csv):nk]">
@@ -4530,7 +4528,6 @@
               <geometry column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[clct:Geometry:nk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_gap_from_national:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_gap_from_national:qk]" />
-              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:supply_response_gap:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_providers_per_1000_funded_plans:qk]" />
             </encodings>
             <customized-tooltip>

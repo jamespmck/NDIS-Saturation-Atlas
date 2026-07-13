@@ -295,14 +295,13 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
         "none:persistent_utilisation_classification:nk",
         "avg:funded_plans_per_1000_gap_from_national:qk",
         "avg:mean_plan_utilisation_gap_from_national:qk",
-        "avg:supply_response_gap:qk",
         "avg:active_providers_per_1000_funded_plans:qk",
     ]:
         if field not in atlas_xml:
             findings.append(ReviewFinding("fail", "high", "atlas_metric_contract", f"Atlas Map is missing field `{field}`."))
             break
     else:
-        findings.append(ReviewFinding("pass", "info", "atlas_metric_contract", "Atlas Map uses render-safe workbook fields for utilisation classification, funded-plan gap, utilisation gap, supply response and provider rate."))
+        findings.append(ReviewFinding("pass", "info", "atlas_metric_contract", "Atlas Map uses render-safe workbook fields for utilisation classification, funded-plan gap, utilisation gap and provider rate."))
 
     forbidden_atlas_tokens = [
         "atlas_default_metric_value",
@@ -310,6 +309,7 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
         "mean_plan_utilisation_delta_from_national_median",
         "provider_saturation_delta_from_national_mean",
         "none:support_type:nk",
+        "avg:supply_response_gap:qk",
     ]
     leaked_tokens = [token for token in forbidden_atlas_tokens if token in atlas_xml]
     if leaked_tokens:

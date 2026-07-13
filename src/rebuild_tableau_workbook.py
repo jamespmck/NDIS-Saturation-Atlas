@@ -287,16 +287,15 @@ def _configure_atlas_worksheet(root: ET.Element) -> None:
             "[mean_plan_utilisation_delta_from_national_median]",
             "[provider_saturation_delta_from_national_mean]",
             "[support_type]",
+            "[supply_response_gap]",
         ],
     )
 
     _ensure_column(dependencies, "Funded Plans Per 1000 Gap From National", "real", "[funded_plans_per_1000_gap_from_national]", "measure", "quantitative")
     _ensure_column(dependencies, "Mean Plan Utilisation Gap From National", "real", "[mean_plan_utilisation_gap_from_national]", "measure", "quantitative")
-    _ensure_column(dependencies, "Supply Response Gap", "real", "[supply_response_gap]", "measure", "quantitative")
     _ensure_column(dependencies, "Active Providers Per 1000 Funded Plans", "real", "[active_providers_per_1000_funded_plans]", "measure", "quantitative")
     _ensure_column_instance(dependencies, "[funded_plans_per_1000_gap_from_national]", "Avg", "[avg:funded_plans_per_1000_gap_from_national:qk]", "quantitative")
     _ensure_column_instance(dependencies, "[mean_plan_utilisation_gap_from_national]", "Avg", "[avg:mean_plan_utilisation_gap_from_national:qk]", "quantitative")
-    _ensure_column_instance(dependencies, "[supply_response_gap]", "Avg", "[avg:supply_response_gap:qk]", "quantitative")
     _ensure_column_instance(dependencies, "[active_providers_per_1000_funded_plans]", "Avg", "[avg:active_providers_per_1000_funded_plans:qk]", "quantitative")
 
     for color in encodings.findall("color"):
@@ -311,12 +310,12 @@ def _configure_atlas_worksheet(root: ET.Element) -> None:
             "mean_plan_utilisation_delta_from_national_median",
             "provider_saturation_delta_from_national_mean",
             "support_type",
+            "supply_response_gap",
         ],
     )
     for column in [
         "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_gap_from_national:qk]",
         "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_gap_from_national:qk]",
-        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:supply_response_gap:qk]",
         "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:active_providers_per_1000_funded_plans:qk]",
     ]:
         if not any(node.attrib.get("column") == column for node in encodings.findall("tooltip")):
