@@ -250,6 +250,12 @@ FIELD_DESCRIPTIONS = {
     "utilisation_barrier_score": "Quarter-relative proxy score for utilisation friction, based on below-peer utilisation, unspent committed funding and funding-conversion gaps.",
     "underserviced_provider_score": "Quarter-relative proxy score for potential under-service, based on provider load, supply response and utilisation gap indicators.",
     "combined_opportunity_score": "Mean of business and advocacy opportunity proxy scores.",
+    "funded_plans_per_1000_delta_from_national_mean": "Funded plans per 1,000 population minus the national mean for the same quarter.",
+    "mean_plan_utilisation_delta_from_national_median": "Mean plan utilisation minus the national median service-area utilisation for the same quarter.",
+    "provider_saturation_delta_from_national_mean": "Funded plans per active provider minus the national mean for the same quarter. Higher values indicate higher provider load.",
+    "active_provider_rate_delta_from_national_mean": "Active providers per 1,000 funded plans minus the national mean for the same quarter.",
+    "atlas_default_metric_value": "Default atlas colour metric combining funded-plan coverage gaps, utilisation gaps and provider saturation signals.",
+    "atlas_service_type_filter": "Support type copied into the service-type table for Tableau atlas filtering.",
     "opportunity_rank": "Quarter-specific rank by combined opportunity score, where 1 is the highest-ranked service area.",
     "opportunity_segment": "Readable service-area opportunity segment derived from the proxy scores.",
     "support_payment_gap_from_remoteness_benchmark": "Estimated support-type payment dollars below or above the remoteness peer payment-share benchmark.",
@@ -284,6 +290,11 @@ FIELD_CALCULATIONS = {
     "support_location_quotient": "local_support_share / national_support_share",
     "support_payment_gap_from_remoteness_benchmark": "area_total_payments * remoteness_benchmark - payments",
     "support_payment_gap_from_national_benchmark": "area_total_payments * national_benchmark - payments",
+    "funded_plans_per_1000_delta_from_national_mean": "funded_plans_per_1000 - benchmark_national_funded_plans_per_1000",
+    "mean_plan_utilisation_delta_from_national_median": "mean_plan_utilisation - benchmark_national_median_plan_utilisation",
+    "provider_saturation_delta_from_national_mean": "funded_plans_per_active_provider - benchmark_national_provider_saturation",
+    "active_provider_rate_delta_from_national_mean": "active_providers_per_1000_funded_plans - benchmark_national_active_providers_per_1000_funded_plans",
+    "atlas_default_metric_value": "mean of quarter-relative funded-plan coverage gap, utilisation gap and provider saturation proxy scores",
     "projected_next_quarter_payments": "payments * (1 + clipped payment_growth_rate)",
 }
 
@@ -293,5 +304,6 @@ FIELD_LIMITATIONS = {
     "population_count": "Current denominator is static 2025 ERP; quarterly interpolation requires annual source series.",
     "business_opportunity_score": "Proxy score for triage and prioritisation only. It does not prove unmet demand, provider shortage or future revenue.",
     "advocacy_opportunity_score": "Proxy score for triage and prioritisation only. It should be interpreted with local evidence and participant/community context.",
+    "atlas_default_metric_value": "Composite visual priority score only; inspect the individual delta fields before drawing conclusions.",
     "projected_next_quarter_payments": "Simple momentum proxy only. It is not a causal forecast and clips growth rates to avoid extreme projections.",
 }

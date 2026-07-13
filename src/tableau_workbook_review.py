@@ -36,24 +36,21 @@ OPPORTUNITY_WORKSHEETS = {
 }
 
 REQUIRED_DASHBOARDS = {
-    "NDIS Saturation Monitor",
-    "NDIS Saturation Tablet",
-    "NDIS Saturation Phone",
     "NDIS Saturation Atlas Monitor",
     "NDIS Saturation Atlas Tablet",
     "NDIS Saturation Atlas Phone",
+    "NDIS Saturation National Monitor",
+    "NDIS Saturation National Tablet",
+    "NDIS Saturation National Phone",
     "NDIS Saturation Service Area Monitor",
     "NDIS Saturation Service Area Tablet",
     "NDIS Saturation Service Area Phone",
-    "NDIS Saturation Rankings Monitor",
-    "NDIS Saturation Rankings Tablet",
-    "NDIS Saturation Rankings Phone",
+    "NDIS Saturation Opportunities Monitor",
+    "NDIS Saturation Opportunities Tablet",
+    "NDIS Saturation Opportunities Phone",
 }
 
 ATLAS_DASHBOARDS = {
-    "NDIS Saturation Monitor",
-    "NDIS Saturation Tablet",
-    "NDIS Saturation Phone",
     "NDIS Saturation Atlas Monitor",
     "NDIS Saturation Atlas Tablet",
     "NDIS Saturation Atlas Phone",
@@ -71,10 +68,16 @@ SERVICE_AREA_DASHBOARDS = {
     "NDIS Saturation Service Area Phone",
 }
 
-RANKING_DASHBOARDS = {
-    "NDIS Saturation Rankings Monitor",
-    "NDIS Saturation Rankings Tablet",
-    "NDIS Saturation Rankings Phone",
+NATIONAL_DASHBOARDS = {
+    "NDIS Saturation National Monitor",
+    "NDIS Saturation National Tablet",
+    "NDIS Saturation National Phone",
+}
+
+OPPORTUNITY_DASHBOARDS = {
+    "NDIS Saturation Opportunities Monitor",
+    "NDIS Saturation Opportunities Tablet",
+    "NDIS Saturation Opportunities Phone",
 }
 
 
@@ -217,11 +220,15 @@ def _dashboard_findings(dashboard_sheets: dict[str, set[str]]) -> list[ReviewFin
     else:
         findings.append(ReviewFinding("pass", "info", "service_area_detail", "Service-area dashboards include utilisation, saturation and evidence detail sheets."))
 
-    missing_rankings = sorted(name for name in RANKING_DASHBOARDS if "Ranked Service Areas" not in dashboard_sheets.get(name, set()))
-    if missing_rankings:
-        findings.append(ReviewFinding("warn", "medium", "ranking_dashboard_legacy_rankings", f"Ranking dashboards do not include the legacy Ranked Service Areas sheet: {', '.join(missing_rankings)}. This is acceptable only if opportunity rankings replace it."))
+    missing_national = sorted(
+        name
+        for name in NATIONAL_DASHBOARDS
+        if not {"Headline KPIs", "Utilisation Trend", "Funded Plan Saturation Trend"}.issubset(dashboard_sheets.get(name, set()))
+    )
+    if missing_national:
+        findings.append(ReviewFinding("fail", "high", "national_dashboard_kpis", f"National dashboards missing KPI/trend sheets: {', '.join(missing_national)}."))
     else:
-        findings.append(ReviewFinding("pass", "info", "ranking_dashboard_legacy_rankings", "Ranking dashboards include Ranked Service Areas."))
+        findings.append(ReviewFinding("pass", "info", "national_dashboard_kpis", "National dashboards contain headline KPIs and national trend context."))
     return findings
 
 
@@ -243,7 +250,7 @@ def _opportunity_findings(dashboard_sheets: dict[str, set[str]]) -> list[ReviewF
     else:
         findings.append(ReviewFinding("pass", "info", "opportunity_dashboard_coverage", "All opportunity worksheets are embedded in at least one dashboard."))
 
-    ranking_coverage = set().union(*(dashboard_sheets.get(name, set()) for name in RANKING_DASHBOARDS))
+    ranking_coverage = set().union(*(dashboard_sheets.get(name, set()) for name in OPPORTUNITY_DASHBOARDS))
     missing_ranking_opportunity = sorted(OPPORTUNITY_WORKSHEETS - ranking_coverage)
     if missing_ranking_opportunity:
         findings.append(
@@ -251,11 +258,11 @@ def _opportunity_findings(dashboard_sheets: dict[str, set[str]]) -> list[ReviewF
                 "fail",
                 "high",
                 "opportunity_ranking_dashboard",
-                "Ranking dashboards do not cover: " + ", ".join(missing_ranking_opportunity) + ".",
+                "Opportunity dashboards do not cover: " + ", ".join(missing_ranking_opportunity) + ".",
             )
         )
     else:
-        findings.append(ReviewFinding("pass", "info", "opportunity_ranking_dashboard", "Ranking dashboards cover opportunity, advocacy, provider and service-type views."))
+        findings.append(ReviewFinding("pass", "info", "opportunity_ranking_dashboard", "Opportunity dashboards cover opportunity, advocacy, provider and service-type views."))
     return findings
 
 
@@ -273,6 +280,38 @@ def _atlas_findings(root: ET.Element, worksheets: set[str], dashboard_sheets: di
         findings.append(ReviewFinding("fail", "high", "atlas_color_encoding", "Atlas Map does not contain a color encoding."))
     else:
         findings.append(ReviewFinding("pass", "info", "atlas_color_encoding", "Atlas Map contains a color encoding."))
+
+    fixed_space_encodings = [
+        node
+        for node in atlas.findall(".//encoding")
+        if node.attrib.get("type") == "space" and node.attrib.get("range-type") == "fixed"
+    ]
+    if len(fixed_space_encodings) < 2:
+        findings.append(ReviewFinding("fail", "high", "atlas_fixed_extent", "Atlas Map does not have fixed longitude/latitude ranges for the Australia extent."))
+    else:
+        findings.append(ReviewFinding("pass", "info", "atlas_fixed_extent", "Atlas Map has fixed longitude/latitude ranges for the Australia extent."))
+
+    for field in [
+        "avg:atlas_default_metric_value:qk",
+        "avg:funded_plans_per_1000_delta_from_national_mean:qk",
+        "avg:mean_plan_utilisation_delta_from_national_median:qk",
+        "avg:provider_saturation_delta_from_national_mean:qk",
+    ]:
+        if field not in atlas_xml:
+            findings.append(ReviewFinding("fail", "high", "atlas_metric_contract", f"Atlas Map is missing field `{field}`."))
+            break
+    else:
+        findings.append(ReviewFinding("pass", "info", "atlas_metric_contract", "Atlas Map includes benchmark opportunity, funded-plan, utilisation and provider-saturation delta fields."))
+
+    if "none:support_type:nk" not in atlas_xml:
+        findings.append(ReviewFinding("fail", "high", "atlas_service_type_filter_contract", "Atlas Map is missing the support_type field needed for service-type filtering."))
+    else:
+        findings.append(ReviewFinding("pass", "info", "atlas_service_type_filter_contract", "Atlas Map includes support_type for service-type filtering."))
+
+    if "quarter_label" not in atlas_xml:
+        findings.append(ReviewFinding("fail", "high", "atlas_quarter_filter_contract", "Atlas Map is missing the quarter label field needed for quarter filtering."))
+    else:
+        findings.append(ReviewFinding("pass", "info", "atlas_quarter_filter_contract", "Atlas Map includes quarter label context for quarter filtering."))
 
     atlas_dashboards = sorted(name for name, sheets in dashboard_sheets.items() if "Atlas Map" in sheets)
     if atlas_dashboards:
@@ -312,7 +351,7 @@ def _markdown_report(path: Path, findings: list[ReviewFinding]) -> str:
             "",
             "## Review Standard",
             "",
-            "A website-ready workbook must open reliably, show the atlas as the first geospatial view, support service-area detail review, and embed the opportunity, advocacy, provider and service-type worksheets in dashboard shells suitable for Tableau Public and `gmdata.au` embedding.",
+            "A website-ready workbook must open reliably, show a standalone atlas with benchmark-delta metrics as the first geospatial view, move headline KPIs to national dashboards, support service-area detail review, and embed opportunity, advocacy, provider and service-type worksheets away from the atlas.",
             "",
         ]
     )

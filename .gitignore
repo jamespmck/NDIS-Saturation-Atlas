@@ -56,6 +56,7 @@ data/published/master_ndis_service_area_wide_all_available.csv
 data/published/national_benchmark_wide_2024_present.csv
 data/published/ndis_service_area_total_row_build_audit.csv
 data/audits/_test_workbook_*.twb
+data/audits/_test_atlas_*.geojson
 
 # Do not commit rendered outputs except the deployment boundary GeoJSON
 outputs/*

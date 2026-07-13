@@ -4,8 +4,8 @@ Workbook: `D:\Good Measure\NDIS-Saturation-Atlas\outputs\tableau\NDIS-Saturation
 
 Verdict: **WEBSITE READY**
 
-- Pass: 16
-- Warn: 1
+- Pass: 21
+- Warn: 0
 - Fail: 0
 
 ## Findings
@@ -23,13 +23,17 @@ Verdict: **WEBSITE READY**
 | pass | info | `atlas_first_view` | Atlas/overview dashboards include the Atlas Map worksheet. |
 | pass | info | `atlas_only_dashboard_focus` | Standalone atlas dashboards contain only the Atlas Map worksheet. |
 | pass | info | `service_area_detail` | Service-area dashboards include utilisation, saturation and evidence detail sheets. |
-| warn | medium | `ranking_dashboard_legacy_rankings` | Ranking dashboards do not include the legacy Ranked Service Areas sheet: NDIS Saturation Rankings Monitor, NDIS Saturation Rankings Phone, NDIS Saturation Rankings Tablet. This is acceptable only if opportunity rankings replace it. |
+| pass | info | `national_dashboard_kpis` | National dashboards contain headline KPIs and national trend context. |
 | pass | info | `opportunity_dashboard_coverage` | All opportunity worksheets are embedded in at least one dashboard. |
-| pass | info | `opportunity_ranking_dashboard` | Ranking dashboards cover opportunity, advocacy, provider and service-type views. |
+| pass | info | `opportunity_ranking_dashboard` | Opportunity dashboards cover opportunity, advocacy, provider and service-type views. |
 | pass | info | `atlas_geometry_encoding` | Atlas Map contains a geometry encoding. |
 | pass | info | `atlas_color_encoding` | Atlas Map contains a color encoding. |
-| pass | info | `atlas_dashboard_presence` | Atlas Map appears in 6 dashboard(s). |
+| pass | info | `atlas_fixed_extent` | Atlas Map has fixed longitude/latitude ranges for the Australia extent. |
+| pass | info | `atlas_metric_contract` | Atlas Map includes benchmark opportunity, funded-plan, utilisation and provider-saturation delta fields. |
+| pass | info | `atlas_service_type_filter_contract` | Atlas Map includes support_type for service-type filtering. |
+| pass | info | `atlas_quarter_filter_contract` | Atlas Map includes quarter label context for quarter filtering. |
+| pass | info | `atlas_dashboard_presence` | Atlas Map appears in 3 dashboard(s). |
 
 ## Review Standard
 
-A website-ready workbook must open reliably, show the atlas as the first geospatial view, support service-area detail review, and embed the opportunity, advocacy, provider and service-type worksheets in dashboard shells suitable for Tableau Public and `gmdata.au` embedding.
+A website-ready workbook must open reliably, show a standalone atlas with benchmark-delta metrics as the first geospatial view, move headline KPIs to national dashboards, support service-area detail review, and embed opportunity, advocacy, provider and service-type worksheets away from the atlas.

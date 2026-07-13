@@ -45,18 +45,18 @@ If Tableau Public raises `Error Code: 2805CF18` while adding phone layouts, do n
 
 Generated Tableau dashboards:
 
-- Monitor dashboard: `NDIS Saturation Monitor`, fixed size around `1600 x 1068`.
-- Tablet dashboard: `NDIS Saturation Tablet`, fixed size around `900 x 1222`.
-- Phone dashboard: `NDIS Saturation Phone`, fixed size around `390 x 1774`.
 - Atlas monitor dashboard: `NDIS Saturation Atlas Monitor`, fixed size around `1600 x 940`, map-only.
 - Atlas tablet dashboard: `NDIS Saturation Atlas Tablet`, fixed size around `900 x 760`, map-only.
 - Atlas phone dashboard: `NDIS Saturation Atlas Phone`, fixed size around `390 x 520`, map-only.
-- Monitor service-area dashboard: `NDIS Saturation Service Area Monitor`, fixed size around `1600 x 1208`.
-- Tablet service-area dashboard: `NDIS Saturation Service Area Tablet`, fixed size around `900 x 1856`.
-- Phone service-area dashboard: `NDIS Saturation Service Area Phone`, fixed size around `390 x 2470`.
-- Rankings monitor dashboard: `NDIS Saturation Rankings Monitor`, fixed size around `1600 x 1268`.
-- Rankings tablet dashboard: `NDIS Saturation Rankings Tablet`, fixed size around `900 x 1976`.
-- Rankings phone dashboard: `NDIS Saturation Rankings Phone`, fixed size around `390 x 2720`.
+- National monitor dashboard: `NDIS Saturation National Monitor`, fixed size around `1600 x 1120`.
+- National tablet dashboard: `NDIS Saturation National Tablet`, fixed size around `900 x 1580`.
+- National phone dashboard: `NDIS Saturation National Phone`, fixed size around `390 x 2260`.
+- Monitor service-area dashboard: `NDIS Saturation Service Area Monitor`, fixed size around `1600 x 1180`.
+- Tablet service-area dashboard: `NDIS Saturation Service Area Tablet`, fixed size around `900 x 1780`.
+- Phone service-area dashboard: `NDIS Saturation Service Area Phone`, fixed size around `390 x 2500`.
+- Opportunities monitor dashboard: `NDIS Saturation Opportunities Monitor`, fixed size around `1600 x 1280`.
+- Opportunities tablet dashboard: `NDIS Saturation Opportunities Tablet`, fixed size around `900 x 1960`.
+- Opportunities phone dashboard: `NDIS Saturation Opportunities Phone`, fixed size around `390 x 2760`.
 - Build each as a normal dashboard, not as a Tableau device layout.
 - The standalone atlas dashboards should contain only `Atlas Map`.
 - Keep KPI, opportunity, advocacy and service-type worksheets in the overview, service-area and rankings dashboards:
@@ -133,7 +133,8 @@ https://public.tableau.com/views/YourPublishedWorkbookName
 The website embed presents:
 
 - the standalone geospatial atlas first;
+- a national dashboard for headline KPIs, national trends, support mix, remoteness and quality context;
 - a hidden service-area detail panel that appears after a map mark is selected;
-- a ranking dashboard for utilisation, saturation, provider activity, market position, opportunity signals, advocacy signals and evidence checks.
+- an opportunities dashboard for utilisation, saturation, provider activity, opportunity signals, advocacy signals, service-type demand and evidence checks.
 
 The embed script listens for a mark selection in the desktop atlas view and applies the selected service-area value to the detail dashboard views where Tableau exposes a matching `Geography Name`, `Ndis Service Area`, `NDIS Service Area` or `Name` field.

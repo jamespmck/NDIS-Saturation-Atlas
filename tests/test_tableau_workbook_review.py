@@ -47,21 +47,21 @@ def _minimal_workbook(opportunity_dashboard: bool) -> str:
         "Opportunity Matrix",
     ]
     dashboards = [
-        "NDIS Saturation Monitor",
-        "NDIS Saturation Tablet",
-        "NDIS Saturation Phone",
         "NDIS Saturation Atlas Monitor",
         "NDIS Saturation Atlas Tablet",
         "NDIS Saturation Atlas Phone",
+        "NDIS Saturation National Monitor",
+        "NDIS Saturation National Tablet",
+        "NDIS Saturation National Phone",
         "NDIS Saturation Service Area Monitor",
         "NDIS Saturation Service Area Tablet",
         "NDIS Saturation Service Area Phone",
-        "NDIS Saturation Rankings Monitor",
-        "NDIS Saturation Rankings Tablet",
-        "NDIS Saturation Rankings Phone",
+        "NDIS Saturation Opportunities Monitor",
+        "NDIS Saturation Opportunities Tablet",
+        "NDIS Saturation Opportunities Phone",
     ]
     worksheet_xml = "\n".join(
-        f'<worksheet name="{name}"><table><encodings>{"<geometry />" if name == "Atlas Map" else ""}<color /></encodings></table><simple-id uuid="ws-{index}" /></worksheet>'
+        f'<worksheet name="{name}"><table><encodings>{"<geometry /><encoding type=\"space\" range-type=\"fixed\" /><encoding type=\"space\" range-type=\"fixed\" /><color column=\"[avg:atlas_default_metric_value:qk]\" /><tooltip column=\"[avg:funded_plans_per_1000_delta_from_national_mean:qk]\" /><tooltip column=\"[avg:mean_plan_utilisation_delta_from_national_median:qk]\" /><tooltip column=\"[avg:provider_saturation_delta_from_national_mean:qk]\" /><tooltip column=\"[none:support_type:nk]\" /><tooltip column=\"[none:quarter_label:nk]\" />" if name == "Atlas Map" else "<color />"}</encodings></table><simple-id uuid="ws-{index}" /></worksheet>'
         for index, name in enumerate(required_worksheets)
     )
     dashboard_xml = "\n".join(
@@ -78,12 +78,12 @@ def _minimal_workbook(opportunity_dashboard: bool) -> str:
 def _zones_for(dashboard_name: str, opportunity_dashboard: bool) -> str:
     if "Atlas" in dashboard_name:
         sheets = ["Atlas Map"]
-    elif dashboard_name in {"NDIS Saturation Monitor", "NDIS Saturation Tablet", "NDIS Saturation Phone"}:
-        sheets = ["Atlas Map", "Headline KPIs"]
+    elif "National" in dashboard_name:
+        sheets = ["Headline KPIs", "Utilisation Trend", "Funded Plan Saturation Trend"]
     elif "Service Area" in dashboard_name:
         sheets = ["Utilisation Trend", "Funded Plan Saturation Trend", "Evidence Table"]
     else:
-        sheets = ["Ranked Service Areas"]
-    if opportunity_dashboard and "Rankings" in dashboard_name:
+        sheets = []
+    if opportunity_dashboard and "Opportunities" in dashboard_name:
         sheets.extend(["Opportunity Priority", "Advocacy Gaps", "Provider Underservice", "Service Type Opportunities", "Opportunity Matrix"])
     return "".join(f'<zone name="{sheet}" />' for sheet in sheets)

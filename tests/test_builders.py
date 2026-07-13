@@ -47,6 +47,10 @@ def test_tableau_outputs_include_opportunity_scores():
         "advocacy_opportunity_score",
         "underfunded_advocacy_score",
         "underserviced_provider_score",
+        "funded_plans_per_1000_delta_from_national_mean",
+        "mean_plan_utilisation_delta_from_national_median",
+        "provider_saturation_delta_from_national_mean",
+        "atlas_default_metric_value",
         "opportunity_segment",
     }.issubset(market_out.columns)
     assert {
@@ -54,12 +58,17 @@ def test_tableau_outputs_include_opportunity_scores():
         "support_undersupply_score",
         "service_type_opportunity_score",
         "service_type_opportunity_segment",
+        "atlas_service_type_filter",
+        "funded_plans_per_1000_delta_from_national_mean",
+        "mean_plan_utilisation_delta_from_national_median",
+        "provider_saturation_delta_from_national_mean",
     }.issubset(support_out.columns)
 
     for field in [
         "business_opportunity_score",
         "advocacy_opportunity_score",
         "combined_opportunity_score",
+        "atlas_default_metric_value",
         "support_undersupply_score",
         "service_type_opportunity_score",
     ]:

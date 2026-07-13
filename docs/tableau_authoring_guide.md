@@ -135,55 +135,53 @@ Use `docs/tableau_dashboard_rebuild_checklist.md` as a compact QA checklist for 
 
 Responsive dashboards:
 
-1. `NDIS Saturation Monitor`
-   - Size: fixed, `1600 x 1068`.
-   - Top: `Headline KPIs`.
-   - Main row: `Atlas Map` left, `Market Position` and `Funded Plan Saturation Trend` stacked right.
-   - Bottom row: `Utilisation Trend`, `Ranked Service Areas`, `Support Type Mix`.
-
-2. `NDIS Saturation Tablet`
-   - Size: fixed, `900 x 1222`.
-   - Tablet overview using the stable dashboard worksheets.
-
-3. `NDIS Saturation Phone`
-   - Size: fixed, `390 x 1774`.
-   - Stacked mobile overview layout.
-
-4. `NDIS Saturation Service Area Monitor`
-   - Size: fixed, `1600 x 1208`.
-   - Rows: utilisation/funded-plan trends, benchmark/support/provider diagnostics, evidence and data quality.
-
-5. `NDIS Saturation Service Area Tablet`
-   - Size: fixed, `900 x 1856`.
-   - Stacked service-area detail flow.
-
-6. `NDIS Saturation Service Area Phone`
-   - Size: fixed, `390 x 2470`.
-   - Fully stacked service-area detail flow for mobile viewing.
-
-7. `NDIS Saturation Atlas Monitor`
+1. `NDIS Saturation Atlas Monitor`
    - Size: fixed, `1600 x 940`.
-   - Standalone map-only atlas. Keep KPI, opportunity, classification, remoteness and quality context on other dashboards.
+   - Standalone map-only atlas with metro inset geometry and benchmark-delta tooltips.
 
-8. `NDIS Saturation Atlas Tablet`
+2. `NDIS Saturation Atlas Tablet`
    - Size: fixed, `900 x 760`.
    - Tablet-first map-only version of the standalone atlas.
 
-9. `NDIS Saturation Atlas Phone`
+3. `NDIS Saturation Atlas Phone`
    - Size: fixed, `390 x 520`.
    - Mobile map-only version of the standalone atlas.
 
-10. `NDIS Saturation Rankings Monitor`
-    - Size: fixed, `1600 x 1268`.
-    - Ranking surface for utilisation gap, saturation, providers, market position, evidence and quality flags.
+4. `NDIS Saturation National Monitor`
+   - Size: fixed, `1600 x 1120`.
+   - National KPI surface: headline KPIs, utilisation trend, funded-plan trend, support mix, remoteness summary and quality.
 
-11. `NDIS Saturation Rankings Tablet`
-    - Size: fixed, `900 x 1976`.
-    - Tablet ranking surface.
+5. `NDIS Saturation National Tablet`
+   - Size: fixed, `900 x 1580`.
+   - Tablet national summary.
 
-12. `NDIS Saturation Rankings Phone`
-    - Size: fixed, `390 x 2720`.
-    - Mobile stacked ranking surface.
+6. `NDIS Saturation National Phone`
+   - Size: fixed, `390 x 2260`.
+   - Mobile national summary.
+
+7. `NDIS Saturation Service Area Monitor`
+   - Size: fixed, `1600 x 1180`.
+   - Service-area detail: utilisation/funded-plan trends, benchmark/support/provider diagnostics, evidence and data quality.
+
+8. `NDIS Saturation Service Area Tablet`
+   - Size: fixed, `900 x 1780`.
+   - Stacked service-area detail flow.
+
+9. `NDIS Saturation Service Area Phone`
+   - Size: fixed, `390 x 2500`.
+   - Fully stacked service-area detail flow for mobile viewing.
+
+10. `NDIS Saturation Opportunities Monitor`
+    - Size: fixed, `1600 x 1280`.
+    - Opportunity and advocacy surface for ranked service areas, service-type demand, provider underservice and evidence.
+
+11. `NDIS Saturation Opportunities Tablet`
+    - Size: fixed, `900 x 1960`.
+    - Tablet opportunity surface.
+
+12. `NDIS Saturation Opportunities Phone`
+    - Size: fixed, `390 x 2760`.
+    - Mobile stacked opportunity surface.
 
 Publish each dashboard as a separate Tableau Public view and let `gmdata.au` switch between the views with CSS.
 

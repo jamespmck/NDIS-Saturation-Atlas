@@ -4,6 +4,7 @@ import argparse
 import copy
 import shutil
 import xml.etree.ElementTree as ET
+import uuid
 from pathlib import Path
 
 from . import config
@@ -20,6 +21,21 @@ ATLAS_ONLY_DASHBOARDS = {
     "NDIS Saturation Atlas Phone": {"maxwidth": "390", "minwidth": "390", "maxheight": "520", "minheight": "520"},
 }
 
+STREAMLIT_STYLE_DASHBOARDS = [
+    ("NDIS Saturation Atlas Monitor", (1600, 940), ["Atlas Map"]),
+    ("NDIS Saturation Atlas Tablet", (900, 760), ["Atlas Map"]),
+    ("NDIS Saturation Atlas Phone", (390, 520), ["Atlas Map"]),
+    ("NDIS Saturation National Monitor", (1600, 1120), ["Headline KPIs", "Utilisation Trend", "Funded Plan Saturation Trend", "Support Type Mix", "Remoteness Summary", "Data Quality Flags"]),
+    ("NDIS Saturation National Tablet", (900, 1580), ["Headline KPIs", "Utilisation Trend", "Funded Plan Saturation Trend", "Support Type Mix", "Remoteness Summary", "Data Quality Flags"]),
+    ("NDIS Saturation National Phone", (390, 2260), ["Headline KPIs", "Utilisation Trend", "Funded Plan Saturation Trend", "Support Type Mix", "Remoteness Summary", "Data Quality Flags"]),
+    ("NDIS Saturation Service Area Monitor", (1600, 1180), ["Utilisation Trend", "Funded Plan Saturation Trend", "Benchmark Gaps", "Support Type Mix", "Provider Data Availability", "Evidence Table", "Data Quality Flags"]),
+    ("NDIS Saturation Service Area Tablet", (900, 1780), ["Utilisation Trend", "Funded Plan Saturation Trend", "Benchmark Gaps", "Support Type Mix", "Provider Data Availability", "Evidence Table", "Data Quality Flags"]),
+    ("NDIS Saturation Service Area Phone", (390, 2500), ["Utilisation Trend", "Funded Plan Saturation Trend", "Benchmark Gaps", "Support Type Mix", "Provider Data Availability", "Evidence Table", "Data Quality Flags"]),
+    ("NDIS Saturation Opportunities Monitor", (1600, 1280), ["Opportunity Priority", "Opportunity Matrix", "Advocacy Gaps", "Provider Underservice", "Service Type Opportunities", "Evidence Table"]),
+    ("NDIS Saturation Opportunities Tablet", (900, 1960), ["Opportunity Priority", "Opportunity Matrix", "Advocacy Gaps", "Provider Underservice", "Service Type Opportunities", "Evidence Table"]),
+    ("NDIS Saturation Opportunities Phone", (390, 2760), ["Opportunity Priority", "Opportunity Matrix", "Advocacy Gaps", "Provider Underservice", "Service Type Opportunities", "Evidence Table"]),
+]
+
 
 def rebuild_website_ready_candidate(
     stable_workbook: Path = WORKBOOK_PATH,
@@ -34,7 +50,8 @@ def rebuild_website_ready_candidate(
 
     _replace_child(stable_root, "dashboards", layout_root.find("dashboards"))
     _replace_dashboard_windows(stable_root.find("windows"), layout_root.find("windows"))
-    _simplify_atlas_dashboards(stable_root)
+    _rebuild_streamlit_style_dashboards(stable_root)
+    _configure_atlas_worksheet(stable_root)
     ET.indent(stable_tree, space="  ")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     stable_tree.write(output_path, encoding="utf-8", xml_declaration=True)
@@ -140,6 +157,165 @@ def _atlas_viewpoint() -> ET.Element:
     highlight = ET.SubElement(viewpoint, "highlight")
     ET.SubElement(highlight, "color-one-way")
     return viewpoint
+
+
+def _rebuild_streamlit_style_dashboards(root: ET.Element) -> None:
+    dashboards = root.find("dashboards")
+    windows = root.find("windows")
+    if dashboards is None or windows is None:
+        raise ValueError("Workbook is missing dashboards or windows.")
+    source_dashboard = dashboards.find("dashboard")
+    if source_dashboard is None:
+        raise ValueError("Workbook has no dashboard template.")
+    datasource_block = source_dashboard.find("datasources")
+    devicelayouts = source_dashboard.find("devicelayouts")
+
+    dashboards.clear()
+    for name, size, sheets in STREAMLIT_STYLE_DASHBOARDS:
+        dashboards.append(_dashboard(name, size, sheets, datasource_block, devicelayouts))
+
+    for window in list(windows):
+        if window.attrib.get("class") == "dashboard":
+            windows.remove(window)
+    for name, _, sheets in STREAMLIT_STYLE_DASHBOARDS:
+        windows.append(_dashboard_window(name, sheets))
+
+
+def _dashboard(name: str, size: tuple[int, int], sheets: list[str], datasource_block: ET.Element | None, devicelayouts: ET.Element | None) -> ET.Element:
+    width, height = size
+    dashboard = ET.Element("dashboard", {"name": name})
+    style = ET.SubElement(dashboard, "style")
+    style_rule = ET.SubElement(style, "style-rule", {"element": "dashboard"})
+    ET.SubElement(style_rule, "format", {"attr": "background-color", "value": "#f5f7fb"})
+    ET.SubElement(dashboard, "size", {"maxheight": str(height), "maxwidth": str(width), "minheight": str(height), "minwidth": str(width)})
+    if datasource_block is not None:
+        dashboard.append(copy.deepcopy(datasource_block))
+    dashboard.append(_dashboard_zones(name, sheets))
+    if devicelayouts is not None:
+        dashboard.append(copy.deepcopy(devicelayouts))
+    else:
+        layouts = ET.SubElement(dashboard, "devicelayouts")
+        ET.SubElement(layouts, "devicelayout", {"name": "Desktop"})
+    ET.SubElement(dashboard, "simple-id", {"uuid": _stable_uuid(f"dashboard:{name}")})
+    return dashboard
+
+
+def _dashboard_zones(name: str, sheets: list[str]) -> ET.Element:
+    zones = ET.Element("zones")
+    canvas = ET.SubElement(
+        zones,
+        "zone",
+        {
+            "id": "1",
+            "x": "0",
+            "y": "0",
+            "w": "100000",
+            "h": "100000",
+            "type-v2": "layout-basic",
+            "friendly-name": f"{name} Canvas",
+        },
+    )
+    ET.SubElement(canvas, "layout-cache", {"minheight": "100", "minwidth": "100", "type-h": "scalable", "type-w": "scalable"})
+    if sheets == ["Atlas Map"]:
+        ET.SubElement(canvas, "zone", {"id": "2", "name": "Atlas Map", "x": "0", "y": "0", "w": "100000", "h": "100000", "show-title": "false"})
+        return zones
+
+    columns = 2 if len(sheets) > 3 else 1
+    gap = 1500
+    margin = 1500
+    available_w = 100000 - 2 * margin - (columns - 1) * gap
+    zone_w = available_w // columns
+    rows = (len(sheets) + columns - 1) // columns
+    available_h = 100000 - 2 * margin - (rows - 1) * gap
+    zone_h = available_h // rows
+    for index, sheet in enumerate(sheets):
+        row = index // columns
+        col = index % columns
+        attrs = {
+            "id": str(index + 2),
+            "name": sheet,
+            "x": str(margin + col * (zone_w + gap)),
+            "y": str(margin + row * (zone_h + gap)),
+            "w": str(zone_w),
+            "h": str(zone_h),
+            "show-title": "true",
+        }
+        zone = ET.SubElement(canvas, "zone", attrs)
+        ET.SubElement(zone, "layout-cache", {"minheight": "100", "minwidth": "100", "type-h": "scalable", "type-w": "scalable"})
+        zone_style = ET.SubElement(zone, "zone-style")
+        ET.SubElement(zone_style, "format", {"attr": "background-color", "value": "#ffffff"})
+        ET.SubElement(zone_style, "format", {"attr": "border-color", "value": "#d7dde8"})
+        ET.SubElement(zone_style, "format", {"attr": "border-style", "value": "solid"})
+        ET.SubElement(zone_style, "format", {"attr": "border-width", "value": "1"})
+        ET.SubElement(zone_style, "format", {"attr": "margin", "value": "8"})
+        ET.SubElement(zone_style, "format", {"attr": "padding", "value": "8"})
+    return zones
+
+
+def _dashboard_window(name: str, sheets: list[str]) -> ET.Element:
+    window = ET.Element("window", {"class": "dashboard", "name": name})
+    viewpoints = ET.SubElement(window, "viewpoints")
+    for sheet in sheets:
+        viewpoints.append(_viewpoint(sheet))
+    ET.SubElement(window, "active", {"id": "2"})
+    ET.SubElement(window, "device-preview")
+    ET.SubElement(window, "simple-id", {"uuid": _stable_uuid(f"window:{name}")})
+    return window
+
+
+def _viewpoint(name: str) -> ET.Element:
+    viewpoint = ET.Element("viewpoint", {"name": name})
+    highlight = ET.SubElement(viewpoint, "highlight")
+    ET.SubElement(highlight, "color-one-way")
+    return viewpoint
+
+
+def _configure_atlas_worksheet(root: ET.Element) -> None:
+    worksheet = next((node for node in root.findall(".//worksheets/worksheet") if node.attrib.get("name") == "Atlas Map"), None)
+    if worksheet is None:
+        return
+    dependencies = worksheet.find(".//datasource-dependencies")
+    encodings = worksheet.find(".//encodings")
+    if dependencies is None or encodings is None:
+        return
+
+    _ensure_column(dependencies, "Atlas Default Metric Value", "real", "[atlas_default_metric_value]", "measure", "quantitative")
+    _ensure_column(dependencies, "Funded Plans Per 1000 Delta From National Mean", "real", "[funded_plans_per_1000_delta_from_national_mean]", "measure", "quantitative")
+    _ensure_column(dependencies, "Mean Plan Utilisation Delta From National Median", "real", "[mean_plan_utilisation_delta_from_national_median]", "measure", "quantitative")
+    _ensure_column(dependencies, "Provider Saturation Delta From National Mean", "real", "[provider_saturation_delta_from_national_mean]", "measure", "quantitative")
+    _ensure_column(dependencies, "Support Type", "string", "[support_type]", "dimension", "nominal")
+    _ensure_column_instance(dependencies, "[atlas_default_metric_value]", "Avg", "[avg:atlas_default_metric_value:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[funded_plans_per_1000_delta_from_national_mean]", "Avg", "[avg:funded_plans_per_1000_delta_from_national_mean:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[mean_plan_utilisation_delta_from_national_median]", "Avg", "[avg:mean_plan_utilisation_delta_from_national_median:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[provider_saturation_delta_from_national_mean]", "Avg", "[avg:provider_saturation_delta_from_national_mean:qk]", "quantitative")
+    _ensure_column_instance(dependencies, "[support_type]", "None", "[none:support_type:nk]", "nominal")
+
+    for color in encodings.findall("color"):
+        encodings.remove(color)
+    color = ET.Element("color", {"column": "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:atlas_default_metric_value:qk]"})
+    encodings.insert(0, color)
+    for column in [
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_mean:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_mean:qk]",
+        "[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:support_type:nk]",
+    ]:
+        if not any(node.attrib.get("column") == column for node in encodings.findall("tooltip")):
+            ET.SubElement(encodings, "tooltip", {"column": column})
+
+
+def _ensure_column(dependencies: ET.Element, caption: str, datatype: str, name: str, role: str, col_type: str) -> None:
+    if dependencies.find(f"./column[@name='{name}']") is None:
+        ET.SubElement(dependencies, "column", {"caption": caption, "datatype": datatype, "name": name, "role": role, "type": col_type})
+
+
+def _ensure_column_instance(dependencies: ET.Element, column: str, derivation: str, name: str, instance_type: str) -> None:
+    if dependencies.find(f"./column-instance[@name='{name}']") is None:
+        ET.SubElement(dependencies, "column-instance", {"column": column, "derivation": derivation, "name": name, "pivot": "key", "type": instance_type})
+
+
+def _stable_uuid(value: str) -> str:
+    return "{" + str(uuid.uuid5(uuid.NAMESPACE_URL, value)).upper() + "}"
 
 
 def main() -> None:

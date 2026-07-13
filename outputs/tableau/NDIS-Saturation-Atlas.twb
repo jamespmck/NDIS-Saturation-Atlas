@@ -4478,6 +4478,16 @@
             <column-instance column="[mean_plan_utilisation]" derivation="Avg" name="[avg:mean_plan_utilisation:qk]" pivot="key" type="quantitative" />
             <column-instance column="[payment_amount]" derivation="Sum" name="[sum:payment_amount:qk]" pivot="key" type="quantitative" />
             <column-instance column="[payments_per_funded_plan]" derivation="Avg" name="[avg:payments_per_funded_plan:qk]" pivot="key" type="quantitative" />
+            <column caption="Atlas Default Metric Value" datatype="real" name="[atlas_default_metric_value]" role="measure" type="quantitative" />
+            <column caption="Funded Plans Per 1000 Delta From National Mean" datatype="real" name="[funded_plans_per_1000_delta_from_national_mean]" role="measure" type="quantitative" />
+            <column caption="Mean Plan Utilisation Delta From National Median" datatype="real" name="[mean_plan_utilisation_delta_from_national_median]" role="measure" type="quantitative" />
+            <column caption="Provider Saturation Delta From National Mean" datatype="real" name="[provider_saturation_delta_from_national_mean]" role="measure" type="quantitative" />
+            <column caption="Support Type" datatype="string" name="[support_type]" role="dimension" type="nominal" />
+            <column-instance column="[atlas_default_metric_value]" derivation="Avg" name="[avg:atlas_default_metric_value:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[funded_plans_per_1000_delta_from_national_mean]" derivation="Avg" name="[avg:funded_plans_per_1000_delta_from_national_mean:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[mean_plan_utilisation_delta_from_national_median]" derivation="Avg" name="[avg:mean_plan_utilisation_delta_from_national_median:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[provider_saturation_delta_from_national_mean]" derivation="Avg" name="[avg:provider_saturation_delta_from_national_mean:qk]" pivot="key" type="quantitative" />
+            <column-instance column="[support_type]" derivation="None" name="[none:support_type:nk]" pivot="key" type="nominal" />
           </datasource-dependencies>
           <filter class="categorical" column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:quarter_label (tableau_market_classification.csv):nk]">
             <groupfilter function="member" level="[none:quarter_label (tableau_market_classification.csv):nk]" member="&quot;2026 Q1&quot;" ns0:ui-domain="database" ns0:ui-enumeration="inclusive" ns0:ui-marker="enumerate" />
@@ -4509,7 +4519,7 @@
             </view>
             <mark class="Automatic" />
             <encodings>
-              <color column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:persistent_utilisation_classification:nk]" />
+              <color column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:atlas_default_metric_value:qk]" />
               <lod column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:remoteness_category:nk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[sum:funded_plan_count:qk]" />
               <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000:qk]" />
@@ -4520,6 +4530,10 @@
               <lod column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[clct:Geometry:nk]" />
               <lod column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:ndis_service_area:nk]" />
               <geometry column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[clct:Geometry:nk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:funded_plans_per_1000_delta_from_national_mean:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:mean_plan_utilisation_delta_from_national_median:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[avg:provider_saturation_delta_from_national_mean:qk]" />
+              <tooltip column="[federated.0t2pdsf1ugut8y1dop0ji1sbsjij].[none:support_type:nk]" />
             </encodings>
             <customized-tooltip>
               <formatted-text>
@@ -5707,354 +5721,6 @@ Weighted mean utilisation KPI: &lt;</run>
     </worksheet>
   </worksheets>
   <dashboards>
-    <dashboard name="NDIS Saturation Monitor">
-      <style>
-        <style-rule element="dashboard">
-          <format attr="background-color" value="#f5f7fb" />
-        </style-rule>
-      </style>
-      <size maxheight="1100" maxwidth="1600" minheight="1100" minwidth="1600" />
-      <datasources>
-        <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
-      </datasources>
-      <zones>
-        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Monitor Canvas">
-          <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="1500" y="1800" w="97000" h="9500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="3" name="Atlas Map" x="1500" y="13000" w="58000" h="45500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="4" name="Opportunity Matrix" x="61000" y="13000" w="37500" h="22000" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="5" name="Opportunity Priority" x="61000" y="37000" w="37500" h="21500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="6" name="Service Type Opportunities" x="1500" y="61000" w="31250" h="36000" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="7" name="Advocacy Gaps" x="34250" y="61000" w="31250" h="36000" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="8" name="Provider Underservice" x="67000" y="61000" w="31500" h="36000" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="9" name="Utilisation Trend" x="67000" y="37000" w="31500" h="21500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
-        </zone>
-      </zones>
-      <devicelayouts>
-        <devicelayout name="Desktop" />
-      </devicelayouts>
-      <simple-id uuid="{B29AB56E-852E-4FE7-B591-C033A9B69CE7}" />
-    </dashboard>
-    <dashboard name="NDIS Saturation Tablet">
-      <style>
-        <style-rule element="dashboard">
-          <format attr="background-color" value="#f5f7fb" />
-        </style-rule>
-      </style>
-      <size maxheight="1350" maxwidth="900" minheight="1350" minwidth="900" />
-      <datasources>
-        <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
-      </datasources>
-      <zones>
-        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Tablet Canvas">
-          <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="2500" y="1200" w="95000" h="6500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="3" name="Atlas Map" x="2500" y="8600" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="4" name="Opportunity Matrix" x="2500" y="21614" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="5" name="Opportunity Priority" x="2500" y="34628" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="6" name="Service Type Opportunities" x="2500" y="47642" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="7" name="Advocacy Gaps" x="2500" y="60656" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="8" name="Provider Underservice" x="2500" y="73670" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="9" name="Utilisation Trend" x="2500" y="86684" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
-        </zone>
-      </zones>
-      <devicelayouts>
-        <devicelayout name="Desktop" />
-      </devicelayouts>
-      <simple-id uuid="{875403EE-E8C4-41AD-B9D3-DF5EBB5B10C7}" />
-    </dashboard>
-    <dashboard name="NDIS Saturation Phone">
-      <style>
-        <style-rule element="dashboard">
-          <format attr="background-color" value="#f5f7fb" />
-        </style-rule>
-      </style>
-      <size maxheight="2350" maxwidth="390" minheight="2350" minwidth="390" />
-      <datasources>
-        <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
-      </datasources>
-      <zones>
-        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Phone Canvas">
-          <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="3000" y="900" w="94000" h="5500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="3" name="Atlas Map" x="3000" y="7200" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="4" name="Opportunity Matrix" x="3000" y="20442" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="5" name="Opportunity Priority" x="3000" y="33684" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="6" name="Service Type Opportunities" x="3000" y="46926" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="7" name="Advocacy Gaps" x="3000" y="60168" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="8" name="Provider Underservice" x="3000" y="73410" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="9" name="Utilisation Trend" x="3000" y="86652" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
-        </zone>
-      </zones>
-      <devicelayouts>
-        <devicelayout name="Desktop" />
-      </devicelayouts>
-      <simple-id uuid="{FBB00BCC-6E4C-4B02-BD89-43C3CAF23F3D}" />
-    </dashboard>
     <dashboard name="NDIS Saturation Atlas Monitor">
       <style>
         <style-rule element="dashboard">
@@ -6068,15 +5734,13 @@ Weighted mean utilisation KPI: &lt;</run>
       <zones>
         <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Atlas Monitor Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Atlas Map" x="0" y="0" w="100000" h="100000" show-title="false">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          </zone>
+          <zone id="2" name="Atlas Map" x="0" y="0" w="100000" h="100000" show-title="false" />
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{D04C3D14-A19D-4E89-972B-1933C975FD7F}" />
+      <simple-id uuid="{E5D1943E-719D-5501-B5F8-CD69DDC22F70}" />
     </dashboard>
     <dashboard name="NDIS Saturation Atlas Tablet">
       <style>
@@ -6091,15 +5755,13 @@ Weighted mean utilisation KPI: &lt;</run>
       <zones>
         <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Atlas Tablet Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Atlas Map" x="0" y="0" w="100000" h="100000" show-title="false">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          </zone>
+          <zone id="2" name="Atlas Map" x="0" y="0" w="100000" h="100000" show-title="false" />
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{07FF4A6C-1C3C-493C-9F92-C2147C0C65B5}" />
+      <simple-id uuid="{514FFF0D-50CB-57C7-8FBD-87B858DF199F}" />
     </dashboard>
     <dashboard name="NDIS Saturation Atlas Phone">
       <style>
@@ -6114,15 +5776,271 @@ Weighted mean utilisation KPI: &lt;</run>
       <zones>
         <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Atlas Phone Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Atlas Map" x="0" y="0" w="100000" h="100000" show-title="false">
+          <zone id="2" name="Atlas Map" x="0" y="0" w="100000" h="100000" show-title="false" />
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout name="Desktop" />
+      </devicelayouts>
+      <simple-id uuid="{E20D5086-29E5-55CA-AC42-9265DD57AC2B}" />
+    </dashboard>
+    <dashboard name="NDIS Saturation National Monitor">
+      <style>
+        <style-rule element="dashboard">
+          <format attr="background-color" value="#f5f7fb" />
+        </style-rule>
+      </style>
+      <size maxheight="1120" maxwidth="1600" minheight="1120" minwidth="1600" />
+      <datasources>
+        <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
+      </datasources>
+      <zones>
+        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation National Monitor Canvas">
+          <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+          <zone id="2" name="Headline KPIs" x="1500" y="1500" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="3" name="Utilisation Trend" x="50750" y="1500" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="4" name="Funded Plan Saturation Trend" x="1500" y="34333" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="5" name="Support Type Mix" x="50750" y="34333" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="6" name="Remoteness Summary" x="1500" y="67166" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="7" name="Data Quality Flags" x="50750" y="67166" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
           </zone>
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{9E93DF42-8789-49B5-9BA0-8B2155E3982A}" />
+      <simple-id uuid="{6B865558-A0C5-5040-AA53-CCA572D70444}" />
+    </dashboard>
+    <dashboard name="NDIS Saturation National Tablet">
+      <style>
+        <style-rule element="dashboard">
+          <format attr="background-color" value="#f5f7fb" />
+        </style-rule>
+      </style>
+      <size maxheight="1580" maxwidth="900" minheight="1580" minwidth="900" />
+      <datasources>
+        <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
+      </datasources>
+      <zones>
+        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation National Tablet Canvas">
+          <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+          <zone id="2" name="Headline KPIs" x="1500" y="1500" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="3" name="Utilisation Trend" x="50750" y="1500" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="4" name="Funded Plan Saturation Trend" x="1500" y="34333" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="5" name="Support Type Mix" x="50750" y="34333" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="6" name="Remoteness Summary" x="1500" y="67166" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="7" name="Data Quality Flags" x="50750" y="67166" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout name="Desktop" />
+      </devicelayouts>
+      <simple-id uuid="{EDA8F0EE-4851-58EB-826F-055AB6E09A1E}" />
+    </dashboard>
+    <dashboard name="NDIS Saturation National Phone">
+      <style>
+        <style-rule element="dashboard">
+          <format attr="background-color" value="#f5f7fb" />
+        </style-rule>
+      </style>
+      <size maxheight="2260" maxwidth="390" minheight="2260" minwidth="390" />
+      <datasources>
+        <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
+      </datasources>
+      <zones>
+        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation National Phone Canvas">
+          <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+          <zone id="2" name="Headline KPIs" x="1500" y="1500" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="3" name="Utilisation Trend" x="50750" y="1500" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="4" name="Funded Plan Saturation Trend" x="1500" y="34333" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="5" name="Support Type Mix" x="50750" y="34333" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="6" name="Remoteness Summary" x="1500" y="67166" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+          <zone id="7" name="Data Quality Flags" x="50750" y="67166" w="47750" h="31333" show-title="true">
+            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
+            <zone-style>
+              <format attr="background-color" value="#ffffff" />
+              <format attr="border-color" value="#d7dde8" />
+              <format attr="border-style" value="solid" />
+              <format attr="border-width" value="1" />
+              <format attr="margin" value="8" />
+              <format attr="padding" value="8" />
+            </zone-style>
+          </zone>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout name="Desktop" />
+      </devicelayouts>
+      <simple-id uuid="{001991B3-E1DE-5D54-87B1-E3A0C220F647}" />
     </dashboard>
     <dashboard name="NDIS Saturation Service Area Monitor">
       <style>
@@ -6137,7 +6055,7 @@ Weighted mean utilisation KPI: &lt;</run>
       <zones>
         <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Service Area Monitor Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="1500" y="1800" w="97000" h="9500" show-title="true">
+          <zone id="2" name="Utilisation Trend" x="1500" y="1500" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6148,7 +6066,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="3" name="Utilisation Trend" x="1500" y="13000" w="58000" h="45500" show-title="true">
+          <zone id="3" name="Funded Plan Saturation Trend" x="50750" y="1500" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6159,7 +6077,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="4" name="Funded Plan Saturation Trend" x="61000" y="13000" w="37500" h="22000" show-title="true">
+          <zone id="4" name="Benchmark Gaps" x="1500" y="26125" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6170,7 +6088,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="5" name="Service Type Opportunities" x="61000" y="37000" w="37500" h="21500" show-title="true">
+          <zone id="5" name="Support Type Mix" x="50750" y="26125" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6181,7 +6099,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="6" name="Advocacy Gaps" x="1500" y="61000" w="31250" h="36000" show-title="true">
+          <zone id="6" name="Provider Data Availability" x="1500" y="50750" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6192,7 +6110,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="7" name="Provider Underservice" x="34250" y="61000" w="31250" h="36000" show-title="true">
+          <zone id="7" name="Evidence Table" x="50750" y="50750" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6203,7 +6121,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="8" name="Evidence Table" x="67000" y="61000" w="31500" h="36000" show-title="true">
+          <zone id="8" name="Data Quality Flags" x="1500" y="75375" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6214,31 +6132,12 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="9" name="Data Quality Flags" x="67000" y="37000" w="31500" h="21500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{E8D3AE0A-89DB-420A-944D-302265519CF3}" />
+      <simple-id uuid="{B0C9D2FA-3EDE-58DA-8EAF-13A91157C2AE}" />
     </dashboard>
     <dashboard name="NDIS Saturation Service Area Tablet">
       <style>
@@ -6246,14 +6145,14 @@ Weighted mean utilisation KPI: &lt;</run>
           <format attr="background-color" value="#f5f7fb" />
         </style-rule>
       </style>
-      <size maxheight="1550" maxwidth="900" minheight="1550" minwidth="900" />
+      <size maxheight="1780" maxwidth="900" minheight="1780" minwidth="900" />
       <datasources>
         <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
       </datasources>
       <zones>
         <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Service Area Tablet Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="2500" y="1200" w="95000" h="6500" show-title="true">
+          <zone id="2" name="Utilisation Trend" x="1500" y="1500" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6264,7 +6163,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="3" name="Utilisation Trend" x="2500" y="8600" w="95000" h="12114" show-title="true">
+          <zone id="3" name="Funded Plan Saturation Trend" x="50750" y="1500" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6275,7 +6174,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="4" name="Funded Plan Saturation Trend" x="2500" y="21614" w="95000" h="12114" show-title="true">
+          <zone id="4" name="Benchmark Gaps" x="1500" y="26125" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6286,7 +6185,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="5" name="Service Type Opportunities" x="2500" y="34628" w="95000" h="12114" show-title="true">
+          <zone id="5" name="Support Type Mix" x="50750" y="26125" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6297,7 +6196,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="6" name="Advocacy Gaps" x="2500" y="47642" w="95000" h="12114" show-title="true">
+          <zone id="6" name="Provider Data Availability" x="1500" y="50750" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6308,7 +6207,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="7" name="Provider Underservice" x="2500" y="60656" w="95000" h="12114" show-title="true">
+          <zone id="7" name="Evidence Table" x="50750" y="50750" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6319,7 +6218,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="8" name="Evidence Table" x="2500" y="73670" w="95000" h="12114" show-title="true">
+          <zone id="8" name="Data Quality Flags" x="1500" y="75375" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6330,31 +6229,12 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="9" name="Data Quality Flags" x="2500" y="86684" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{F0958C9B-3DFD-4FBB-8167-DE6A330A18DD}" />
+      <simple-id uuid="{28E0BE95-945E-5F88-81A8-319FC6DF29B9}" />
     </dashboard>
     <dashboard name="NDIS Saturation Service Area Phone">
       <style>
@@ -6362,14 +6242,14 @@ Weighted mean utilisation KPI: &lt;</run>
           <format attr="background-color" value="#f5f7fb" />
         </style-rule>
       </style>
-      <size maxheight="2600" maxwidth="390" minheight="2600" minwidth="390" />
+      <size maxheight="2500" maxwidth="390" minheight="2500" minwidth="390" />
       <datasources>
         <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
       </datasources>
       <zones>
         <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Service Area Phone Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="3000" y="900" w="94000" h="5500" show-title="true">
+          <zone id="2" name="Utilisation Trend" x="1500" y="1500" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6380,7 +6260,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="3" name="Utilisation Trend" x="3000" y="7200" w="94000" h="12442" show-title="true">
+          <zone id="3" name="Funded Plan Saturation Trend" x="50750" y="1500" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6391,7 +6271,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="4" name="Funded Plan Saturation Trend" x="3000" y="20442" w="94000" h="12442" show-title="true">
+          <zone id="4" name="Benchmark Gaps" x="1500" y="26125" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6402,7 +6282,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="5" name="Service Type Opportunities" x="3000" y="33684" w="94000" h="12442" show-title="true">
+          <zone id="5" name="Support Type Mix" x="50750" y="26125" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6413,7 +6293,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="6" name="Advocacy Gaps" x="3000" y="46926" w="94000" h="12442" show-title="true">
+          <zone id="6" name="Provider Data Availability" x="1500" y="50750" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6424,7 +6304,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="7" name="Provider Underservice" x="3000" y="60168" w="94000" h="12442" show-title="true">
+          <zone id="7" name="Evidence Table" x="50750" y="50750" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6435,7 +6315,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="8" name="Evidence Table" x="3000" y="73410" w="94000" h="12442" show-title="true">
+          <zone id="8" name="Data Quality Flags" x="1500" y="75375" w="47750" h="23125" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6446,46 +6326,27 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="9" name="Data Quality Flags" x="3000" y="86652" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{7616F9A0-D628-4558-BD91-99BD6E8FA3DF}" />
+      <simple-id uuid="{D137A261-DF05-5747-ACA2-5692C89BCD0A}" />
     </dashboard>
-    <dashboard name="NDIS Saturation Rankings Monitor">
+    <dashboard name="NDIS Saturation Opportunities Monitor">
       <style>
         <style-rule element="dashboard">
           <format attr="background-color" value="#f5f7fb" />
         </style-rule>
       </style>
-      <size maxheight="1180" maxwidth="1600" minheight="1180" minwidth="1600" />
+      <size maxheight="1280" maxwidth="1600" minheight="1280" minwidth="1600" />
       <datasources>
         <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
       </datasources>
       <zones>
-        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Rankings Monitor Canvas">
+        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Opportunities Monitor Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="1500" y="1800" w="97000" h="9500" show-title="true">
+          <zone id="2" name="Opportunity Priority" x="1500" y="1500" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6496,7 +6357,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="3" name="Opportunity Priority" x="1500" y="13000" w="58000" h="45500" show-title="true">
+          <zone id="3" name="Opportunity Matrix" x="50750" y="1500" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6507,7 +6368,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="4" name="Advocacy Gaps" x="61000" y="13000" w="37500" h="22000" show-title="true">
+          <zone id="4" name="Advocacy Gaps" x="1500" y="34333" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6518,7 +6379,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="5" name="Provider Underservice" x="61000" y="37000" w="37500" h="21500" show-title="true">
+          <zone id="5" name="Provider Underservice" x="50750" y="34333" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6529,7 +6390,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="6" name="Service Type Opportunities" x="1500" y="61000" w="31250" h="36000" show-title="true">
+          <zone id="6" name="Service Type Opportunities" x="1500" y="67166" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6540,7 +6401,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="7" name="Opportunity Matrix" x="34250" y="61000" w="31250" h="36000" show-title="true">
+          <zone id="7" name="Evidence Table" x="50750" y="67166" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6551,57 +6412,27 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="8" name="Evidence Table" x="67000" y="61000" w="31500" h="36000" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="9" name="Data Quality Flags" x="67000" y="37000" w="31500" h="21500" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{7AABCBBB-D068-4B46-9F46-0E5955ABAA2A}" />
+      <simple-id uuid="{0915C30C-FF07-5192-8517-783182C4EE93}" />
     </dashboard>
-    <dashboard name="NDIS Saturation Rankings Tablet">
+    <dashboard name="NDIS Saturation Opportunities Tablet">
       <style>
         <style-rule element="dashboard">
           <format attr="background-color" value="#f5f7fb" />
         </style-rule>
       </style>
-      <size maxheight="1550" maxwidth="900" minheight="1550" minwidth="900" />
+      <size maxheight="1960" maxwidth="900" minheight="1960" minwidth="900" />
       <datasources>
         <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
       </datasources>
       <zones>
-        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Rankings Tablet Canvas">
+        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Opportunities Tablet Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="2500" y="1200" w="95000" h="6500" show-title="true">
+          <zone id="2" name="Opportunity Priority" x="1500" y="1500" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6612,7 +6443,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="3" name="Opportunity Priority" x="2500" y="8600" w="95000" h="12114" show-title="true">
+          <zone id="3" name="Opportunity Matrix" x="50750" y="1500" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6623,7 +6454,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="4" name="Advocacy Gaps" x="2500" y="21614" w="95000" h="12114" show-title="true">
+          <zone id="4" name="Advocacy Gaps" x="1500" y="34333" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6634,7 +6465,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="5" name="Provider Underservice" x="2500" y="34628" w="95000" h="12114" show-title="true">
+          <zone id="5" name="Provider Underservice" x="50750" y="34333" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6645,7 +6476,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="6" name="Service Type Opportunities" x="2500" y="47642" w="95000" h="12114" show-title="true">
+          <zone id="6" name="Service Type Opportunities" x="1500" y="67166" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6656,7 +6487,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="7" name="Opportunity Matrix" x="2500" y="60656" w="95000" h="12114" show-title="true">
+          <zone id="7" name="Evidence Table" x="50750" y="67166" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6667,57 +6498,27 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="8" name="Evidence Table" x="2500" y="73670" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="9" name="Data Quality Flags" x="2500" y="86684" w="95000" h="12114" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{3D778A7C-0290-44E6-A314-5FE8854CE322}" />
+      <simple-id uuid="{0E2164BD-2F9F-59D0-B34E-7FF6E7F9715D}" />
     </dashboard>
-    <dashboard name="NDIS Saturation Rankings Phone">
+    <dashboard name="NDIS Saturation Opportunities Phone">
       <style>
         <style-rule element="dashboard">
           <format attr="background-color" value="#f5f7fb" />
         </style-rule>
       </style>
-      <size maxheight="2600" maxwidth="390" minheight="2600" minwidth="390" />
+      <size maxheight="2760" maxwidth="390" minheight="2760" minwidth="390" />
       <datasources>
         <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" />
       </datasources>
       <zones>
-        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Rankings Phone Canvas">
+        <zone id="1" x="0" y="0" w="100000" h="100000" type-v2="layout-basic" friendly-name="NDIS Saturation Opportunities Phone Canvas">
           <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-          <zone id="2" name="Headline KPIs" x="3000" y="900" w="94000" h="5500" show-title="true">
+          <zone id="2" name="Opportunity Priority" x="1500" y="1500" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6728,7 +6529,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="3" name="Opportunity Priority" x="3000" y="7200" w="94000" h="12442" show-title="true">
+          <zone id="3" name="Opportunity Matrix" x="50750" y="1500" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6739,7 +6540,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="4" name="Advocacy Gaps" x="3000" y="20442" w="94000" h="12442" show-title="true">
+          <zone id="4" name="Advocacy Gaps" x="1500" y="34333" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6750,7 +6551,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="5" name="Provider Underservice" x="3000" y="33684" w="94000" h="12442" show-title="true">
+          <zone id="5" name="Provider Underservice" x="50750" y="34333" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6761,7 +6562,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="6" name="Service Type Opportunities" x="3000" y="46926" w="94000" h="12442" show-title="true">
+          <zone id="6" name="Service Type Opportunities" x="1500" y="67166" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6772,7 +6573,7 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="7" name="Opportunity Matrix" x="3000" y="60168" w="94000" h="12442" show-title="true">
+          <zone id="7" name="Evidence Table" x="50750" y="67166" w="47750" h="31333" show-title="true">
             <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
             <zone-style>
               <format attr="background-color" value="#ffffff" />
@@ -6783,42 +6584,12 @@ Weighted mean utilisation KPI: &lt;</run>
               <format attr="padding" value="8" />
             </zone-style>
           </zone>
-          <zone id="8" name="Evidence Table" x="3000" y="73410" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone id="9" name="Data Quality Flags" x="3000" y="86652" w="94000" h="12442" show-title="true">
-            <layout-cache minheight="100" minwidth="100" type-h="scalable" type-w="scalable" />
-            <zone-style>
-              <format attr="background-color" value="#ffffff" />
-              <format attr="border-color" value="#d7dde8" />
-              <format attr="border-style" value="solid" />
-              <format attr="border-width" value="1" />
-              <format attr="margin" value="8" />
-              <format attr="padding" value="8" />
-            </zone-style>
-          </zone>
-          <zone-style>
-            <format attr="background-color" value="#f5f7fb" />
-            <format attr="border-color" value="#f5f7fb" />
-            <format attr="border-style" value="solid" />
-            <format attr="border-width" value="1" />
-            <format attr="margin" value="0" />
-            <format attr="padding" value="0" />
-          </zone-style>
         </zone>
       </zones>
       <devicelayouts>
         <devicelayout name="Desktop" />
       </devicelayouts>
-      <simple-id uuid="{48169767-11BA-4C92-88D6-6F5C40AB24E8}" />
+      <simple-id uuid="{10B6777D-C14D-56DB-9992-DD1D8A969F4F}" />
     </dashboard>
   </dashboards>
   <windows source-height="30">
@@ -7284,147 +7055,6 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoint>
       <simple-id uuid="{712BCA0F-78CF-4DEE-A721-04353E128836}" />
     </window>
-    <window class="dashboard" name="NDIS Saturation Monitor">
-      <viewpoints>
-        <viewpoint name="Headline KPIs">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Atlas Map">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Opportunity Matrix">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Opportunity Priority">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Service Type Opportunities">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Advocacy Gaps">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Provider Underservice">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Utilisation Trend">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-      </viewpoints>
-      <active id="2" />
-      <device-preview />
-      <simple-id uuid="{38D9C773-AB42-4D30-BED7-410EFAEB5896}" />
-    </window>
-    <window class="dashboard" name="NDIS Saturation Tablet">
-      <viewpoints>
-        <viewpoint name="Headline KPIs">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Atlas Map">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Opportunity Matrix">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Opportunity Priority">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Service Type Opportunities">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Advocacy Gaps">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Provider Underservice">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Utilisation Trend">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-      </viewpoints>
-      <active id="2" />
-      <device-preview />
-      <simple-id uuid="{A911BC79-660F-4C09-8A39-FC8B697135EE}" />
-    </window>
-    <window class="dashboard" name="NDIS Saturation Phone">
-      <viewpoints>
-        <viewpoint name="Headline KPIs">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Atlas Map">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Opportunity Matrix">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Opportunity Priority">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Service Type Opportunities">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Advocacy Gaps">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Provider Underservice">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Utilisation Trend">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-      </viewpoints>
-      <active id="2" />
-      <device-preview />
-      <simple-id uuid="{0617BF5E-B988-480B-997B-327E0CB4D309}" />
-    </window>
     <window class="dashboard" name="NDIS Saturation Atlas Monitor">
       <viewpoints>
         <viewpoint name="Atlas Map">
@@ -7435,7 +7065,7 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{4ABB322F-E6B7-4AAE-A168-71015CBD7142}" />
+      <simple-id uuid="{057D885A-886B-5278-A968-74964C11073F}" />
     </window>
     <window class="dashboard" name="NDIS Saturation Atlas Tablet">
       <viewpoints>
@@ -7447,7 +7077,7 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{AF0FCC85-A746-4C70-975B-BB86FEDDCD4A}" />
+      <simple-id uuid="{C7265F99-D8AD-5551-8FAF-0D789A67ABB1}" />
     </window>
     <window class="dashboard" name="NDIS Saturation Atlas Phone">
       <viewpoints>
@@ -7459,15 +7089,121 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{050A4A2F-0444-47F3-AB7C-BC1FEA31112D}" />
+      <simple-id uuid="{FB1F536B-E8A3-5B81-A7C1-EA6E62CB9F8C}" />
+    </window>
+    <window class="dashboard" name="NDIS Saturation National Monitor">
+      <viewpoints>
+        <viewpoint name="Headline KPIs">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Utilisation Trend">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Funded Plan Saturation Trend">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Support Type Mix">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Remoteness Summary">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Data Quality Flags">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+      </viewpoints>
+      <active id="2" />
+      <device-preview />
+      <simple-id uuid="{974522FA-34F5-548C-9AE0-33A81A2D7573}" />
+    </window>
+    <window class="dashboard" name="NDIS Saturation National Tablet">
+      <viewpoints>
+        <viewpoint name="Headline KPIs">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Utilisation Trend">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Funded Plan Saturation Trend">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Support Type Mix">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Remoteness Summary">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Data Quality Flags">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+      </viewpoints>
+      <active id="2" />
+      <device-preview />
+      <simple-id uuid="{48618802-4CE4-5C71-A3AE-E72B060E032F}" />
+    </window>
+    <window class="dashboard" name="NDIS Saturation National Phone">
+      <viewpoints>
+        <viewpoint name="Headline KPIs">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Utilisation Trend">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Funded Plan Saturation Trend">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Support Type Mix">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Remoteness Summary">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Data Quality Flags">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+      </viewpoints>
+      <active id="2" />
+      <device-preview />
+      <simple-id uuid="{94D28477-BFF8-50D8-8984-F467A05A716B}" />
     </window>
     <window class="dashboard" name="NDIS Saturation Service Area Monitor">
       <viewpoints>
-        <viewpoint name="Headline KPIs">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
         <viewpoint name="Utilisation Trend">
           <highlight>
             <color-one-way />
@@ -7478,17 +7214,17 @@ Weighted mean utilisation KPI: &lt;</run>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Service Type Opportunities">
+        <viewpoint name="Benchmark Gaps">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Advocacy Gaps">
+        <viewpoint name="Support Type Mix">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Provider Underservice">
+        <viewpoint name="Provider Data Availability">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7506,15 +7242,10 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{BF7CCDF8-8F5B-4C30-AC19-3B8C5FDF4819}" />
+      <simple-id uuid="{A01CC9E8-ECBA-5430-B329-EC7A1FFE977F}" />
     </window>
     <window class="dashboard" name="NDIS Saturation Service Area Tablet">
       <viewpoints>
-        <viewpoint name="Headline KPIs">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
         <viewpoint name="Utilisation Trend">
           <highlight>
             <color-one-way />
@@ -7525,17 +7256,17 @@ Weighted mean utilisation KPI: &lt;</run>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Service Type Opportunities">
+        <viewpoint name="Benchmark Gaps">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Advocacy Gaps">
+        <viewpoint name="Support Type Mix">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Provider Underservice">
+        <viewpoint name="Provider Data Availability">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7553,15 +7284,10 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{CEB58CAB-CBFF-4DE8-8F90-49ED14F2D033}" />
+      <simple-id uuid="{F145DA4B-5C20-547D-858D-0DE381A93FB5}" />
     </window>
     <window class="dashboard" name="NDIS Saturation Service Area Phone">
       <viewpoints>
-        <viewpoint name="Headline KPIs">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
         <viewpoint name="Utilisation Trend">
           <highlight>
             <color-one-way />
@@ -7572,17 +7298,17 @@ Weighted mean utilisation KPI: &lt;</run>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Service Type Opportunities">
+        <viewpoint name="Benchmark Gaps">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Advocacy Gaps">
+        <viewpoint name="Support Type Mix">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Provider Underservice">
+        <viewpoint name="Provider Data Availability">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7600,31 +7326,11 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{00922253-7F24-4E68-86C7-4E39FB885765}" />
+      <simple-id uuid="{A7665ED4-92EC-5E4C-9FC2-6012B1F8D7EB}" />
     </window>
-    <window class="dashboard" name="NDIS Saturation Rankings Monitor">
+    <window class="dashboard" name="NDIS Saturation Opportunities Monitor">
       <viewpoints>
-        <viewpoint name="Headline KPIs">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
         <viewpoint name="Opportunity Priority">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Advocacy Gaps">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Provider Underservice">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Service Type Opportunities">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7634,12 +7340,22 @@ Weighted mean utilisation KPI: &lt;</run>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Evidence Table">
+        <viewpoint name="Advocacy Gaps">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Data Quality Flags">
+        <viewpoint name="Provider Underservice">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Service Type Opportunities">
+          <highlight>
+            <color-one-way />
+          </highlight>
+        </viewpoint>
+        <viewpoint name="Evidence Table">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7647,16 +7363,16 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{EEDA334E-3C28-4D31-8F97-5C19DAF16B2E}" />
+      <simple-id uuid="{22645598-4FF6-5855-B842-F25C239430DE}" />
     </window>
-    <window class="dashboard" name="NDIS Saturation Rankings Tablet">
+    <window class="dashboard" name="NDIS Saturation Opportunities Tablet">
       <viewpoints>
-        <viewpoint name="Headline KPIs">
+        <viewpoint name="Opportunity Priority">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Opportunity Priority">
+        <viewpoint name="Opportunity Matrix">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7676,17 +7392,7 @@ Weighted mean utilisation KPI: &lt;</run>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Opportunity Matrix">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
         <viewpoint name="Evidence Table">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Data Quality Flags">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7694,16 +7400,16 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{148B4898-79C8-4F40-9E4D-CAD9C287DBE1}" />
+      <simple-id uuid="{682F58A7-579E-5CE5-889E-BDD0EEAE29E6}" />
     </window>
-    <window class="dashboard" name="NDIS Saturation Rankings Phone">
+    <window class="dashboard" name="NDIS Saturation Opportunities Phone">
       <viewpoints>
-        <viewpoint name="Headline KPIs">
+        <viewpoint name="Opportunity Priority">
           <highlight>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Opportunity Priority">
+        <viewpoint name="Opportunity Matrix">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7723,17 +7429,7 @@ Weighted mean utilisation KPI: &lt;</run>
             <color-one-way />
           </highlight>
         </viewpoint>
-        <viewpoint name="Opportunity Matrix">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
         <viewpoint name="Evidence Table">
-          <highlight>
-            <color-one-way />
-          </highlight>
-        </viewpoint>
-        <viewpoint name="Data Quality Flags">
           <highlight>
             <color-one-way />
           </highlight>
@@ -7741,7 +7437,7 @@ Weighted mean utilisation KPI: &lt;</run>
       </viewpoints>
       <active id="2" />
       <device-preview />
-      <simple-id uuid="{2879FE37-7E9F-4E76-BF60-4DEA45A5EE13}" />
+      <simple-id uuid="{59F3E08C-5870-5CF5-9D15-8A0CF7EC4750}" />
     </window>
   </windows>
   <thumbnails>

@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 from pathlib import Path
 
 import pandas as pd
+from shapely import affinity
+from shapely.geometry import mapping, shape
 
 from . import config
 from .io_utils import numeric, read_csv, safe_divide
@@ -16,6 +17,31 @@ FISCAL_QUARTER_END_MONTH_DAY = {
     2: (12, 31),
     3: (3, 31),
     4: (6, 30),
+}
+
+EXCLUDED_ATLAS_GEOGRAPHIES = {"lord howe island", "norfolk island"}
+
+METRO_INSET_GROUPS = {
+    "Perth inset": {
+        "areas": {"Central North Metro", "Central South Metro", "North Metro", "South East Metro", "South Metro"},
+        "target_bounds": (112.0, -37.2, 119.0, -31.0),
+    },
+    "Adelaide inset": {
+        "areas": {"Adelaide Hills", "Eastern Adelaide", "Northern Adelaide", "Southern Adelaide", "Western Adelaide"},
+        "target_bounds": (129.7, -39.6, 136.4, -34.0),
+    },
+    "Melbourne inset": {
+        "areas": {"Inner East Melbourne", "North East Melbourne", "Outer East Melbourne", "Southern Melbourne", "Western Melbourne"},
+        "target_bounds": (145.2, -44.0, 151.5, -39.0),
+    },
+    "Sydney inset": {
+        "areas": {"North Sydney", "South Eastern Sydney", "South Western Sydney", "Sydney", "Western Sydney"},
+        "target_bounds": (153.8, -37.6, 159.7, -32.2),
+    },
+    "Brisbane inset": {
+        "areas": {"Brisbane"},
+        "target_bounds": (154.2, -31.1, 158.7, -27.1),
+    },
 }
 
 
@@ -204,7 +230,7 @@ def write_geometry_outputs() -> list[dict]:
     target = config.GEOMETRY_OUTPUTS["ndia_service_area_geojson"]
     if config.SERVICE_AREA_GEOJSON_SOURCE.exists():
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(config.SERVICE_AREA_GEOJSON_SOURCE, target)
+        _write_atlas_geojson(config.SERVICE_AREA_GEOJSON_SOURCE, target)
         rows.append(
             {
                 "dataset": "geometry_ndia_service_area",
@@ -215,9 +241,12 @@ def write_geometry_outputs() -> list[dict]:
                 "issue_severity": "info",
                 "missingness": 0,
                 "suppression": "",
-                "mapping_status": "copied_from_existing_simplified_geojson",
+                "mapping_status": "atlas_geojson_with_metro_insets",
                 "reliability_flag": config.RELIABILITY_FLAGS["derived"],
-                "explanatory_note": f"Copied from {config.SERVICE_AREA_GEOJSON_SOURCE}. Geometry is stored separately from CSV outputs.",
+                "explanatory_note": (
+                    f"Built from {config.SERVICE_AREA_GEOJSON_SOURCE}. Metro service areas are repositioned into inset panels "
+                    "for Tableau atlas readability; Lord Howe Island and Norfolk Island are excluded if present."
+                ),
             }
         )
     else:
@@ -237,6 +266,84 @@ def write_geometry_outputs() -> list[dict]:
             }
         )
     return rows
+
+
+def _write_atlas_geojson(source: Path, target: Path) -> None:
+    with source.open("r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+
+    features = [_atlas_feature(feature) for feature in payload.get("features", [])]
+    features = [feature for feature in features if feature is not None]
+    features = _apply_metro_insets(features)
+    out = dict(payload)
+    out["features"] = features
+    target.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+
+
+def _atlas_feature(feature: dict) -> dict | None:
+    props = dict(feature.get("properties", {}))
+    name = str(props.get("ndis_service_area") or props.get("map_key") or props.get("name") or "").strip()
+    if name.lower() in EXCLUDED_ATLAS_GEOGRAPHIES:
+        return None
+    props["atlas_panel"] = "Main map"
+    out = dict(feature)
+    out["properties"] = props
+    return out
+
+
+def _apply_metro_insets(features: list[dict]) -> list[dict]:
+    by_name = {
+        str(feature.get("properties", {}).get("ndis_service_area") or feature.get("properties", {}).get("map_key") or feature.get("properties", {}).get("name")): feature
+        for feature in features
+    }
+    transformed_names: set[str] = set()
+    for panel_name, spec in METRO_INSET_GROUPS.items():
+        names = set(spec["areas"])
+        panel_features = [by_name[name] for name in names if name in by_name]
+        if not panel_features:
+            continue
+        transformed = _transform_features_to_bounds(panel_features, spec["target_bounds"], panel_name)
+        for feature in transformed:
+            name = str(feature["properties"].get("ndis_service_area") or feature["properties"].get("map_key") or feature["properties"].get("name"))
+            by_name[name] = feature
+            transformed_names.add(name)
+
+    ordered: list[dict] = []
+    for feature in features:
+        name = str(feature.get("properties", {}).get("ndis_service_area") or feature.get("properties", {}).get("map_key") or feature.get("properties", {}).get("name"))
+        ordered.append(by_name[name] if name in transformed_names else feature)
+    return ordered
+
+
+def _transform_features_to_bounds(features: list[dict], target_bounds: tuple[float, float, float, float], panel_name: str) -> list[dict]:
+    geometries = [shape(feature["geometry"]) for feature in features if feature.get("geometry")]
+    minx = min(geom.bounds[0] for geom in geometries)
+    miny = min(geom.bounds[1] for geom in geometries)
+    maxx = max(geom.bounds[2] for geom in geometries)
+    maxy = max(geom.bounds[3] for geom in geometries)
+    source_w = max(maxx - minx, 0.000001)
+    source_h = max(maxy - miny, 0.000001)
+    target_minx, target_miny, target_maxx, target_maxy = target_bounds
+    target_w = target_maxx - target_minx
+    target_h = target_maxy - target_miny
+    scale = min(target_w / source_w, target_h / source_h)
+    scaled_w = source_w * scale
+    scaled_h = source_h * scale
+    offset_x = target_minx + (target_w - scaled_w) / 2
+    offset_y = target_miny + (target_h - scaled_h) / 2
+
+    transformed: list[dict] = []
+    for feature in features:
+        geom = shape(feature["geometry"])
+        moved = affinity.scale(geom, xfact=scale, yfact=scale, origin=(minx, miny))
+        moved = affinity.translate(moved, xoff=offset_x - minx, yoff=offset_y - miny)
+        out = dict(feature)
+        props = dict(feature.get("properties", {}))
+        props["atlas_panel"] = panel_name
+        out["properties"] = props
+        out["geometry"] = mapping(moved)
+        transformed.append(out)
+    return transformed
 
 
 def geography_audit(source_name: str, frame: pd.DataFrame, geography_col: str, lookup: pd.DataFrame) -> pd.DataFrame:
