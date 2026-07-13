@@ -1,0 +1,10 @@
+kpi,value_number,value_text,unit
+latest_quarter,,2026 Q1,label
+service_area_count,80.0,,count
+population_count,27395856.0,,count
+funded_plan_count,774021.0,,count
+funded_plans_per_1000,28.253214646769933,,per_1000
+payment_amount,48538414000.0,,aud
+payments_per_funded_plan,62709.42778038322,,aud
+active_provider_count,,,count
+weighted_mean_plan_utilisation,0.7386029448813404,,decimal

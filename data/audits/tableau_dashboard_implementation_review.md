@@ -1,0 +1,35 @@
+# Tableau Dashboard Implementation Review
+
+Workbook: `D:\Good Measure\NDIS-Saturation-Atlas\outputs\tableau\NDIS-Saturation-Atlas.twb`
+
+Verdict: **WEBSITE READY**
+
+- Pass: 16
+- Warn: 1
+- Fail: 0
+
+## Findings
+
+| Status | Severity | Check | Detail |
+| --- | --- | --- | --- |
+| pass | info | `required_worksheets` | All 11 required worksheets are present. |
+| pass | info | `required_opportunity_worksheets` | All 5 required opportunity worksheets are present. |
+| pass | info | `required_dashboards` | All 12 required dashboards are present. |
+| pass | info | `unique_simple_ids` | No duplicate simple-id UUIDs found. |
+| pass | info | `forbidden_grid` | No invalid <grid> elements found. |
+| pass | info | `forbidden_nested_devicelayouts` | No invalid <nested_devicelayouts> elements found. |
+| pass | info | `devicelayout_auto_generated_attribute` | No unsupported devicelayout auto-generated attributes found. |
+| pass | info | `dashboard_sheet_zones` | Every dashboard contains worksheet zones. |
+| pass | info | `atlas_first_view` | Atlas/overview dashboards include the Atlas Map worksheet. |
+| pass | info | `atlas_only_dashboard_focus` | Standalone atlas dashboards contain only the Atlas Map worksheet. |
+| pass | info | `service_area_detail` | Service-area dashboards include utilisation, saturation and evidence detail sheets. |
+| warn | medium | `ranking_dashboard_legacy_rankings` | Ranking dashboards do not include the legacy Ranked Service Areas sheet: NDIS Saturation Rankings Monitor, NDIS Saturation Rankings Phone, NDIS Saturation Rankings Tablet. This is acceptable only if opportunity rankings replace it. |
+| pass | info | `opportunity_dashboard_coverage` | All opportunity worksheets are embedded in at least one dashboard. |
+| pass | info | `opportunity_ranking_dashboard` | Ranking dashboards cover opportunity, advocacy, provider and service-type views. |
+| pass | info | `atlas_geometry_encoding` | Atlas Map contains a geometry encoding. |
+| pass | info | `atlas_color_encoding` | Atlas Map contains a color encoding. |
+| pass | info | `atlas_dashboard_presence` | Atlas Map appears in 6 dashboard(s). |
+
+## Review Standard
+
+A website-ready workbook must open reliably, show the atlas as the first geospatial view, support service-area detail review, and embed the opportunity, advocacy, provider and service-type worksheets in dashboard shells suitable for Tableau Public and `gmdata.au` embedding.

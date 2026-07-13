@@ -4,6 +4,7 @@ __pycache__/
 *.pyo
 *.pyd
 .pytest_cache/
+pytest-cache-files-*/
 
 # Virtual environments and local configuration
 .venv/
@@ -54,12 +55,16 @@ data/published/master_ndis_service_area_wide_2024_present.csv
 data/published/master_ndis_service_area_wide_all_available.csv
 data/published/national_benchmark_wide_2024_present.csv
 data/published/ndis_service_area_total_row_build_audit.csv
+data/audits/_test_workbook_*.twb
 
 # Do not commit rendered outputs except the deployment boundary GeoJSON
 outputs/*
 !outputs/powerbi_map/
 outputs/powerbi_map/*
 !outputs/powerbi_map/ndis_service_area_boundaries_simplified.geojson
+!outputs/tableau/
+outputs/tableau/*
+!outputs/tableau/NDIS-Saturation-Atlas.twb
 outputs/codex_pycache/
 outputs/streamlit*.log
 

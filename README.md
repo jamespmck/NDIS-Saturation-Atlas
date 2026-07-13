@@ -1,4 +1,56 @@
-﻿# NDIS Market Saturation Atlas
+﻿# NDIS Saturation Atlas Tableau Pipeline
+
+This repository now includes a reproducible Python data preparation pipeline for Tableau Public. The Streamlit app remains preserved as a legacy prototype, but the publication workflow is:
+
+```powershell
+python -m pip install -r requirements.txt
+python -m src.run_pipeline --stage all
+python -m pytest -q
+```
+
+The pipeline writes Tableau CSVs, Parquet equivalents, metadata and validation audits under `data/tableau/`, `metadata/` and `data/audits/`.
+
+Primary outputs:
+
+- `data/tableau/tableau_market_quarter.csv`
+- `data/tableau/tableau_support_type_quarter.csv`
+- `data/tableau/tableau_participant_profile.csv`
+- `data/tableau/tableau_community_context.csv`
+- `data/tableau/tableau_market_classification.csv`
+- `data/tableau/tableau_geography_lookup.csv`
+- `data/tableau/tableau_data_quality.csv`
+- `data/tableau/geometry_ndia_service_area.geojson`
+
+Supported commands:
+
+```powershell
+python -m src.run_pipeline --stage all
+python -m src.run_pipeline --stage ndia
+python -m src.run_pipeline --stage population
+python -m src.run_pipeline --stage census
+python -m src.run_pipeline --stage community
+python -m src.run_pipeline --stage features
+python -m src.run_pipeline --stage tableau
+python -m src.run_pipeline --stage analysis
+python -m src.run_pipeline --stage review
+python -m src.run_pipeline --validate-only
+```
+
+Workbook implementation review:
+
+```powershell
+python -m src.rebuild_tableau_workbook --promote
+python -m src.tableau_workbook_review --fail-on-critical
+```
+
+The rebuild helper combines the current stable worksheet layer with the website-ready dashboard layout. The review command writes `data/audits/tableau_dashboard_implementation_review.md` and checks that the atlas, service-area detail, rankings, opportunity, advocacy, provider and service-type views are embedded in the Tableau workbook before publication.
+
+Current reusable assets include the curated NDIA service-area-quarter table, curated service-type payment table, processed 2025 ERP population denominators, remoteness context and simplified service-area GeoJSON. Streamlit files in `app/` and notebooks remain useful references but are no longer the primary presentation or production data-prep layer.
+
+Missing Census, SEIFA, DSS, PHIDU, workforce and broader housing/SDA sources are documented in `metadata/source_register.csv`, `metadata/source_acquisition.md` and `data/tableau/tableau_data_quality.csv`; the pipeline does not fabricate those indicators.
+
+---
+# NDIS Market Saturation Atlas
 
 Applied data science and geospatial evidence prototype for Good Measure.
 
@@ -112,3 +164,5 @@ The dashboard uses simple visual language because the evidence is already layere
 ## Current Status
 
 This is a case-study prototype, not a production statistical release. The core analytical calculations are test-covered, while the app remains intentionally transparent and inspectable for review.
+
+

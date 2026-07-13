@@ -7,5 +7,5 @@ readme = "README.md"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["app"]
+pythonpath = ["app", "."]
 addopts = "-q"

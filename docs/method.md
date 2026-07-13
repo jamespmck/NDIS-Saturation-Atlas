@@ -2,13 +2,15 @@
 
 ## Purpose
 
-The NDIS Market Saturation Atlas is an exploratory data science case study. It converts public NDIS service-area data into interpretable benchmark, trend, service-category and geospatial evidence for strategic review.
+The NDIS Market Saturation Atlas is an exploratory data science case study. It converts public NDIS service-area data into interpretable benchmark, trend, service-category, projection and geospatial evidence for strategic review.
+
+The public version is also intended to showcase applied data science practice: taking constrained administrative data, making defensible benchmark choices, documenting limitations, and turning the outputs into a tool that organisations and consumer groups can use to ask better questions about local NDIS markets.
 
 The central analytical question is:
 
-> Which service areas appear materially below, near or above selected benchmarks for NDIS plan coverage, plan utilisation and service-category payment mix?
+> Which service areas appear materially below, near or above selected benchmarks for NDIS plan coverage, plan utilisation, provider saturation, service-category payment mix and projected demand signals?
 
-The project is designed for transparent exploration, not for formal statistical inference.
+The project is designed for transparent exploration, not for formal statistical inference. It should help readers compare areas, quarters, remoteness groups and support categories, while making clear that the outputs are triage signals rather than proof of unmet need or commercial demand.
 
 ## Unit Of Analysis
 
@@ -70,6 +72,31 @@ change = selected quarter value - reference quarter value
 ```
 
 The default reference quarter is 2024Q2.
+
+## Opportunity And Advocacy Scores
+
+The Tableau outputs include proxy scores that help rank service areas and support types for review. Scores are calculated within each quarter on a 0-1 percentile scale, so a high score means an area is high relative to other areas in the same period.
+
+Service-area opportunity fields combine:
+
+- market scale: funded-plan volume and payment intensity;
+- funding/access gaps: funded-plan coverage, mean plan funding and payment intensity below remoteness peers;
+- utilisation friction: below-peer utilisation, unspent committed funding and funding-conversion gaps;
+- provider-activity pressure: funded plans per active provider and supply-response gaps.
+
+Support-type opportunity fields compare each local support payment mix with national and remoteness peer benchmarks:
+
+```text
+support payment gap = area total payments x benchmark support share - observed support payments
+```
+
+Positive support payment gaps indicate that the local support type is below the selected benchmark share. A simple next-quarter payment projection is also supplied as a momentum demand proxy:
+
+```text
+projected payments = current payments x (1 + clipped payment growth rate)
+```
+
+These fields are designed for triage, ranking and conversation. They are not causal estimates, definitive unmet-need measures or revenue forecasts.
 
 ## Service-Category Payment Mix
 

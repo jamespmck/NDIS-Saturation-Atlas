@@ -1,0 +1,42 @@
+<!-- Replace data-tableau-base with the final Tableau Public workbook URL base after publishing. -->
+<section
+  class="section section-tint"
+  data-ndis-tableau
+  data-tableau-base="https://public.tableau.com/views/REPLACE_WITH_PUBLISHED_WORKBOOK">
+  <div class="container tableau-shell">
+    <div class="tableau-setup" data-tableau-setup hidden>
+      <p><strong>Publication setup required.</strong> Publish the workbook, then replace the placeholder URL above.</p>
+    </div>
+
+    <p class="tableau-status" data-tableau-ready hidden>Select a service area on the atlas to filter the detail dashboard.</p>
+
+    <article class="tableau-panel">
+      <h3>Geospatial atlas</h3>
+      <div class="tableau-viz-frame">
+        <tableau-viz class="tableau-monitor" data-tableau-role="atlas" data-device="monitor" data-view-name="NDISSaturationAtlasMonitor" toolbar="bottom" hide-tabs width="100%" height="1248"></tableau-viz>
+        <tableau-viz class="tableau-tablet" data-tableau-role="atlas" data-device="tablet" data-view-name="NDISSaturationAtlasTablet" toolbar="bottom" hide-tabs width="100%" height="1406"></tableau-viz>
+        <tableau-viz class="tableau-phone" data-tableau-role="atlas" data-device="phone" data-view-name="NDISSaturationAtlasPhone" toolbar="bottom" hide-tabs width="100%" height="1558"></tableau-viz>
+      </div>
+    </article>
+
+    <article class="tableau-panel" data-tableau-detail hidden>
+      <h3>Service-area detail: <span data-selected-service-area>Select a service area on the atlas</span></h3>
+      <div class="tableau-viz-frame">
+        <tableau-viz class="tableau-monitor" data-tableau-role="detail" data-device="monitor" data-view-name="NDISSaturationServiceAreaMonitor" toolbar="bottom" hide-tabs width="100%" height="1208"></tableau-viz>
+        <tableau-viz class="tableau-tablet" data-tableau-role="detail" data-device="tablet" data-view-name="NDISSaturationServiceAreaTablet" toolbar="bottom" hide-tabs width="100%" height="1856"></tableau-viz>
+        <tableau-viz class="tableau-phone" data-tableau-role="detail" data-device="phone" data-view-name="NDISSaturationServiceAreaPhone" toolbar="bottom" hide-tabs width="100%" height="2470"></tableau-viz>
+      </div>
+    </article>
+
+    <article class="tableau-panel">
+      <h3>Service-area rankings</h3>
+      <div class="tableau-viz-frame">
+        <tableau-viz class="tableau-monitor" data-tableau-role="rankings" data-device="monitor" data-view-name="NDISSaturationRankingsMonitor" toolbar="bottom" hide-tabs width="100%" height="1268"></tableau-viz>
+        <tableau-viz class="tableau-tablet" data-tableau-role="rankings" data-device="tablet" data-view-name="NDISSaturationRankingsTablet" toolbar="bottom" hide-tabs width="100%" height="1976"></tableau-viz>
+        <tableau-viz class="tableau-phone" data-tableau-role="rankings" data-device="phone" data-view-name="NDISSaturationRankingsPhone" toolbar="bottom" hide-tabs width="100%" height="2720"></tableau-viz>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script type="module" src="/assets/js/ndis-tableau.js"></script>

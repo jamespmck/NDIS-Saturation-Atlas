@@ -1,0 +1,60 @@
+dataset,period,geography,field,issue_type,issue_severity,missingness,suppression,mapping_status,reliability_flag,explanatory_note
+tableau_market_quarter,,,"quarter,geography_type,geography_code",schema,info,,,,,Required key columns are present.
+tableau_market_quarter,,,"quarter,geography_type,geography_code",duplicate_keys,info,,,,,0 duplicate key rows found.
+tableau_market_quarter,,,quarter,invalid_quarter,info,,,,,0 invalid quarter values found.
+tableau_market_quarter,,,geography_code,missing_geographic_code,info,,,,,0 rows have missing geography codes.
+tableau_market_quarter,,,population_count,negative_value,info,,,,,0 negative values found.
+tableau_market_quarter,,,participant_count,negative_value,info,,,,,0 negative values found.
+tableau_market_quarter,,,funded_plan_count,negative_value,info,,,,,0 negative values found.
+tableau_market_quarter,,,payment_amount,negative_value,info,,,,,0 negative values found.
+tableau_market_quarter,,,active_provider_count,negative_value,info,,,,,0 negative values found.
+tableau_market_quarter,,,registered_provider_count,negative_value,info,,,,,0 negative values found.
+tableau_market_quarter,,,mean_plan_utilisation,rate_outside_expected_bounds,info,,,,,"0 values outside [0, 1.5]."
+tableau_market_quarter,,,funding_conversion_rate,rate_outside_expected_bounds,info,,,,,"0 values outside [0, 1.5]."
+tableau_market_quarter,,,population_count,zero_denominator,info,,,,,0 zero population denominators found.
+tableau_market_quarter,,,funded_plan_count,zero_denominator,info,,,,,0 zero funded-plan denominators found.
+tableau_support_type_quarter,,,"quarter,geography_type,geography_code,support_type",schema,info,,,,,Required key columns are present.
+tableau_support_type_quarter,,,"quarter,geography_type,geography_code,support_type",duplicate_keys,info,,,,,0 duplicate key rows found.
+tableau_support_type_quarter,,,quarter,invalid_quarter,info,,,,,0 invalid quarter values found.
+tableau_support_type_quarter,,,geography_code,missing_geographic_code,info,,,,,0 rows have missing geography codes.
+tableau_support_type_quarter,,,payments,negative_value,info,,,,,0 negative values found.
+tableau_support_type_quarter,,,funded_plan_count,negative_value,info,,,,,0 negative values found.
+tableau_support_type_quarter,,,population_count,negative_value,info,,,,,0 negative values found.
+tableau_support_type_quarter,,,local_support_share,share_outside_bounds,info,,,,,"0 values outside [0, 1]."
+tableau_support_type_quarter,,,national_support_share,share_outside_bounds,info,,,,,"0 values outside [0, 1]."
+tableau_support_type_quarter,,,population_count,zero_denominator,info,,,,,0 zero population denominators found.
+tableau_support_type_quarter,,,funded_plan_count,zero_denominator,info,,,,,0 zero funded-plan denominators found.
+tableau_participant_profile,,,"quarter,geography_type,geography_code,profile_dimension,profile_category",schema,info,,,,,Required key columns are present.
+tableau_participant_profile,,,geography_code,missing_geographic_code,info,,,,,0 rows have missing geography codes.
+tableau_participant_profile,,,count,negative_value,info,,,,,0 negative values found.
+tableau_participant_profile,,,proportion,share_outside_bounds,info,,,,,"0 values outside [0, 1]."
+tableau_community_context,,,"geography_type,geography_code,reference_year",schema,info,,,,,Required key columns are present.
+tableau_community_context,,,"geography_type,geography_code,reference_year",duplicate_keys,info,,,,,0 duplicate key rows found.
+tableau_community_context,,,geography_code,missing_geographic_code,info,,,,,0 rows have missing geography codes.
+tableau_community_context,,,population_count,negative_value,info,,,,,0 negative values found.
+tableau_community_context,,,population_count,zero_denominator,info,,,,,0 zero population denominators found.
+tableau_market_classification,,,"quarter,geography_type,geography_code",schema,info,,,,,Required key columns are present.
+tableau_market_classification,,,"quarter,geography_type,geography_code",duplicate_keys,info,,,,,0 duplicate key rows found.
+tableau_market_classification,,,quarter,invalid_quarter,info,,,,,0 invalid quarter values found.
+tableau_market_classification,,,geography_code,missing_geographic_code,info,,,,,0 rows have missing geography codes.
+tableau_market_classification,,,consecutive_quarters_below_national_benchmark,negative_value,info,,,,,0 negative values found.
+tableau_market_classification,,,consecutive_quarters_below_remoteness_benchmark,negative_value,info,,,,,0 negative values found.
+tableau_market_classification,,,demand_score,share_outside_bounds,info,,,,,"0 values outside [0, 1]."
+tableau_market_classification,,,purchasing_score,share_outside_bounds,info,,,,,"0 values outside [0, 1]."
+tableau_market_classification,,,capacity_score,share_outside_bounds,info,,,,,"0 values outside [0, 1]."
+tableau_market_classification,,,performance_score,share_outside_bounds,info,,,,,"0 values outside [0, 1]."
+tableau_geography_lookup,,,"geography_type,geography_code",schema,info,,,,,Required key columns are present.
+tableau_geography_lookup,,,"geography_type,geography_code",duplicate_keys,info,,,,,0 duplicate key rows found.
+tableau_geography_lookup,,,geography_code,missing_geographic_code,info,,,,,0 rows have missing geography codes.
+tableau_geography_lookup,,,area_sqkm,negative_value,info,,,,,0 negative values found.
+tableau_geography_lookup,,,population,negative_value,info,,,,,0 negative values found.
+tableau_support_type_quarter,,,payments,payment_reconciliation,info,,,,,0 service-area-quarter groups have support-type payments more than 2 pct from area total.
+census_2021_community_indicators,2021,source geography,,missing_source,warning,1,,not_processed,source_unavailable,No official 2021 Census indicator extract is available locally; counts and denominators are not fabricated.
+seifa_2021,2021,source geography,,missing_source,warning,1,,not_processed,source_unavailable,No official ABS SEIFA 2021 extract is available locally.
+dss_payment_data,latest available,source geography,,missing_source,warning,1,,not_processed,source_unavailable,No official DSS payment-recipient extract is available locally.
+phidu_social_health_atlas,latest available,PHIDU source geography,,missing_source,warning,1,,not_processed,source_unavailable,No PHIDU Social Health Atlas extract is available locally; PHIDU geography is not treated as equivalent to NDIA Service Area.
+workforce_public_sources,latest available,source geography,,missing_source,warning,1,,not_processed,source_unavailable,No official workforce extract is available locally; broad occupation counts will not be presented as NDIS-only workforce.
+housing_and_sda_context,latest available,source geography,,missing_source,warning,1,,not_processed,source_unavailable,No official housing/SDA context extract beyond existing NDIA support-type payment context is available locally.
+tableau_participant_profile,2024Q2-2026Q1,ndia_service_area,profile_dimension,missing_source,warning,1,,not_processed,source_unavailable,"No local participant profile source by age, disability, plan management or support class is available."
+geometry_ndia_service_area,,ndia_service_area,geometry,available,info,0,,copied_from_existing_simplified_geojson,derived_from_local_curated_source,Copied from D:\Good Measure\NDIS-Saturation-Atlas\outputs\powerbi_map\ndis_service_area_boundaries_simplified.geojson. Geometry is stored separately from CSV outputs.
+tableau_market_quarter,,NDIA Service Area,geography_code,geography_matching,info,0,,1.000,derived_from_local_curated_source,Lookup currently covers local service-area context only; no forced conversion to other geographies.
