@@ -1,6 +1,6 @@
 # Tableau Dashboard Implementation Review
 
-Workbook: `D:\Good Measure\NDIS-Saturation-Atlas\outputs\tableau\NDIS-Saturation-Atlas.twb`
+Workbook: `outputs\tableau\NDIS-Saturation-Atlas.public.twb`
 
 Verdict: **WEBSITE READY**
 
@@ -20,7 +20,7 @@ Verdict: **WEBSITE READY**
 | pass | info | `forbidden_map_navigation` | No invalid <map_navigation> elements found. |
 | pass | info | `forbidden_nested_devicelayouts` | No invalid <nested_devicelayouts> elements found. |
 | pass | info | `forbidden_stale_extract` | No embedded extract elements found. |
-| pass | info | `forbidden_temp_hyper_extract` | No temporary Hyper extract references found. |
+| pass | info | `forbidden_temp_hyper_extract` | Workbook references an intentional NDIS-Saturation-Atlas Hyper extract. |
 | pass | info | `devicelayout_auto_generated_attribute` | No unsupported devicelayout auto-generated attributes found. |
 | pass | info | `dashboard_sheet_zones` | Every dashboard contains worksheet zones. |
 | pass | info | `atlas_first_view` | Atlas/overview dashboards include the Atlas Map worksheet. |

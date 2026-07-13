@@ -21,7 +21,7 @@
   </preferences>
   <datasources>
     <datasource caption="tableau_market_quarter.csv+ (Multiple Connections)" inline="true" name="federated.0t2pdsf1ugut8y1dop0ji1sbsjij" version="18.1">
-      <connection access_mode="readonly" class="hyper" dbname="D:/Good Measure/NDIS-Saturation-Atlas/outputs/tableau/NDIS-Saturation-Atlas.hyper" default-settings="yes" schema="public" username="tableau_internal_user">
+      <connection access_mode="readonly" class="hyper" dbname="D:/Good Measure/NDIS-Saturation-Atlas/outputs/tableau/NDIS-Saturation-Atlas.public.hyper" default-settings="yes" schema="public" username="tableau_internal_user">
         <relation type="collection">
           <relation name="tableau_market_quarter.csv" table="[public].[tableau_market_quarter.csv]" type="table" />
           <relation name="tableau_community_context.csv" table="[public].[tableau_community_context.csv]" type="table" />
@@ -31,6 +31,132 @@
           <relation name="tableau_market_classification.csv" table="[public].[tableau_market_classification.csv]" type="table" />
           <relation name="geometry_ndia_service_area.geojson" table="[public].[geometry_ndia_service_area.geojson]" type="table" />
         </relation>
+        <cols>
+          <map key="[Geometry]" value="[geometry_ndia_service_area.geojson].[Geometry]" />
+          <map key="[active_provider_count]" value="[tableau_market_quarter.csv].[active_provider_count]" />
+          <map key="[active_providers_per_1000_funded_plans]" value="[tableau_market_quarter.csv].[active_providers_per_1000_funded_plans]" />
+          <map key="[area_sqkm (tableau_community_context.csv)]" value="[tableau_community_context.csv].[area_sqkm]" />
+          <map key="[area_sqkm]" value="[tableau_geography_lookup.csv].[area_sqkm]" />
+          <map key="[area_total_payments]" value="[tableau_support_type_quarter.csv].[area_total_payments]" />
+          <map key="[available_context_note]" value="[tableau_community_context.csv].[available_context_note]" />
+          <map key="[benchmark_national_funded_plans_per_1000]" value="[tableau_market_quarter.csv].[benchmark_national_funded_plans_per_1000]" />
+          <map key="[benchmark_national_mean_plan_utilisation]" value="[tableau_market_quarter.csv].[benchmark_national_mean_plan_utilisation]" />
+          <map key="[benchmark_remoteness_funded_plans_per_1000]" value="[tableau_market_quarter.csv].[benchmark_remoteness_funded_plans_per_1000]" />
+          <map key="[benchmark_remoteness_mean_plan_utilisation]" value="[tableau_market_quarter.csv].[benchmark_remoteness_mean_plan_utilisation]" />
+          <map key="[capacity_score]" value="[tableau_market_classification.csv].[capacity_score]" />
+          <map key="[cluster_diagnostic_note]" value="[tableau_market_classification.csv].[cluster_diagnostic_note]" />
+          <map key="[committed_supports]" value="[tableau_market_quarter.csv].[committed_supports]" />
+          <map key="[consecutive_quarters_below_national_benchmark]" value="[tableau_market_classification.csv].[consecutive_quarters_below_national_benchmark]" />
+          <map key="[consecutive_quarters_below_remoteness_benchmark]" value="[tableau_market_classification.csv].[consecutive_quarters_below_remoteness_benchmark]" />
+          <map key="[demand_score]" value="[tableau_market_classification.csv].[demand_score]" />
+          <map key="[funded_plan_count (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[funded_plan_count]" />
+          <map key="[funded_plan_count]" value="[tableau_market_quarter.csv].[funded_plan_count]" />
+          <map key="[funded_plan_growth_rate]" value="[tableau_market_quarter.csv].[funded_plan_growth_rate]" />
+          <map key="[funded_plans_per_1000]" value="[tableau_market_quarter.csv].[funded_plans_per_1000]" />
+          <map key="[funded_plans_per_1000_gap_from_national]" value="[tableau_market_quarter.csv].[funded_plans_per_1000_gap_from_national]" />
+          <map key="[funded_plans_per_1000_gap_from_remoteness]" value="[tableau_market_quarter.csv].[funded_plans_per_1000_gap_from_remoteness]" />
+          <map key="[funded_plans_per_active_provider]" value="[tableau_market_quarter.csv].[funded_plans_per_active_provider]" />
+          <map key="[funding_conversion_rate]" value="[tableau_market_quarter.csv].[funding_conversion_rate]" />
+          <map key="[geography_code (tableau_community_context.csv)]" value="[tableau_community_context.csv].[geography_code]" />
+          <map key="[geography_code (tableau_geography_lookup.csv)]" value="[tableau_geography_lookup.csv].[geography_code]" />
+          <map key="[geography_code (tableau_market_classification.csv)]" value="[tableau_market_classification.csv].[geography_code]" />
+          <map key="[geography_code (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[geography_code]" />
+          <map key="[geography_code]" value="[tableau_market_quarter.csv].[geography_code]" />
+          <map key="[geography_name (tableau_geography_lookup.csv)]" value="[tableau_geography_lookup.csv].[geography_name]" />
+          <map key="[geography_name (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[geography_name]" />
+          <map key="[geography_name]" value="[tableau_market_quarter.csv].[geography_name]" />
+          <map key="[geography_type (tableau_community_context.csv)]" value="[tableau_community_context.csv].[geography_type]" />
+          <map key="[geography_type (tableau_geography_lookup.csv)]" value="[tableau_geography_lookup.csv].[geography_type]" />
+          <map key="[geography_type (tableau_market_classification.csv)]" value="[tableau_market_classification.csv].[geography_type]" />
+          <map key="[geography_type (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[geography_type]" />
+          <map key="[geography_type]" value="[tableau_market_quarter.csv].[geography_type]" />
+          <map key="[geography_vintage]" value="[tableau_geography_lookup.csv].[geography_vintage]" />
+          <map key="[latitude]" value="[tableau_geography_lookup.csv].[latitude]" />
+          <map key="[lga_count_in_boundary]" value="[geometry_ndia_service_area.geojson].[lga_count_in_boundary]" />
+          <map key="[local_support_share]" value="[tableau_support_type_quarter.csv].[local_support_share]" />
+          <map key="[longitude]" value="[tableau_geography_lookup.csv].[longitude]" />
+          <map key="[map_key]" value="[geometry_ndia_service_area.geojson].[map_key]" />
+          <map key="[market_density_indicator_note]" value="[tableau_market_quarter.csv].[market_density_indicator_note]" />
+          <map key="[mean_plan_funding]" value="[tableau_market_quarter.csv].[mean_plan_funding]" />
+          <map key="[mean_plan_utilisation]" value="[tableau_market_quarter.csv].[mean_plan_utilisation]" />
+          <map key="[mean_plan_utilisation_gap_from_national]" value="[tableau_market_quarter.csv].[mean_plan_utilisation_gap_from_national]" />
+          <map key="[mean_plan_utilisation_gap_from_remoteness]" value="[tableau_market_quarter.csv].[mean_plan_utilisation_gap_from_remoteness]" />
+          <map key="[median_plan_funding]" value="[tableau_market_quarter.csv].[median_plan_funding]" />
+          <map key="[name]" value="[geometry_ndia_service_area.geojson].[name]" />
+          <map key="[national_benchmark]" value="[tableau_support_type_quarter.csv].[national_benchmark]" />
+          <map key="[national_support_share]" value="[tableau_support_type_quarter.csv].[national_support_share]" />
+          <map key="[ndis_service_area]" value="[geometry_ndia_service_area.geojson].[ndis_service_area]" />
+          <map key="[optional_cluster]" value="[tableau_market_classification.csv].[optional_cluster]" />
+          <map key="[parent_geography_codes]" value="[tableau_geography_lookup.csv].[parent_geography_codes]" />
+          <map key="[participant_count]" value="[tableau_market_quarter.csv].[participant_count]" />
+          <map key="[participant_growth_rate]" value="[tableau_market_quarter.csv].[participant_growth_rate]" />
+          <map key="[participant_provider_growth_quadrant]" value="[tableau_market_classification.csv].[participant_provider_growth_quadrant]" />
+          <map key="[participants_per_1000]" value="[tableau_market_quarter.csv].[participants_per_1000]" />
+          <map key="[participants_per_active_provider]" value="[tableau_market_quarter.csv].[participants_per_active_provider]" />
+          <map key="[payment_amount]" value="[tableau_market_quarter.csv].[payment_amount]" />
+          <map key="[payment_growth_rate (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[payment_growth_rate]" />
+          <map key="[payment_growth_rate]" value="[tableau_market_quarter.csv].[payment_growth_rate]" />
+          <map key="[payment_item_participant_count_sum_not_unique]" value="[tableau_support_type_quarter.csv].[payment_item_participant_count_sum_not_unique]" />
+          <map key="[payment_provider_growth_quadrant]" value="[tableau_market_classification.csv].[payment_provider_growth_quadrant]" />
+          <map key="[payments]" value="[tableau_support_type_quarter.csv].[payments]" />
+          <map key="[payments_per_1000_population (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[payments_per_1000_population]" />
+          <map key="[payments_per_1000_population]" value="[tableau_market_quarter.csv].[payments_per_1000_population]" />
+          <map key="[payments_per_funded_plan (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[payments_per_funded_plan]" />
+          <map key="[payments_per_funded_plan]" value="[tableau_market_quarter.csv].[payments_per_funded_plan]" />
+          <map key="[payments_per_participant]" value="[tableau_market_quarter.csv].[payments_per_participant]" />
+          <map key="[performance_score]" value="[tableau_market_classification.csv].[performance_score]" />
+          <map key="[persistent_utilisation_classification]" value="[tableau_market_classification.csv].[persistent_utilisation_classification]" />
+          <map key="[plan_value_growth_rate]" value="[tableau_market_quarter.csv].[plan_value_growth_rate]" />
+          <map key="[population]" value="[tableau_geography_lookup.csv].[population]" />
+          <map key="[population_2025_erp]" value="[geometry_ndia_service_area.geojson].[population_2025_erp]" />
+          <map key="[population_count (tableau_community_context.csv)]" value="[tableau_community_context.csv].[population_count]" />
+          <map key="[population_count (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[population_count]" />
+          <map key="[population_count]" value="[tableau_market_quarter.csv].[population_count]" />
+          <map key="[population_density_per_sqkm]" value="[tableau_community_context.csv].[population_density_per_sqkm]" />
+          <map key="[population_method]" value="[tableau_market_quarter.csv].[population_method]" />
+          <map key="[population_reference_year]" value="[tableau_market_quarter.csv].[population_reference_year]" />
+          <map key="[provider_growth_rate]" value="[tableau_market_quarter.csv].[provider_growth_rate]" />
+          <map key="[purchasing_score]" value="[tableau_market_classification.csv].[purchasing_score]" />
+          <map key="[quarter (tableau_market_classification.csv)]" value="[tableau_market_classification.csv].[quarter]" />
+          <map key="[quarter (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[quarter]" />
+          <map key="[quarter]" value="[tableau_market_quarter.csv].[quarter]" />
+          <map key="[quarter_end_date (tableau_market_classification.csv)]" value="[tableau_market_classification.csv].[quarter_end_date]" />
+          <map key="[quarter_end_date (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[quarter_end_date]" />
+          <map key="[quarter_end_date]" value="[tableau_market_quarter.csv].[quarter_end_date]" />
+          <map key="[quarter_label (tableau_market_classification.csv)]" value="[tableau_market_classification.csv].[quarter_label]" />
+          <map key="[quarter_label (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[quarter_label]" />
+          <map key="[quarter_label]" value="[tableau_market_quarter.csv].[quarter_label]" />
+          <map key="[reference_year]" value="[tableau_community_context.csv].[reference_year]" />
+          <map key="[registered_provider_count]" value="[tableau_market_quarter.csv].[registered_provider_count]" />
+          <map key="[reliability_flag (tableau_community_context.csv)]" value="[tableau_community_context.csv].[reliability_flag]" />
+          <map key="[reliability_flag (tableau_geography_lookup.csv)]" value="[tableau_geography_lookup.csv].[reliability_flag]" />
+          <map key="[reliability_flag (tableau_market_classification.csv)]" value="[tableau_market_classification.csv].[reliability_flag]" />
+          <map key="[reliability_flag (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[reliability_flag]" />
+          <map key="[reliability_flag]" value="[tableau_market_quarter.csv].[reliability_flag]" />
+          <map key="[remoteness (tableau_community_context.csv)]" value="[tableau_community_context.csv].[remoteness]" />
+          <map key="[remoteness (tableau_geography_lookup.csv)]" value="[tableau_geography_lookup.csv].[remoteness]" />
+          <map key="[remoteness (tableau_support_type_quarter.csv)]" value="[tableau_support_type_quarter.csv].[remoteness]" />
+          <map key="[remoteness]" value="[tableau_market_quarter.csv].[remoteness]" />
+          <map key="[remoteness_benchmark]" value="[tableau_support_type_quarter.csv].[remoteness_benchmark]" />
+          <map key="[remoteness_category]" value="[geometry_ndia_service_area.geojson].[remoteness_category]" />
+          <map key="[remoteness_support_location_quotient]" value="[tableau_support_type_quarter.csv].[remoteness_support_location_quotient]" />
+          <map key="[remoteness_support_share]" value="[tableau_support_type_quarter.csv].[remoteness_support_share]" />
+          <map key="[rolling_eight_quarter_mean_utilisation]" value="[tableau_market_classification.csv].[rolling_eight_quarter_mean_utilisation]" />
+          <map key="[rolling_four_quarter_mean_utilisation]" value="[tableau_market_classification.csv].[rolling_four_quarter_mean_utilisation]" />
+          <map key="[source_item_rows]" value="[tableau_support_type_quarter.csv].[source_item_rows]" />
+          <map key="[state (tableau_geography_lookup.csv)]" value="[tableau_geography_lookup.csv].[state]" />
+          <map key="[state]" value="[tableau_market_quarter.csv].[state]" />
+          <map key="[supply_response_gap]" value="[tableau_market_quarter.csv].[supply_response_gap]" />
+          <map key="[support_class]" value="[tableau_support_type_quarter.csv].[support_class]" />
+          <map key="[support_location_quotient]" value="[tableau_support_type_quarter.csv].[support_location_quotient]" />
+          <map key="[support_type]" value="[tableau_support_type_quarter.csv].[support_type]" />
+          <map key="[support_type_group]" value="[tableau_support_type_quarter.csv].[support_type_group]" />
+          <map key="[suppressed_participant_item_rows]" value="[tableau_support_type_quarter.csv].[suppressed_participant_item_rows]" />
+          <map key="[suppressed_payment_item_rows]" value="[tableau_support_type_quarter.csv].[suppressed_payment_item_rows]" />
+          <map key="[unspent_committed_funding]" value="[tableau_market_quarter.csv].[unspent_committed_funding]" />
+          <map key="[utilisation_trend_slope]" value="[tableau_market_classification.csv].[utilisation_trend_slope]" />
+          <map key="[utilisation_volatility]" value="[tableau_market_classification.csv].[utilisation_volatility]" />
+        </cols>
       </connection>
       <aliases enabled="yes" />
       <column caption="Funded plans per 1,000 KPI" datatype="real" name="[Calculation_2027520829890565]" role="measure" type="quantitative">

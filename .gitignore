@@ -67,8 +67,8 @@ outputs/powerbi_map/*
 !outputs/tableau/
 outputs/tableau/*
 !outputs/tableau/NDIS-Saturation-Atlas.twb
-!outputs/tableau/NDIS-Saturation-Atlas.extract.twb
-!outputs/tableau/NDIS-Saturation-Atlas.hyper
+!outputs/tableau/NDIS-Saturation-Atlas.public.twb
+!outputs/tableau/NDIS-Saturation-Atlas.public.hyper
 outputs/codex_pycache/
 outputs/streamlit*.log
 hyperd.log

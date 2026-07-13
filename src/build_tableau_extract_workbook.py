@@ -27,8 +27,8 @@ from tableauhyperapi import (  # type: ignore[import-not-found]
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "tableau"
 WORKBOOK_PATH = ROOT / "outputs" / "tableau" / "NDIS-Saturation-Atlas.twb"
-EXTRACT_WORKBOOK_PATH = ROOT / "outputs" / "tableau" / "NDIS-Saturation-Atlas.extract.twb"
-HYPER_PATH = ROOT / "outputs" / "tableau" / "NDIS-Saturation-Atlas.hyper"
+EXTRACT_WORKBOOK_PATH = ROOT / "outputs" / "tableau" / "NDIS-Saturation-Atlas.public.twb"
+HYPER_PATH = ROOT / "outputs" / "tableau" / "NDIS-Saturation-Atlas.public.hyper"
 HYPERD_DIR = Path(r"C:\Program Files\Tableau\Tableau Public 2026.2\bin\hyper")
 
 
@@ -78,6 +78,7 @@ def build_extract_workbook(table_columns: dict[str, list[tuple[str, str]]]) -> N
     connection = datasource.find("./connection")
     if connection is None:
         raise ValueError("Datasource has no connection.")
+    cols = connection.find("cols")
 
     connection.clear()
     connection.attrib.clear()
@@ -103,6 +104,8 @@ def build_extract_workbook(table_columns: dict[str, list[tuple[str, str]]]) -> N
         if columns is not None:
             for column_name, tableau_type in table_columns[table]:
                 ET.SubElement(columns, "column", {"datatype": tableau_type, "name": column_name})
+    if cols is not None:
+        connection.append(cols)
 
     for relation in root.findall(".//relation"):
         table = relation.attrib.get("table")
