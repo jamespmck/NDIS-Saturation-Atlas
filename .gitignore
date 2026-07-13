@@ -11,6 +11,7 @@ pytest-cache-files-*/
 venv/
 .env
 .env.*
+.codex/pydeps/
 .streamlit/secrets.toml
 .streamlit/*.backup_*
 
@@ -66,8 +67,11 @@ outputs/powerbi_map/*
 !outputs/tableau/
 outputs/tableau/*
 !outputs/tableau/NDIS-Saturation-Atlas.twb
+!outputs/tableau/NDIS-Saturation-Atlas.extract.twb
+!outputs/tableau/NDIS-Saturation-Atlas.hyper
 outputs/codex_pycache/
 outputs/streamlit*.log
+hyperd.log
 
 # Archives
 *.zip

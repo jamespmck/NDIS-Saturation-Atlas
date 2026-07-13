@@ -189,8 +189,12 @@ def _schema_findings(root: ET.Element, workbook_xml: str) -> list[ReviewFinding]
                 detail = f"No invalid <{tag}> elements found."
             findings.append(ReviewFinding("pass", "info", f"forbidden_{tag}", detail))
 
-    if "TableauTemp" in workbook_xml or 'class="hyper"' in workbook_xml:
-        findings.append(ReviewFinding("fail", "critical", "forbidden_temp_hyper_extract", "Workbook references a temporary Hyper extract, which can mask the regenerated atlas GeoJSON."))
+    if "TableauTemp" in workbook_xml:
+        findings.append(ReviewFinding("fail", "critical", "forbidden_temp_hyper_extract", "Workbook references a TableauTemp Hyper extract, which can mask the regenerated atlas GeoJSON."))
+    elif 'class="hyper"' in workbook_xml and "NDIS-Saturation-Atlas.hyper" not in workbook_xml:
+        findings.append(ReviewFinding("fail", "critical", "forbidden_temp_hyper_extract", "Workbook references an unrecognised Hyper extract, which can mask the regenerated atlas GeoJSON."))
+    elif 'class="hyper"' in workbook_xml:
+        findings.append(ReviewFinding("pass", "info", "forbidden_temp_hyper_extract", "Workbook references the intentional NDIS-Saturation-Atlas.hyper extract."))
     else:
         findings.append(ReviewFinding("pass", "info", "forbidden_temp_hyper_extract", "No temporary Hyper extract references found."))
 
