@@ -24,23 +24,32 @@ EXCLUDED_ATLAS_GEOGRAPHIES = {"lord howe island", "norfolk island"}
 METRO_INSET_GROUPS = {
     "Perth inset": {
         "areas": {"Central North Metro", "Central South Metro", "North Metro", "South East Metro", "South Metro"},
-        "target_bounds": (112.0, -37.2, 119.0, -31.0),
+        "target_bounds": (101.0, -39.5, 109.8, -31.0),
     },
     "Adelaide inset": {
-        "areas": {"Adelaide Hills", "Eastern Adelaide", "Northern Adelaide", "Southern Adelaide", "Western Adelaide"},
-        "target_bounds": (129.7, -39.6, 136.4, -34.0),
+        "areas": {"Adelaide Hills", "Barossa, Light and Lower North", "Eastern Adelaide", "Northern Adelaide", "Southern Adelaide", "Western Adelaide"},
+        "target_bounds": (124.0, -52.0, 140.0, -45.0),
     },
     "Melbourne inset": {
-        "areas": {"Inner East Melbourne", "North East Melbourne", "Outer East Melbourne", "Southern Melbourne", "Western Melbourne"},
-        "target_bounds": (145.2, -44.0, 151.5, -39.0),
+        "areas": {
+            "Bayside Peninsula",
+            "Brimbank Melton",
+            "Hume Moreland",
+            "Inner East Melbourne",
+            "North East Melbourne",
+            "Outer East Melbourne",
+            "Southern Melbourne",
+            "Western Melbourne",
+        },
+        "target_bounds": (171.0, -43.8, 179.0, -36.0),
     },
     "Sydney inset": {
-        "areas": {"North Sydney", "South Eastern Sydney", "South Western Sydney", "Sydney", "Western Sydney"},
-        "target_bounds": (153.8, -37.6, 159.7, -32.2),
+        "areas": {"Central Coast", "North Sydney", "South Eastern Sydney", "South Western Sydney", "Sydney", "Western Sydney"},
+        "target_bounds": (171.0, -35.2, 179.0, -27.7),
     },
     "Brisbane inset": {
-        "areas": {"Brisbane"},
-        "target_bounds": (154.2, -31.1, 158.7, -27.1),
+        "areas": {"Beenleigh", "Brisbane", "Caboolture/Strathpine", "Robina"},
+        "target_bounds": (171.0, -26.8, 179.0, -20.5),
     },
 }
 

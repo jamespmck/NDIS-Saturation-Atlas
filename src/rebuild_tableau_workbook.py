@@ -22,8 +22,8 @@ ATLAS_ONLY_DASHBOARDS = {
 }
 
 ATLAS_FIXED_EXTENT_DEGREES = {
-    "cols": {"min": "110.0", "max": "170.0"},
-    "rows": {"min": "-45.0", "max": "-8.0"},
+    "cols": {"min": "100.0", "max": "180.0"},
+    "rows": {"min": "-53.0", "max": "-8.0"},
 }
 
 STREAMLIT_STYLE_DASHBOARDS = [

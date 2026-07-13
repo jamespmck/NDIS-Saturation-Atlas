@@ -27,6 +27,14 @@ def test_atlas_geojson_excludes_external_islands_and_tags_metro_insets():
         "type": "FeatureCollection",
         "features": [
             _feature("Sydney", 151.0, -34.0),
+            _feature("Central Coast", 151.2, -33.5),
+            _feature("Beenleigh", 153.0, -27.8),
+            _feature("Caboolture/Strathpine", 153.0, -27.1),
+            _feature("Robina", 153.4, -28.1),
+            _feature("Brimbank Melton", 144.5, -37.8),
+            _feature("Hume Moreland", 144.9, -37.6),
+            _feature("Bayside Peninsula", 145.0, -38.0),
+            _feature("Barossa, Light and Lower North", 138.8, -34.4),
             _feature("Norfolk Island", 167.9, -29.0),
             _feature("Barkly", 134.0, -20.0),
         ],
@@ -40,6 +48,14 @@ def test_atlas_geojson_excludes_external_islands_and_tags_metro_insets():
     panels = {feature["properties"]["ndis_service_area"]: feature["properties"]["atlas_panel"] for feature in out["features"]}
     assert "Norfolk Island" not in names
     assert panels["Sydney"] == "Sydney inset"
+    assert panels["Central Coast"] == "Sydney inset"
+    assert panels["Beenleigh"] == "Brisbane inset"
+    assert panels["Caboolture/Strathpine"] == "Brisbane inset"
+    assert panels["Robina"] == "Brisbane inset"
+    assert panels["Brimbank Melton"] == "Melbourne inset"
+    assert panels["Hume Moreland"] == "Melbourne inset"
+    assert panels["Bayside Peninsula"] == "Melbourne inset"
+    assert panels["Barossa, Light and Lower North"] == "Adelaide inset"
     assert panels["Barkly"] == "Main map"
 
 
